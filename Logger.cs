@@ -65,7 +65,7 @@ public static class Logger {
 		var method = sf.GetMethod().Name;
 
 
-		var dt = DateTime.Now.ToString("HH:mm:ss.fff");
+		var dt = DateTime.Now.ToString("HH:mm:ss.fff ");
 		var m = $"[{dt}] DEBUG <{filename}:{lineno} {method}()> {msg}";
 		//GD.Print(m);
 
