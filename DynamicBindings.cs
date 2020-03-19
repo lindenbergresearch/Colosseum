@@ -50,7 +50,7 @@ public static class DynamicBindings {
 	public static void SetupBindings(Node node) {
 		var t = node.GetType();
 
-		Logger.debug($"Setup dynamic node-bindings for: '{t}'");
+		Logger.trace($"Setup dynamic node-bindings for: '{t}'");
 
 		foreach (var field in t.GetFields(bindingFlags)) {
 			foreach (var attr in field.GetCustomAttributes()) {
@@ -62,7 +62,7 @@ public static class DynamicBindings {
 
 					field.SetValue(node, bindNode);
 
-					Logger.debug($"'{field}' has been bound to node: '{binder.BindTo}'");
+					Logger.trace($"'{field}' has been bound to node: '{binder.BindTo}'");
 				}
 			}
 		}
