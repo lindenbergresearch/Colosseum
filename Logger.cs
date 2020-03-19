@@ -12,7 +12,7 @@ public interface ILogWriter {
 	/// Simple interface method for string output.
 	/// </summary>
 	/// <param name="message"></param>
-	void Write(String message);
+	void Write(Logger.LogLevel level, String message);
 }
 
 /// <summary>
@@ -31,6 +31,7 @@ public static class Logger {
 		FATAL
 	}
 
+
 	/// <summary>
 	/// Enable/Disable debug messages
 	/// </summary>
@@ -39,7 +40,7 @@ public static class Logger {
 	/// <summary>
 	/// Current loglevel
 	/// </summary>
-	public static LogLevel Level { get; set; } = LogLevel.DEBUG;
+	public static LogLevel Level { get; set; } = LogLevel.TRACE;
 
 	/// <summary>
 	/// Holds all pushed messages.
@@ -65,12 +66,18 @@ public static class Logger {
 		var method = sf.GetMethod().Name;
 
 
-		var dt = DateTime.Now.ToString("HH:mm:ss.fff ");
-		var m = $"[{dt}] DEBUG <{filename}:{lineno} {method}()> {msg}";
+		var dt = DateTime.Now.ToString("HH:mm:ss.fff");
+		var m = $"[{dt}] {level} <{filename}:{lineno} {method}()> {msg}";
 		//GD.Print(m);
 
+		//TODO: find a better solution to add the standard logger
+		if (LogWriters.Count == 0) {
+			LogWriters.Add(new GodotConsoleLogWriter());
+			LogWriters.Add(new SystemConsoleLogWriter());
+		}
+
 		foreach (var writer in LogWriters) {
-			writer.Write(m);
+			writer.Write(level, m);
 		}
 
 		messages.Add(m);
@@ -83,7 +90,7 @@ public static class Logger {
 	/// <param name="message"></param>
 	public static void trace(string message) {
 		if (Level > LogLevel.TRACE) return;
-		log(Level, message);
+		log(LogLevel.TRACE, message);
 	}
 
 
@@ -93,7 +100,7 @@ public static class Logger {
 	/// <param name="message"></param>
 	public static void debug(string message) {
 		if (Level > LogLevel.DEBUG) return;
-		log(Level, message);
+		log(LogLevel.DEBUG, message);
 	}
 
 
@@ -103,7 +110,7 @@ public static class Logger {
 	/// <param name="message"></param>
 	public static void info(string message) {
 		if (Level > LogLevel.INFO) return;
-		log(Level, message);
+		log(LogLevel.INFO, message);
 	}
 
 
@@ -113,7 +120,7 @@ public static class Logger {
 	/// <param name="message"></param>
 	public static void warn(string message) {
 		if (Level > LogLevel.WARN) return;
-		log(Level, message);
+		log(LogLevel.WARN, message);
 	}
 
 
@@ -123,7 +130,7 @@ public static class Logger {
 	/// <param name="message"></param>
 	public static void error(string message) {
 		if (Level > LogLevel.ERROR) return;
-		log(Level, message);
+		log(LogLevel.ERROR, message);
 	}
 
 
@@ -133,6 +140,41 @@ public static class Logger {
 	/// <param name="message"></param>
 	public static void fatal(string message) {
 		if (Level > LogLevel.FATAL) return;
-		log(Level, message);
+		log(LogLevel.FATAL, message);
+	}
+}
+
+
+/// <summary>
+/// Standard Godot console log-writer
+/// </summary>
+public class GodotConsoleLogWriter : ILogWriter {
+	/// <summary>
+	/// Write to Godot console.
+	/// </summary>
+	/// <param name="level"></param>
+	/// <param name="message"></param>
+	public void Write(Logger.LogLevel level, string message) {
+		if (level == Logger.LogLevel.ERROR || level == Logger.LogLevel.FATAL)
+			GD.PrintErr(message);
+		else
+			GD.Print(message);
+	}
+}
+
+/// <summary>
+/// System console log-writer
+/// </summary>
+public class SystemConsoleLogWriter : ILogWriter {
+	/// <summary>
+	/// Write to system console.
+	/// </summary>
+	/// <param name="level"></param>
+	/// <param name="message"></param>
+	public void Write(Logger.LogLevel level, string message) {
+		if (level == Logger.LogLevel.ERROR || level == Logger.LogLevel.FATAL)
+			Console.Error.WriteLine(message);
+		else
+			Console.Out.WriteLine(message);
 	}
 }
