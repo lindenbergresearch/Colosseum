@@ -1,0 +1,7 @@
+/Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/bin/Debug/Colosseum.pdb
+/Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/obj/Debug/Colosseum.csprojAssemblyReference.cache
+/Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/obj/Debug/Colosseum.csproj.CoreCompileInputs.cache
+/Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/obj/Debug/Colosseum.pdb
+/Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/bin/Debug/Colosseum.xml
+/Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/bin/Debug/Colosseum.exe
+/Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/obj/Debug/Colosseum.exe

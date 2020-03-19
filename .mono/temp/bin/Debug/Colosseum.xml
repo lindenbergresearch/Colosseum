@@ -1,0 +1,654 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Colosseum</name>
+    </assembly>
+    <members>
+        <member name="T:Brick">
+            <summary>
+            Simple brick which could be damaged
+            </summary>
+        </member>
+        <member name="M:Brick._Ready">
+            <summary>
+            Init
+            </summary>
+        </member>
+        <member name="M:Brick.onCollide(Godot.KinematicCollision2D)">
+            <summary>
+            Handle collision
+            </summary>
+            <param name="collision"></param>
+        </member>
+        <member name="T:ICoinCollector">
+            <summary>
+            Coin collector interface
+            </summary>
+        </member>
+        <member name="M:ICoinCollector.onCoinCollect(Coin)">
+            <summary>
+            Called upon coin is touched.
+            </summary>
+            <param name="coin">Ref to the coin</param>
+        </member>
+        <member name="T:Coin">
+            <summary>
+            Standard collectable coins
+            </summary>
+        </member>
+        <member name="M:Coin._Ready">
+            <summary>
+            Init...
+            </summary>
+        </member>
+        <member name="M:Coin.onBodyEnter(Godot.Object)">
+            <summary>
+            Coin collected 
+            </summary>
+            <param name="body"></param>
+        </member>
+        <member name="T:DebugMessageBox">
+            <summary>
+            Simple RichText messagebox for showing debug messages on
+            game screen.
+            </summary>
+        </member>
+        <member name="P:DebugMessageBox.RedrawInterval">
+            <summary>
+            The redraw interval in ms
+            </summary>
+        </member>
+        <member name="T:BindToAttribute">
+            <summary>
+            Custom Attribute to bind a local property to a Godot Node in the scene-graph
+            </summary>
+        </member>
+        <member name="P:BindToAttribute.BindTo">
+            <summary>
+            Name (and path) of the target note)
+            </summary>
+        </member>
+        <member name="M:BindToAttribute.#ctor(System.String)">
+            <summary>
+            Construct NoteBindingAttribute
+            </summary>
+            <param name="bindTo">Name (and path) of the target note.</param>
+        </member>
+        <member name="T:DynamicBindings">
+            <summary>
+            Contain helper methods for dynamic node bindings.
+            </summary>
+        </member>
+        <member name="M:DynamicBindings.SetupNodeBindings(Godot.Node)">
+            <summary>
+            Extension method to be used with nodes.
+            Must use with 'this.' to work: this.AutobindNotes()
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:DynamicBindings.SetupBindings(Godot.Node)">
+            <summary>
+            Setup dynamic bindings for a given node instance.
+            Please call this in every '_Ready()' method in Godot nodes
+            to use automatic bindings. 
+            </summary>
+            <param name="node">The node to setup.</param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="T:IDynamicState`1">
+            <summary>
+            Generic interface to hold a state
+            </summary>
+        </member>
+        <member name="T:IDynamicBoolState">
+            <summary>
+            Boolean implementation
+            </summary>
+        </member>
+        <member name="M:IDynamicBoolState.isSatisfied">
+            <summary>
+            Conditional checker
+            </summary>
+            <returns>Returns true is the state is satisfied.</returns>
+        </member>
+        <member name="T:DynamicStateCombiner">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:DynamicStateCombiner.#ctor(System.Func{System.Boolean})">
+            <summary>
+            Push function via constructor
+            </summary>
+            <param name="fun"></param>
+        </member>
+        <member name="M:DynamicStateCombiner.isSatisfied">
+            <summary>
+            Resolves the conditional state
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DynamicStateCombiner.op_Implicit(System.Func{System.Boolean})~DynamicStateCombiner">
+            <summary>
+            Implicit conversation to use as type
+            </summary>
+            <param name="fun"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamicStateCombiner.op_Implicit(DynamicStateCombiner)~System.Boolean">
+            <summary>
+            Implicit conversation to use as type
+            </summary>
+            <param name="dsc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamicStateCombiner.fun(System.Func{System.Boolean})">
+            <summary>
+            Static factory method
+            </summary>
+            <param name="f"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamicStateCombiner.ToString">
+            <summary>
+            Just some formatting
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Colosseum.ICollidable">
+            <summary>
+            Interface to implement collision handling
+            </summary>
+        </member>
+        <member name="M:Colosseum.ICollidable.onCollide(Godot.KinematicCollision2D)">
+            <summary>
+            Triggered by the collider
+            </summary>
+            <param name="collision"></param>
+        </member>
+        <member name="T:Colosseum.Motion2D">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Colosseum.Motion2D.Velocity">
+            <summary>
+            Represents the velocity of the 2D motion as Vector2
+            </summary>
+        </member>
+        <member name="P:Colosseum.Motion2D.X">
+            <summary>
+            Returns the X part of the velocity vector
+            </summary>
+        </member>
+        <member name="P:Colosseum.Motion2D.Y">
+            <summary>
+            Returns the Y part of the velocity vector
+            </summary>
+        </member>
+        <member name="P:Colosseum.Motion2D.Abs">
+            <summary>
+            Returns the absolute values of both vector components
+            </summary>
+        </member>
+        <member name="M:Colosseum.Motion2D.#ctor(Godot.Vector2)">
+            <summary>
+            Create a new Motion2D by some Vector2
+            </summary>
+            <param name="velocity"></param>
+        </member>
+        <member name="M:Colosseum.Motion2D.reset">
+            <summary>
+            Reset velocity vector
+            </summary>
+        </member>
+        <member name="T:Colosseum.TimeOutFlag">
+            <summary>
+            Flag with timeout setting
+            </summary>
+        </member>
+        <member name="T:ILogWriter">
+            <summary>
+            Interface to output write for log messages.
+            </summary>
+        </member>
+        <member name="M:ILogWriter.Write(System.String)">
+            <summary>
+            Simple interface method for string output.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Logger">
+            <summary>
+            Helper class for qualified log output
+            </summary>
+        </member>
+        <member name="T:Logger.LogLevel">
+            <summary>
+            Available log levels.
+            </summary>
+        </member>
+        <member name="P:Logger.PrintDebug">
+            <summary>
+            Enable/Disable debug messages
+            </summary>
+        </member>
+        <member name="P:Logger.Level">
+            <summary>
+            Current loglevel
+            </summary>
+        </member>
+        <member name="F:Logger.messages">
+            <summary>
+            Holds all pushed messages.
+            </summary>
+        </member>
+        <member name="P:Logger.LogWriters">
+            <summary>
+            Holds all output writers
+            </summary>
+        </member>
+        <member name="M:Logger.log(Logger.LogLevel,System.String)">
+            <summary>
+            Print debug log message to GD console
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:Logger.trace(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Logger.debug(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Logger.info(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Logger.warn(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Logger.error(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Logger.fatal(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Mario2D">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Mario2D.ActionKey">
+            <summary>
+            Type which holds pressed keys
+            </summary>
+        </member>
+        <member name="T:Mario2D.Parameter">
+            <summary>
+            Common player parameter for kinematic handling
+            </summary>
+        </member>
+        <member name="F:Mario2D.pScore">
+            PROPERTIES ********************************************************************
+        </member>
+        <member name="P:Mario2D.Grounded">
+            PROPERTIES ********************************************************************
+            FLAGS *************************************************************************
+        </member>
+        <member name="M:Mario2D.updateKeys">
+            UPDATES ***********************************************************************
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Mario2D.SetLives(System.Int32)">
+            <summary>
+            Set players lives
+            </summary>
+            <param name="delta">The lives to add (neg. values will shrink lives)</param>
+        </member>
+        <member name="M:Mario2D.onCoinCollect(Coin)">
+            <summary>
+            Handle coins
+            </summary>
+            <param name="coin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Mario2D.handleCollisions">
+            <summary>
+            Check collisions and pass event to all coliders
+            </summary>
+        </member>
+        <member name="M:Mario2D.updateStates">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Mario2D.applyGravity(System.Single)">
+            <summary>
+            Apply gravity to the player
+            </summary>
+            <param name="delta"></param>
+        </member>
+        <member name="M:Mario2D.applyXMotion(System.Single)">
+            <summary>
+            Apply x motions to the player
+            </summary>
+            <param name="delta"></param>
+        </member>
+        <member name="M:Mario2D._PhysicsProcess(System.Single)">
+            MAIN *************************************************************************
+            <summary>
+            Update Player
+            </summary>
+            <param name="delta"></param>
+        </member>
+        <member name="M:Mario2D.ResetPlayer">
+            <summary>
+            Resets all player properties to initial values
+            </summary>
+        </member>
+        <member name="M:Mario2D._Ready">
+            INIT *************************************************************************
+            <summary>
+            Init method
+            </summary>
+        </member>
+        <member name="T:Game">
+            <summary>
+            Basic configuration
+            </summary>
+        </member>
+        <member name="T:Node2D">
+            <summary>
+            ROOT node 
+            </summary>
+        </member>
+        <member name="F:Node2D.pTime">
+            PROPERTIES ********************************************************************
+        </member>
+        <member name="F:Node2D.time">
+            PROPERTIES ********************************************************************
+        </member>
+        <member name="M:Node2D._Ready">
+             	 Called when the node is ready.
+            	 Setup man game stuff.
+            
+        </member>
+        <member name="P:PolyStateCombiner`1.Constraints">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:PolyStateCombiner`1.Combinator">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:PolyStateCombiner`1.AddConstraint(System.Func{`0})">
+            <summary>
+            
+            </summary>
+            <param name="constraint"></param>
+        </member>
+        <member name="T:PropertyPool">
+            <summary>
+            Maintains a registered properties
+            </summary>
+        </member>
+        <member name="M:PropertyPool.Register``1(Property{``0})">
+            <summary>
+            Registers a new property at the property-pool.
+            </summary>
+            <param name="property">The property to update</param>
+        </member>
+        <member name="M:PropertyPool.Pull``1(System.String)">
+            <summary>
+            Get a property by it's name ID
+            </summary>
+            <param name="name">The properties name ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:PropertyPool.Unregister``1(Property{``0})">
+            <summary>
+            Removes a property from the pool.
+            </summary>
+            <param name="property">The property to update</param>
+        </member>
+        <member name="M:PropertyPool.AsString">
+            <summary>
+            Returns the pool's content as string representation.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PropertyPool.RegisterNewProperty``1(System.String,``0,System.String,System.Boolean)">
+            <summary>
+            Factory method for creating a property and automatically registering it..
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="group"></param>
+            <param name="locked"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PropertyPool.AddSubscription(IPropertyChangeListener,System.String)">
+            <summary>
+            Add a subscription to one or more properties defined by a matching string.
+            </summary>
+            <param name="subscriber"></param>
+            <param name="match"></param>
+        </member>
+        <member name="T:IPropertyChangeListener">
+            <summary>
+            Interface for subscriber classes.
+            </summary>
+        </member>
+        <member name="M:IPropertyChangeListener.OnPropertyChange``1(Property{``0},PropertyEventArgs{``0})">
+            <summary>
+            Called upon an event has been fired.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:PropertyEventArgs`1">
+            <summary>
+            Property change event data.
+            </summary>
+        </member>
+        <member name="M:PropertyEventArgs`1.ToString">
+            <summary>
+            Pretty print this event.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Property`1">
+            <summary>
+            Encapsulates a property, binds it to a name and provide an event to catch manipulating.
+            </summary>
+        </member>
+        <member name="T:Property`1.ChangeEventHandler">
+            <summary>
+            Event handler delegate.
+            </summary>
+            <param name="sender">The property where the event is raised.</param>
+            <param name="args">Change data.</param>
+        </member>
+        <member name="E:Property`1.RaiseChangeEvent">
+            <summary>
+            The change event bound to the event handler delegate.
+            </summary>
+        </member>
+        <member name="F:Property`1._transformTriggers">
+            <summary>
+            Dynamic transformation trigger list. Contains all transformation trigger.
+            </summary>
+        </member>
+        <member name="F:Property`1._triggers">
+            <summary>
+            Dynamic trigger list. Contains all constraint trigger.
+            </summary>
+        </member>
+        <member name="M:Property`1.#ctor(System.String,`0,System.String,System.Boolean)">
+            <summary>
+            Constructs a property.
+            </summary>
+            <param name="name">The name of the property</param>
+            <param name="value">The properties value</param>
+            <param name="group">The properties group membership</param>
+            <param name="locked">Write-lock (default is false)</param>
+        </member>
+        <member name="M:Property`1.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Constructs a property with a default value.
+            </summary>
+            <param name="name"></param>
+            <param name="locked"></param>
+        </member>
+        <member name="M:Property`1.Subscribe(IPropertyChangeListener)">
+            <summary>
+            Subscribe to event.
+            </summary>
+            <param name="subscriber"></param>
+        </member>
+        <member name="M:Property`1.Unsubscribe(IPropertyChangeListener)">
+            <summary>
+            UnSubscribe to event.
+            </summary>
+            <param name="handler"></param>
+        </member>
+        <member name="M:Property`1.Formatted">
+            <summary>
+            Return the properties value as formatted string using
+            the internal setup Format property.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Property`1.Formatted(System.String)">
+            <summary>
+            Return the properties value as formatted string using
+            the given format specifier.
+            </summary>
+            <param name="format"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Property`1.OnPropertyChange(PropertyEventArgs{`0})">
+            <summary>
+            Event handler. Propagate event to all subscriber.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Property`1.ToString">
+            <summary>
+            String representation of the property.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Property`1.AddTransformTrigger(System.Func{`0,System.Boolean},System.Func{`0,`0})">
+            <summary>
+            Adds a trigger handler which is raised if 'cond' becomes true and transforms
+            it's value via 'handler'.
+            </summary>
+            <param name="cond">The condition closure.</param>
+            <param name="handler">The handler closure. Should return null on no transformation.</param>
+        </member>
+        <member name="M:Property`1.ExecuteTransformTrigger(`0)">
+            <summary>
+            Checks all transform-triggers for match and applies it's
+            transformation on success. 
+            </summary>
+            <param name="t">The value to check against all riggers.</param>
+        </member>
+        <member name="M:Property`1.AddTrigger(System.Func{`0,System.Boolean},System.Action{`0})">
+            <summary>
+            Adds a trigger handler which is raised if 'cond' becomes true.
+            Does not transforms anything.
+            </summary>
+            <param name="cond">The condition closure.</param>
+            <param name="handler">The handler closure. Should return null on no transformation.</param>
+        </member>
+        <member name="M:Property`1.ExecuteTrigger(`0)">
+            <summary>
+            Checks all triggers for match and call it's handler on success.
+            </summary>
+            <param name="t">The value to check against all riggers.</param>
+        </member>
+        <member name="T:QuestionBox">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuestionBox.ContentType">
+            <summary>
+            The questionbox's hidden content
+            </summary>
+        </member>
+        <member name="F:QuestionBox.content">
+            <summary>
+            External property 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:QuestionBox.active">
+            <summary>
+             The questionbox's current state
+            </summary>
+        </member>
+        <member name="M:QuestionBox.onCollide(Godot.KinematicCollision2D)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:QuestionBox._Ready">
+            <summary>
+            Init...
+            </summary>
+        </member>
+        <member name="M:QuestionBox.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Util">
+            <summary>
+            Utility method compilation.
+            </summary>
+        </member>
+        <member name="M:Util.GetPropertyByName(System.String,System.Object)">
+            <summary>
+            Returns the value of a class property by name.
+            Uses reflection in case of dynamic cast problems.  
+            </summary>
+            <param name="name">The name of the property.</param>
+            <param name="clazz">The class instance where the property is bound to.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.InvokeMethodByName(System.String,System.Object[],System.Object)">
+            <summary>
+            Invokes a method of a class by name and reference.
+            Uses reflection in case of dynamic cast problems.
+            </summary>
+            <param name="name">The methods name.</param>
+            <param name="args">List of args to be passed.</param>
+            <param name="clazz">The class instance where the method is located.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
