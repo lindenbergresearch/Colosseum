@@ -1,81 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8E86A378-BD14-401E-AC08-6F56E7AB841E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
-    <RootNamespace>Colosseum</RootNamespace>
-    <AssemblyName>Colosseum</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <GodotProjectGeneratorVersion>1.0.7333.6237</GodotProjectGeneratorVersion>
-    <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(Configuration)</IntermediateOutputPath>
-    <ApiConfiguration Condition=" '$(Configuration)' != 'Release' ">Debug</ApiConfiguration>
-    <ApiConfiguration Condition=" '$(Configuration)' == 'Release' ">Release</ApiConfiguration>
-    <LangVersion>8</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <DocumentationFile>.mono\temp\bin\Debug\Colosseum.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>$(GodotDefineConstants);GODOT;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Tools|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;TOOLS;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="GodotSharp">
-      <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
-      <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AnimatedSprite.cs" />
-    <Compile Include="Brick.cs" />
-    <Compile Include="Coin.cs" />
-    <Compile Include="CollisionShape2D.cs" />
-    <Compile Include="DebugMessageBox.cs" />
-    <Compile Include="DynamicBindings.cs" />
-    <Compile Include="DynamicStateCombiner.cs" />
-    <Compile Include="ICollidable.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="Mario2D.cs" />
-    <Compile Include="Motion2D.cs" />
-    <Compile Include="Node2D.cs" />
-    <Compile Include="PlayerInfoText.cs" />
-    <Compile Include="PlayerUtil.cs" />
-    <Compile Include="PolyStateCombiner.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Property.cs" />
-    <Compile Include="QuestionBox.cs" />
-    <Compile Include="Util.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{8E86A378-BD14-401E-AC08-6F56E7AB841E}</ProjectGuid>
+        <OutputType>Exe</OutputType>
+        <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
+        <RootNamespace>Colosseum</RootNamespace>
+        <AssemblyName>Colosseum</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <GodotProjectGeneratorVersion>1.0.7333.6237</GodotProjectGeneratorVersion>
+        <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
+        <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(Configuration)</IntermediateOutputPath>
+        <ApiConfiguration Condition=" '$(Configuration)' != 'Release' ">Debug</ApiConfiguration>
+        <ApiConfiguration Condition=" '$(Configuration)' == 'Release' ">Release</ApiConfiguration>
+        <LangVersion>8</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>portable</DebugType>
+        <Optimize>true</Optimize>
+        <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <ConsolePause>false</ConsolePause>
+        <DocumentationFile>.mono\temp\bin\Debug\Colosseum.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <DebugType>portable</DebugType>
+        <Optimize>true</Optimize>
+        <DefineConstants>$(GodotDefineConstants);GODOT;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <ConsolePause>false</ConsolePause>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Tools|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>portable</DebugType>
+        <Optimize>false</Optimize>
+        <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;TOOLS;</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <ConsolePause>false</ConsolePause>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="GodotSharp">
+            <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharp.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
+            <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="System"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="AnimatedSprite.cs"/>
+        <Compile Include="Brick.cs"/>
+        <Compile Include="Coin.cs"/>
+        <Compile Include="CollisionShape2D.cs"/>
+        <Compile Include="DebugMessageBox.cs"/>
+        <Compile Include="DynamicBindings.cs"/>
+        <Compile Include="DynamicStateCombiner.cs"/>
+        <Compile Include="ICollidable.cs"/>
+        <Compile Include="Logger.cs"/>
+        <Compile Include="Main.cs"/>
+        <Compile Include="Mario2D.cs"/>
+        <Compile Include="Motion2D.cs"/>
+        <Compile Include="Node2D.cs"/>
+        <Compile Include="PlayerInfoText.cs"/>
+        <Compile Include="PlayerUtil.cs"/>
+        <Compile Include="PolyStateCombiner.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Property.cs"/>
+        <Compile Include="QuestionBox.cs"/>
+        <Compile Include="Util.cs"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
 </Project>

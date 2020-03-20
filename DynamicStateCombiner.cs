@@ -1,7 +1,7 @@
 using System;
 
 /// <summary>
-/// Generic interface to hold a state
+///     Generic interface to hold a state
 /// </summary>
 public interface IDynamicState<T> {
 	Func<T> Resolve { get; set; }
@@ -9,11 +9,11 @@ public interface IDynamicState<T> {
 
 
 /// <summary>
-/// Boolean implementation
+///     Boolean implementation
 /// </summary>
 public interface IDynamicBoolState : IDynamicState<bool> {
 	/// <summary>
-	/// Conditional checker
+	///     Conditional checker
 	/// </summary>
 	/// <returns>Returns true is the state is satisfied.</returns>
 	bool isSatisfied();
@@ -33,14 +33,10 @@ public interface ITimedPropery<T> {
 }
 
 /// <summary>
-/// 
 /// </summary>
 public class DynamicStateCombiner : IDynamicBoolState {
-	public Func<bool> Resolve { get; set; }
-
-
 	/// <summary>
-	/// Push function via constructor
+	///     Push function via constructor
 	/// </summary>
 	/// <param name="fun"></param>
 	public DynamicStateCombiner(Func<bool> fun) {
@@ -48,40 +44,50 @@ public class DynamicStateCombiner : IDynamicBoolState {
 	}
 
 
+	public Func<bool> Resolve { get; set; }
+
+
 	/// <summary>
-	/// Resolves the conditional state
+	///     Resolves the conditional state
 	/// </summary>
 	/// <returns></returns>
-	public bool isSatisfied() => Resolve();
+	public bool isSatisfied() {
+		return Resolve();
+	}
 
 
 	/// <summary>
-	/// Implicit conversation to use as type
+	///     Implicit conversation to use as type
 	/// </summary>
 	/// <param name="fun"></param>
 	/// <returns></returns>
-	public static implicit operator DynamicStateCombiner(Func<bool> fun) => new DynamicStateCombiner(fun);
+	public static implicit operator DynamicStateCombiner(Func<bool> fun) {
+		return new DynamicStateCombiner(fun);
+	}
 
 
 	/// <summary>
-	/// Implicit conversation to use as type
+	///     Implicit conversation to use as type
 	/// </summary>
 	/// <param name="dsc"></param>
 	/// <returns></returns>
-	public static implicit operator bool(DynamicStateCombiner dsc) => dsc.isSatisfied();
+	public static implicit operator bool(DynamicStateCombiner dsc) {
+		return dsc.isSatisfied();
+	}
 
 
 	/// <summary>
-	/// Static factory method
+	///     Static factory method
 	/// </summary>
 	/// <param name="f"></param>
 	/// <returns></returns>
 	public static DynamicStateCombiner fun(Func<bool> f) {
 		return new DynamicStateCombiner(f);
 	}
-	
+
+
 	/// <summary>
-	/// Just some formatting
+	///     Just some formatting
 	/// </summary>
 	/// <returns></returns>
 	public override string ToString() {

@@ -1,23 +1,21 @@
 namespace Colosseum {
 
-	
 	/// <summary>
-	/// Flag with timeout setting
+	///     Flag with timeout setting
 	/// </summary>
-	class TimeOutFlag {
+	internal class TimeOutFlag {
+		private bool flag;
 		public float Time { get; set; }
 		public bool Active { get; set; }
 
-		private bool flag;
 
-
-		void setTimeoutFlag(float timeout, bool flag = false) {
+		private void setTimeoutFlag(float timeout, bool flag = false) {
 			Time = timeout;
 			Active = true;
 		}
 
 
-		void update(float delta) {
+		private void update(float delta) {
 			Time -= delta;
 
 			if (Time <= 0) {
@@ -26,10 +24,9 @@ namespace Colosseum {
 			}
 		}
 	}
-	
-	
+
+
 	public class PlayerUtil {
-		
 	}
 
 }
