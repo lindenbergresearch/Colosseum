@@ -60,7 +60,15 @@ public static class DynamicBindings {
         foreach (var field in t.GetFields(bindingFlags))
         foreach (var attr in field.GetCustomAttributes())
             if (attr is GNodeAttribute binder) {
-                var bindNode = node.GetNode(binder.BindTo);
+                var nodePath = "";
+
+                // node path or node name not set, so use field name
+                if (string.IsNullOrEmpty(binder.BindTo))
+                    nodePath = field.Name;
+                else
+                    nodePath = binder.BindTo;
+
+                var bindNode = node.GetNode(nodePath);
 
                 if (bindNode == null)
                     throw new Exception($"Unable to bind field: '{field}' to node via node-path: '{binder.BindTo}'!");
