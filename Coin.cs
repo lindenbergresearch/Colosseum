@@ -15,9 +15,11 @@ public interface ICoinCollector {
 ///     Standard collectable coins
 /// </summary>
 public class Coin : Area2D {
-    [BindTo("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
+    [GNode("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
 
-    [BindTo("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
+    [GNode("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
+
+
     public bool Picked { get; set; }
 
 

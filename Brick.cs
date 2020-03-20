@@ -5,10 +5,10 @@ using Godot;
 ///     Simple brick which could be damaged
 /// </summary>
 public class Brick : StaticBody2D, ICollidable {
-    [BindTo("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
-    [BindTo("CollisionShape2D")] private Godot.CollisionShape2D _collisionShape2D;
-    [BindTo("Particles2D")] private Particles2D _particles2D;
-    [BindTo("Sprite")] private Sprite _sprite;
+    [GNode("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
+    [GNode("CollisionShape2D")] private Godot.CollisionShape2D _collisionShape2D;
+    [GNode("Particles2D")] private Particles2D _particles2D;
+    [GNode("Sprite")] private Sprite _sprite;
     public bool Broken { get; set; } = false;
 
 

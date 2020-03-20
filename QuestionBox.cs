@@ -20,9 +20,9 @@ public class QuestionBox : StaticBody2D, ICollidable {
     /// </summary>
     [Export] public bool active = true;
 
-    [BindTo("AnimatedSprite")] private Godot.AnimatedSprite anim;
-    [BindTo("AnimationPlayer")] private AnimationPlayer bounce;
-    [BindTo("BumpSound")] private AudioStreamPlayer bumpSound;
+    [GNode("AnimatedSprite")] private Godot.AnimatedSprite anim;
+    [GNode("AnimationPlayer")] private AnimationPlayer bounce;
+    [GNode("BumpSound")] private AudioStreamPlayer bumpSound;
 
 
     /// <summary>
