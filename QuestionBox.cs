@@ -1,86 +1,77 @@
-using Godot;
-using System;
 using Colosseum;
+using Godot;
 
 /// <summary>
-/// 
 /// </summary>
 public class QuestionBox : StaticBody2D, ICollidable {
-	/// <summary>
-	/// The questionbox's hidden content
-	/// </summary>
-	public enum ContentType {
-		NOTHING,
-		COIN,
-		ONEUP,
-		POWERUP
-	}
-
-	private Godot.AnimatedSprite anim;
-
-	/// <summary>
-	/// External property 
-	/// </summary>
-	/// <returns></returns>
-	[Export] public ContentType content = ContentType.NOTHING;
+    /// <summary>
+    ///     The questionbox's hidden content
+    /// </summary>
+    public enum ContentType {
+        NOTHING,
+        COIN,
+        ONEUP,
+        POWERUP
+    }
 
 
-	/// <summary>
-	///  The questionbox's current state
-	/// </summary>
-	[Export] public bool active = true;
+    /// <summary>
+    ///     The questionbox's current state
+    /// </summary>
+    [Export] public bool active = true;
+
+    [BindTo("AnimatedSprite")] private Godot.AnimatedSprite anim;
+    [BindTo("AnimationPlayer")] private AnimationPlayer bounce;
+    [BindTo("BumpSound")] private AudioStreamPlayer bumpSound;
 
 
-	private AudioStreamPlayer bumpSound;
-	private AnimationPlayer bounce;
+    /// <summary>
+    ///     External property
+    /// </summary>
+    /// <returns></returns>
+    [Export] public ContentType content = ContentType.NOTHING;
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public void onCollide(KinematicCollision2D collision) {
-		if (collision.Normal != Vector2.Down) return;
-
-		
-		if (!active) {
-			bumpSound.Play();
-			return;
-		}
-		
-		active = false;
-
-		bumpSound.Play();
-
-		bounce.CurrentAnimation = "Bounce";
-		bounce.Play();
-		
-		anim.Animation = "Deactive";
-		anim.Play();
-	}
+    /// <summary>
+    /// </summary>
+    public void onCollide(KinematicCollision2D collision) {
+        if (collision.Normal != Vector2.Down) return;
 
 
-	/// <summary>
-	/// Init...
-	/// </summary>
-	public override void _Ready() {
-		anim = GetNode<Godot.AnimatedSprite>("AnimatedSprite");
+        if (!active) {
+            bumpSound.Play();
+            return;
+        }
 
-		if (active) anim.Animation = "Active";
-		else anim.Animation = "Deactive";
+        active = false;
 
-		anim.Play();
+        bumpSound.Play();
+
+        bounce.CurrentAnimation = "Bounce";
+        bounce.Play();
+
+        anim.Animation = "Deactive";
+        anim.Play();
+    }
 
 
-		bumpSound = GetNode<AudioStreamPlayer>("BumpSound");
-		bounce = GetNode<AnimationPlayer>("AnimationPlayer");
-	}
+    /// <summary>
+    ///     Init...
+    /// </summary>
+    public override void _Ready() {
+        this.SetupNodeBindings();
+
+        if (active) anim.Animation = "Active";
+        else anim.Animation = "Deactive";
+
+        anim.Play();
+    }
 
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <returns></returns>
-	public override string ToString() {
-		return $"QuesionBox: {content}";
-	}
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString() {
+        return $"QuesionBox: {content}";
+    }
 }

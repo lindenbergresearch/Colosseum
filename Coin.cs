@@ -1,66 +1,64 @@
 using Godot;
-using System;
-using Colosseum;
 
 /// <summary>
-/// Coin collector interface
+///     Coin collector interface
 /// </summary>
 public interface ICoinCollector {
-	/// <summary>
-	/// Called upon coin is touched.
-	/// </summary>
-	/// <param name="coin">Ref to the coin</param>
-	bool onCoinCollect(Coin coin);
+    /// <summary>
+    ///     Called upon coin is touched.
+    /// </summary>
+    /// <param name="coin">Ref to the coin</param>
+    bool onCoinCollect(Coin coin);
 }
 
 /// <summary>
-/// Standard collectable coins
+///     Standard collectable coins
 /// </summary>
 public class Coin : Area2D {
-	public bool Picked { get; set; }
-	private Godot.AudioStreamPlayer _audioStreamPlayer;
-	private Godot.AnimatedSprite _animatedSprite;
+    [BindTo("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
+
+    [BindTo("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
+    public bool Picked { get; set; }
 
 
-	/// <summary>
-	/// Init...
-	/// </summary>
-	public override void _Ready() {
-		_audioStreamPlayer = GetNode<Godot.AudioStreamPlayer>("AudioStreamPlayer");
-		_animatedSprite = GetNode<Godot.AnimatedSprite>("AnimatedSprite");
+    /// <summary>
+    ///     Init...
+    /// </summary>
+    public override void _Ready() {
+        this.SetupNodeBindings();
 
-		Picked = false;
+        Picked = false;
 
-		_animatedSprite.Play();
+        _animatedSprite.Play();
 
-		Connect("body_entered", this, nameof(onBodyEnter));
-	}
+        Connect("body_entered", this, nameof(onBodyEnter));
+    }
 
 
-	/// <summary>
-	/// Coin collected 
-	/// </summary>
-	/// <param name="body"></param>
-	public void onBodyEnter(Godot.Object body) {
-		Logger.debug($"Body entered this coin: {body}");
+    /// <summary>
+    ///     Coin collected
+    /// </summary>
+    /// <param name="body"></param>
+    public void onBodyEnter(Object body) {
+        Logger.debug($"Body entered this coin: {body}");
 
-		if (Picked || !(body is ICoinCollector)) {
-			Logger.debug($"Body: {body} couldn't collect coins.");
-			return;
-		}
+        if (Picked || !(body is ICoinCollector)) {
+            Logger.debug($"Body: {body} couldn't collect coins.");
+            return;
+        }
 
-		Logger.debug($"Calling interface on: {body}");
+        Logger.debug($"Calling interface on: {body}");
 
-		Picked = (body as ICoinCollector).onCoinCollect(this);
+        Picked = (body as ICoinCollector).onCoinCollect(this);
 
-		if (!Picked) return;
+        if (!Picked) return;
 
-		_audioStreamPlayer.Play();
-		Picked = true;
-		Visible = false;
-		SetProcess(false);
-		SetPhysicsProcess(false);
-		SetProcessInput(false);
-		Disconnect("body_entered", this, nameof(onBodyEnter));
-	}
+        _audioStreamPlayer.Play();
+        Picked = true;
+        Visible = false;
+        SetProcess(false);
+        SetPhysicsProcess(false);
+        SetProcessInput(false);
+        Disconnect("body_entered", this, nameof(onBodyEnter));
+    }
 }
