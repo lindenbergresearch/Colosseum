@@ -7,12 +7,15 @@ using static Util;
 [Tool]
 public class BitmapFont2D : Godot.Node2D {
 	private Color _foreground;
+	private Color _shadow;
 	private Vector2 _glyphDimension;
 	private Texture _imageTexture;
 	private float _lineMargin;
 	private int _offset;
 	private Vector2 _scale;
 	private string _text;
+	private bool _hasShadow;
+	private Vector2 _shadowOffset;
 
 
 	/// <summary>
@@ -23,6 +26,10 @@ public class BitmapFont2D : Godot.Node2D {
 		_foreground = Color(1, 1, 1);
 		_text = "The quick brown fox is dead. !\"§$\"%&/()=?><|#+*'´`/\\";
 		_scale = Vec(1, 1);
+		_lineMargin = 2;
+		_hasShadow = false;
+		_shadow = Color(0, 0, 0);
+		_shadowOffset = Vec(1, 1);
 
 		_offset = 32;
 
@@ -107,16 +114,54 @@ public class BitmapFont2D : Godot.Node2D {
 		}
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
 	[Export]
 	public Vector2 CharsDimension { get; set; }
 
-
+	/// <summary>
+	/// 
+	/// </summary>
 	[Export]
 	public float LineMargin {
 		get => _lineMargin;
 		set {
 			_lineMargin = value;
 			Refresh();
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	[Export]
+	public Color Shadow {
+		get => _shadow;
+		set {
+			_shadow = value;
+			Update();
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	[Export]
+	public bool HasShadow {
+		get => _hasShadow;
+		set {
+			_hasShadow = value;
+			Update();
+		}
+	}
+
+	[Export()]
+	public Vector2 ShadowOffset {
+		get => _shadowOffset;
+		set {
+			_shadowOffset = value;
+			Update();
 		}
 	}
 
@@ -130,7 +175,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/// <summary>
-	///     Simulates a put pixel taking scale into account.
+	/// Simulates a put pixel taking scale into account.
 	/// </summary>
 	/// <param name="pos">The position (in normal coordinates)</param>
 	/// <param name="color">The color</param>
@@ -143,7 +188,7 @@ public class BitmapFont2D : Godot.Node2D {
 	/// </summary>
 	/// <param name="pos"></param>
 	/// <param name="text"></param>
-	private void DrawText(Vector2 pos, string text) {
+	private void DrawText(Vector2 pos, string text, Color color) {
 		for (var c = 0; c < text.Length; c++) {
 			var index = Mathf.Clamp(text[c] - _offset, 0, BitmapFont.Glyphs.Length - 1);
 			var glyph = BitmapFont.Glyphs[index];
@@ -152,22 +197,28 @@ public class BitmapFont2D : Godot.Node2D {
 			for (var y = 0; y < GlyphDimension.y; y++)
 			for (var x = 0; x < GlyphDimension.x; x++)
 				if (glyph.PixelAt(x, y))
-					PutPixel(Vec(x + c * GlyphDimension.x, y) + pos, Foreground);
+					PutPixel(Vec(x + c * GlyphDimension.x, y) + pos, color);
 		}
 	}
 
 
 	/// <summary>
-	///     Draw font
+	/// Draw bitmap-font to canvas.
 	/// </summary>
 	public override void _Draw() {
 		if (_imageTexture == null || _imageTexture.GetData() == null || BitmapFont == null || BitmapFont.Glyphs.Length == 0) return;
 
 		var lines = Text.Split('\n');
-
 		var yoffset = 0;
 
-		foreach (var line in lines) DrawText(Vec(0, yoffset++ * (GlyphDimension.y + _lineMargin)), line);
+		foreach (var line in lines) {
+			if (HasShadow) {
+				DrawText(Vec(0, yoffset * (GlyphDimension.y + _lineMargin)) + ShadowOffset, line, Shadow);
+			}
+
+			DrawText(Vec(0, yoffset * (GlyphDimension.y + _lineMargin)), line, Foreground);
+			yoffset++;
+		}
 	}
 
 
@@ -175,7 +226,6 @@ public class BitmapFont2D : Godot.Node2D {
 		if (_imageTexture == null || _imageTexture.GetData() == null) return;
 
 		BitmapFont.process();
-
 		CharsDimension = BitmapFont.CharsDimension;
 
 		Update();
