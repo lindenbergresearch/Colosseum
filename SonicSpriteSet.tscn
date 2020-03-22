@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://sprites/sonic_sprites.png" type="Texture" id=1]
+
+[node name="SonicSpriteSet" type="Node"]
+
+[node name="sonic_sprites" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false

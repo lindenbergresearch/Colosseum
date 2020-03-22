@@ -1,0 +1,239 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://sprites/Platformer Art Complete Pack/Base pack/Items/coinBronze.png" type="Texture" id=1]
+[ext_resource path="res://sprites/Platformer Art Complete Pack/Base pack/Items/gemRed.png" type="Texture" id=2]
+[ext_resource path="res://PlayerInfoText.cs" type="Script" id=3]
+[ext_resource path="res://sprites/Platformer Art Complete Pack/Buildings expansion/Tiles/clock.png" type="Texture" id=4]
+[ext_resource path="res://sprites/mario.png" type="Texture" id=5]
+[ext_resource path="res://PlayerInfoTextFont.tres" type="DynamicFont" id=6]
+[ext_resource path="res://DebugMessageBox.cs" type="Script" id=7]
+[ext_resource path="res://ConsoleMonoFont.tres" type="DynamicFont" id=8]
+[ext_resource path="res://sounds/effects/menu.ogg" type="AudioStream" id=9]
+[ext_resource path="res://BitmapFont2D.tscn" type="PackedScene" id=10]
+[ext_resource path="res://fonts/NESFont3.png" type="Texture" id=11]
+
+[sub_resource type="DynamicFontData" id=1]
+hinting = 0
+font_path = "res://fonts/architect-s-daughter/ArchitectsDaughter.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 110
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+use_filter = true
+font_data = SubResource( 1 )
+
+[node name="PlayerInfoText" type="ParallaxBackground"]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 20.0, 9.0, 13.0, 5.0 ]
+}
+
+[node name="TextTimer" type="Timer" parent="."]
+wait_time = 12.077
+autostart = true
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_top = -0.01875
+anchor_right = 1.0
+anchor_bottom = -0.01875
+margin_bottom = 30.0
+color = Color( 0.160784, 0.0745098, 0.0745098, 0.145098 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="clock" type="Sprite" parent="."]
+position = Vector2( 401, 7 )
+scale = Vector2( 0.114286, 0.114286 )
+texture = ExtResource( 4 )
+centered = false
+
+[node name="coinBronze" type="Sprite" parent="."]
+position = Vector2( 338.646, 3.35355 )
+scale = Vector2( 0.211761, 0.215548 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="gemRed" type="Sprite" parent="."]
+position = Vector2( 250, -2.38419e-07 )
+scale = Vector2( 0.228571, 0.328571 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="mario" type="Sprite" parent="."]
+position = Vector2( 199, 5 )
+scale = Vector2( 0.625002, 0.625 )
+texture = ExtResource( 5 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 48, 16, 16 )
+
+[node name="LivesLabel" type="Label" parent="."]
+margin_left = 218.0
+margin_top = 5.0
+margin_right = 366.0
+margin_bottom = 125.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 6
+custom_constants/shadow_as_outline = 0
+text = "99"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreLabel" type="Label" parent="."]
+margin_left = 265.0
+margin_top = 5.0
+margin_right = 783.0
+margin_bottom = 125.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 6
+custom_constants/shadow_as_outline = 0
+text = "9999999"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CoinsLabel" type="Label" parent="."]
+margin_left = 353.0
+margin_top = 5.0
+margin_right = 649.0
+margin_bottom = 125.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 6
+custom_constants/shadow_as_outline = 0
+text = "9999"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimeLabel" type="Label" parent="."]
+margin_left = 412.0
+margin_top = 5.0
+margin_right = 708.0
+margin_bottom = 125.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 6
+text = "999"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SecondsLabel" type="Label" parent="."]
+margin_left = 435.0
+margin_top = 5.0
+margin_right = 503.0
+margin_bottom = 125.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 6
+custom_constants/shadow_as_outline = 0
+text = "s"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LevelNameLabel" type="Label" parent="."]
+margin_left = 9.0
+margin_top = 1.0
+margin_right = 1095.0
+margin_bottom = 208.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 7
+custom_constants/shadow_offset_y = 8
+custom_constants/shadow_as_outline = 0
+text = "Green Hill Valley"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="XLabel" type="Label" parent="."]
+margin_left = 210.0
+margin_top = 5.0
+margin_right = 278.0
+margin_bottom = 125.0
+rect_scale = Vector2( 0.09, 0.09 )
+custom_fonts/font = ExtResource( 6 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 6
+custom_constants/shadow_as_outline = 0
+text = "x"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRectDebug" type="ColorRect" parent="."]
+anchor_top = 0.0125
+anchor_right = 1.0
+anchor_bottom = 0.20625
+margin_top = 20.0
+margin_bottom = 58.0
+color = Color( 0.0392157, 0.0862745, 0.145098, 0.211765 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="DebugMessageBox" type="RichTextLabel" parent="."]
+anchor_top = 0.0125
+anchor_bottom = 0.0125
+margin_left = 4.0
+margin_top = 24.0
+margin_right = 2364.0
+margin_bottom = 484.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_scale = Vector2( 0.2, 0.2 )
+custom_fonts/normal_font = ExtResource( 8 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 2
+text = "19:14:51.189 DEBUG [Mario2D.cs<358>::Void _Ready()] Setup player...
+19:14:51.250 DEBUG [Mario2D.cs<347>::Void ResetPlayer()] Reset player...
+19:14:51.488 DEBUG [Node2D.cs<34>::Void setupViewport()] Set viewport to resolution: (480, 320) Game has resolution: (1440, 960)
+19:14:51.504 DEBUG [Mario2D.cs<164>::Void handleCollisions()] Pos: (23.82322, 303.92) Vel: (0, 0) Source: [TileMap:1364] Normal: (0, -1) (DOWN--v)
+19:15:12.774 DEBUG [Mario2D.cs<164>::Void handleCollisions()] Pos: (89.58061, 256.08) Vel: (0, 0) Source: [StaticBody2D:1618] Normal: (0, 1) (TOP---^)
+19:15:12.974 DEBUG [Mario2D.cs<164>::Void handleCollisions()] Pos: (89.58061, 303.92) Vel: (0, 0) Source: [TileMap:1364] Normal: (0, -1) (DOWN--v)
+19:15:14.277 DEBUG [Mario2D.cs<164>::Void handleCollisions()] Pos: (72.84438, 256.08) Vel: (0, 0) Source: [StaticBody2D:1611] Normal: (0, 1) (TOP---^)
+"
+scroll_active = false
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+RedrawInterval = 210
+
+[node name="MessageSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = 3.782
+pitch_scale = 1.43
+
+[node name="BitmapFont2D" parent="." instance=ExtResource( 10 )]
+position = Vector2( 8, 144 )
+ImageTexture = ExtResource( 11 )
+Offset = 0
+GlyphDimension = Vector2( 8, 8 )
+CharsDimension = Vector2( 16, 32 )
+[connection signal="timeout" from="TextTimer" to="DebugMessageBox" method="_on_Timer_timeout"]

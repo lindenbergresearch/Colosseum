@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://BitmapFont2D.cs" type="Script" id=1]
+[ext_resource path="res://fonts/NESFont1.png" type="Texture" id=2]
+
+[node name="BitmapFont2D" type="Node2D"]
+position = Vector2( 8.74991, 18.0001 )
+script = ExtResource( 1 )
+ImageTexture = ExtResource( 2 )
+LineMargin = 3.0
+GlyphDimension = Vector2( 16, 16 )
+Text = "(C)2020 BY LINDENBERG RESEARCH
+ALL RIGHTS RESERVED.
+"
+CharsDimension = Vector2( 16, 6 )

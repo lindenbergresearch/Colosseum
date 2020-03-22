@@ -1,0 +1,158 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Mario2D.tscn" type="PackedScene" id=1]
+[ext_resource path="res://OverworldTiles.tres" type="TileSet" id=2]
+[ext_resource path="res://Node2D.cs" type="Script" id=3]
+[ext_resource path="res://ParallaxBackground.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Questionbox.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Brick.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Coin.tscn" type="PackedScene" id=7]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 3 )
+EnableDebug = true
+LevelName = "Green Hill Valley"
+
+[node name="Mario" parent="." instance=ExtResource( 1 )]
+position = Vector2( 24, 288 )
+z_index = 1
+
+[node name="Parallax" parent="." instance=ExtResource( 4 )]
+position = Vector2( 152, 288 )
+
+[node name="TileMap" type="TileMap" parent="."]
+z_as_relative = false
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 262153, 41, 0, 262154, 42, 0, 262155, 43, 0, 327689, 44, 0, 327690, 45, 0, 327691, 46, 0, 393225, 44, 0, 393226, 45, 0, 393227, 46, 0, 458761, 47, 0, 458762, 48, 0, 458763, 49, 0, 524294, 66, 0, 524295, 66, 0, 524296, 66, 0, 524297, 66, 0, 524298, 66, 0, 524299, 66, 0, 524300, 66, 0, 524301, 66, 0, 524302, 66, 0, 655360, 66, 0, 655361, 66, 0, 655362, 66, 0, 655363, 66, 0, 655364, 68, 0, 786443, 66, 0, 786444, 66, 0, 786445, 66, 0, 786446, 66, 0, 983040, 68, 0, 983046, 68, 0, 983047, 69, 0, 983048, 69, 0, 1048593, 26, 0, 1048594, 50, 0, 1048595, 51, 0, 1048596, 52, 0, 1048597, 53, 0, 1048614, 5, 0, 1048615, 5, 0, 1048626, 18, 0, 1114129, 29, 0, 1114130, 58, 0, 1114131, 59, 0, 1114132, 60, 0, 1114133, 61, 0, 1114134, 27, 0, 1114135, 27, 0, 1114136, 27, 0, 1114137, 50, 0, 1114138, 51, 0, 1114139, 52, 0, 1114140, 53, 0, 1114162, 19, 0, 1179655, 21, 0, 1179656, 22, 0, 1179657, 22, 0, 1179658, 23, 0, 1179665, 29, 0, 1179666, 58, 0, 1179667, 58, 0, 1179668, 58, 0, 1179669, 58, 0, 1179670, 58, 0, 1179671, 58, 0, 1179672, 58, 0, 1179673, 58, 0, 1179674, 59, 0, 1179675, 60, 0, 1179676, 61, 0, 1179677, 27, 0, 1179678, 50, 0, 1179679, 51, 0, 1179680, 52, 0, 1179681, 53, 0, 1179698, 20, 0, 1245184, 2, 0, 1245185, 2, 0, 1245186, 2, 0, 1245187, 2, 0, 1245188, 2, 0, 1245189, 2, 0, 1245190, 2, 0, 1245191, 2, 0, 1245192, 2, 0, 1245193, 2, 0, 1245194, 2, 0, 1245195, 3, 0, 1245197, 4, 0, 1245199, 4, 0, 1245201, 29, 0, 1245202, 58, 0, 1245203, 58, 0, 1245204, 58, 0, 1245205, 58, 0, 1245206, 58, 0, 1245207, 58, 0, 1245208, 58, 0, 1245209, 58, 0, 1245210, 58, 0, 1245211, 58, 0, 1245212, 58, 0, 1245213, 58, 0, 1245214, 58, 0, 1245215, 59, 0, 1245216, 60, 0, 1245217, 61, 0, 1245218, 27, 0, 1245219, 28, 0, 1245226, 1, 0, 1245227, 2, 0, 1245228, 2, 0, 1245229, 2, 0, 1245230, 2, 0, 1245231, 2, 0, 1245232, 2, 0, 1245233, 2, 0, 1245234, 2, 0, 1245235, 2, 0, 1245236, 2, 0, 1245237, 2, 0, 1245238, 2, 0, 1245239, 2, 0, 1245240, 2, 0, 1245241, 2, 0, 1245242, 2, 0, 1245243, 2, 0, 1245244, 2, 0, 1245245, 2, 0, 1245246, 2, 0, 1245247, 2, 0, 1245248, 2, 0, 1245249, 2, 0, 1245250, 2, 0, 1245251, 2, 0, 1245252, 2, 0, 1245253, 2, 0, 1245254, 2, 0, 1245255, 2, 0, 1245256, 2, 0, 1245257, 2, 0, 1245258, 2, 0, 1245259, 2, 0, 1245260, 2, 0, 1245261, 2, 0, 1245262, 2, 0, 1245263, 2, 0, 1245264, 2, 0, 1245265, 2, 0, 1245266, 2, 0, 1245267, 2, 0, 1245268, 2, 0, 1245269, 2, 0, 1245270, 2, 0, 1245271, 2, 0, 1245272, 2, 0, 1245273, 2, 0, 1245274, 2, 0, 1245275, 2, 0, 1245276, 2, 0, 1245277, 2, 0, 1245278, 2, 0, 1245279, 2, 0, 1245280, 2, 0, 1245281, 2, 0, 1245282, 2, 0, 1245283, 2, 0, 1245284, 2, 0, 1245285, 2, 0, 1245286, 2, 0, 1245287, 2, 0, 1245288, 2, 0, 1245289, 2, 0, 1245290, 2, 0, 1245291, 2, 0, 1245292, 2, 0, 1245293, 2, 0, 1245294, 2, 0, 1245295, 2, 0 )
+
+[node name="Questionbox" parent="." instance=ExtResource( 5 )]
+position = Vector2( 152, 248 )
+
+[node name="Coins" type="Node" parent="."]
+
+[node name="Coin" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 136, 288 )
+
+[node name="Coin2" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 120, 288 )
+
+[node name="Coin3" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 104, 288 )
+
+[node name="Coin4" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 152, 288 )
+
+[node name="Coin5" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 16, 224 )
+
+[node name="Coin6" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 32, 224 )
+
+[node name="Coin7" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 48, 224 )
+
+[node name="Coin8" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 64, 224 )
+
+[node name="Coin9" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 80, 224 )
+
+[node name="Coin10" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 96, 224 )
+
+[node name="Coin11" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 112, 224 )
+
+[node name="Coin12" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 128, 224 )
+
+[node name="Coin13" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 144, 224 )
+
+[node name="Coin14" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 288, 240 )
+
+[node name="Coin15" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 312, 248 )
+
+[node name="Coin16" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 336, 256 )
+
+[node name="Coin17" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 360, 256 )
+
+[node name="Coin18" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 384, 256 )
+
+[node name="Coin19" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 408, 256 )
+
+[node name="Coin20" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 424, 264 )
+
+[node name="Coin21" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 440, 272 )
+
+[node name="Coin22" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 464, 280 )
+
+[node name="Coin23" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 488, 280 )
+
+[node name="Coin24" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 512, 288 )
+
+[node name="Coin25" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 304, 224 )
+
+[node name="Coin26" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 328, 232 )
+
+[node name="Coin27" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 352, 232 )
+
+[node name="Coin28" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 376, 232 )
+
+[node name="Coin29" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 400, 232 )
+
+[node name="Coin30" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 424, 240 )
+
+[node name="Coin31" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 440, 248 )
+
+[node name="Coin32" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 456, 256 )
+
+[node name="Coin33" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 472, 264 )
+
+[node name="Coin34" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 184, 176 )
+
+[node name="Coin35" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 200, 176 )
+
+[node name="Coin36" parent="Coins" instance=ExtResource( 7 )]
+position = Vector2( 216, 176 )
+
+[node name="Bricks" type="Node" parent="."]
+
+[node name="Brick" parent="Bricks" instance=ExtResource( 6 )]
+position = Vector2( 24, 248 )
+
+[node name="Brick2" parent="Bricks" instance=ExtResource( 6 )]
+position = Vector2( 40, 248 )
+
+[node name="Brick3" parent="Bricks" instance=ExtResource( 6 )]
+position = Vector2( 56, 248 )
+
+[node name="Brick4" parent="Bricks" instance=ExtResource( 6 )]
+position = Vector2( 72, 248 )
+
+[node name="Brick5" parent="Bricks" instance=ExtResource( 6 )]
+position = Vector2( 88, 248 )

@@ -1,0 +1,229 @@
+[gd_scene load_steps=35 format=2]
+
+[ext_resource path="res://sprites/mario.png" type="Texture" id=1]
+[ext_resource path="res://Mario2D.cs" type="Script" id=2]
+[ext_resource path="res://sounds/SMB3/smb3_jump.wav" type="AudioStream" id=3]
+[ext_resource path="res://ConsoleMonoFont.tres" type="DynamicFont" id=4]
+[ext_resource path="res://sounds/SMB3/Slipping SFX.wav" type="AudioStream" id=5]
+[ext_resource path="res://CollisionShape2D.cs" type="Script" id=6]
+[ext_resource path="res://sounds/effects/blockBump.ogg" type="AudioStream" id=7]
+[ext_resource path="res://sprites/sonic_sprites.png" type="Texture" id=8]
+[ext_resource path="res://PlayerInfoText.tscn" type="PackedScene" id=9]
+[ext_resource path="res://sounds/SMB3/smb3_1-up.wav" type="AudioStream" id=10]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
+region = Rect2( 288, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 64, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 32, 16, 32 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 1 )
+region = Rect2( 80, 32, 16, 32 )
+
+[sub_resource type="SpriteFrames" id=11]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
+"loop": true,
+"name": "Walk",
+"speed": 7.0
+}, {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 4 ), SubResource( 5 ) ],
+"loop": true,
+"name": "Run",
+"speed": 12.0
+}, {
+"frames": [ SubResource( 6 ), SubResource( 7 ) ],
+"loop": true,
+"name": "Invincible",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 8 ) ],
+"loop": true,
+"name": "Skid",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 9 ) ],
+"loop": true,
+"name": "Die",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 10 ) ],
+"loop": true,
+"name": "Jump",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=12]
+radius = 6.43619
+height = 4.19094
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 8 )
+region = Rect2( 96, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 8 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 8 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 8 )
+region = Rect2( 120, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 8 )
+region = Rect2( 144, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 8 )
+region = Rect2( 168, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 8 )
+region = Rect2( 192, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 8 )
+region = Rect2( 216, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 8 )
+region = Rect2( 240, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 8 )
+region = Rect2( 264, 0, 24, 24 )
+
+[sub_resource type="SpriteFrames" id=24]
+animations = [ {
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
+"loop": true,
+"name": "Walk",
+"speed": 8.0
+}, {
+"frames": [ SubResource( 16 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ) ],
+"loop": true,
+"name": "Run",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 20 ) ],
+"loop": true,
+"name": "Skid",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ) ],
+"loop": true,
+"name": "Jump",
+"speed": 8.0
+} ]
+
+[node name="Mario" type="KinematicBody2D"]
+position = Vector2( -0.1875, -16 )
+script = ExtResource( 2 )
+
+[node name="PlayerInfoText" parent="." instance=ExtResource( 9 )]
+layer = 0
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 11 )
+animation = "Invincible"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -0.0883867, 7.61872 )
+shape = SubResource( 12 )
+script = ExtResource( 6 )
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+
+[node name="SkiddingSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+volume_db = -4.727
+
+[node name="InfoBox" type="RichTextLabel" parent="."]
+margin_left = -88.853
+margin_top = -80.1109
+margin_right = 920.147
+margin_bottom = 373.889
+grow_vertical = 0
+rect_scale = Vector2( 0.2, 0.2 )
+custom_fonts/normal_font = ExtResource( 4 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+text = "Mario"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+rotating = true
+current = true
+process_mode = 0
+limit_smoothed = true
+smoothing_enabled = true
+smoothing_speed = 12.0
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[node name="BumpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+
+[node name="AnimatedSpriteSonic" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 0.1875, 4 )
+frames = SubResource( 24 )
+animation = "Idle"
+
+[node name="OneLiveUp" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+volume_db = 3.94
+pitch_scale = 0.85
