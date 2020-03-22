@@ -296,8 +296,8 @@ public class Property<T> {
 		if (Format.Length > 0 && Value != null) valStr = Formatted();
 
 		return $"[Name='{Name}' ID={ID} value={typeStr[typeStr.Length - 1]}({valStr})" + (Locked ? " locked=true" : "") +
-		       $" handler={RaiseChangeEvent?.GetInvocationList()?.Length}" +
-		       $" trigger={Triggers.Count} transforms={TransformTriggers.Count}" + "]";
+			   $" handler={RaiseChangeEvent?.GetInvocationList()?.Length}" +
+			   $" trigger={Triggers.Count} transforms={TransformTriggers.Count}" + "]";
 	}
 
 

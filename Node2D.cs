@@ -34,7 +34,7 @@ public class Node2D : Godot.Node2D {
 
 	public void setupViewport() {
 		Logger.debug("Set viewport to resolution: " + Game.VIEWPORT_RESOLUTION + " Game has resolution: " +
-		             Game.WINDOW_RESOLUTION);
+					 Game.WINDOW_RESOLUTION);
 
 
 		GetViewport().SetSizeOverride(true, Game.VIEWPORT_RESOLUTION);

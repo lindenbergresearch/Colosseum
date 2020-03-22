@@ -4,207 +4,381 @@
         <name>Colosseum</name>
     </assembly>
     <members>
-        <member name="T:Brick">
+        <member name="T:BitmapGlyph">
             <summary>
-            Simple brick which could be damaged
+            
             </summary>
         </member>
-        <member name="M:Brick._Ready">
+        <member name="F:BitmapGlyph.data">
             <summary>
-            Init
+            
+            </summary>
+        </member>
+        <member name="M:BitmapGlyph.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Construct a new bitmap glyph with a given dimension.
+            </summary>
+            <param name="width"></param>
+            <param name="height"></param>
+        </member>
+        <member name="M:BitmapGlyph.Parse(Godot.Image,Godot.Vector2,Godot.Color)">
+            <summary>
+            Parses the image data and converts it to a 1-bit data array.
+            </summary>
+            <param name="image"></param>
+            <param name="offset"></param>
+            <param name="transparent"></param>
+        </member>
+        <member name="M:BitmapGlyph.PixelAt(System.Int32,System.Int32)">
+            <summary>
+            Tests for pixel at the given coordinate
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BitmapFont">
+            <summary>
+            Simple class to load and use plain bitmap files as bitmap font in Godot.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.TransparentColor">
+            <summary>
+            The color which indicates the transparent background.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.CharsDimension">
+            <summary>
+            The the characters count vertical and horizontal.
+            Will be autodetect.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.GlyphDimension">
+            <summary>
+            The dimension of one character in pixels.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.Offset">
+            <summary>
+            The offset of the character index. 
+            </summary>
+        </member>
+        <member name="P:BitmapFont.Count">
+            <summary>
+            The character count.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.imageTexture">
+            <summary>
+            The source image
+            </summary>
+        </member>
+        <member name="M:BitmapFont.#ctor">
+            <summary>
+            Set default values on creation
+            </summary>
+        </member>
+        <member name="M:BitmapFont.DetectCharsDimension">
+            <summary>
+            Detects the correct char dimension based on the glyph dimension
+            </summary>
+        </member>
+        <member name="M:BitmapFont.DetectTransparentColor(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BitmapFont.ProcessImage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:BitmapFont.process">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:BitmapFont.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:BitmapFontException">
+            <summary>
+            Bitpmap Font Exception
+            </summary>
+        </member>
+        <member name="T:BitmapFont2D">
+            <summary>
+            Tool node to edit and preview a bitmap font in realtime.
+            </summary>
+        </member>
+        <member name="M:BitmapFont2D.#ctor">
+            <summary>
+                Setup standard values
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.ImageTexture">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.GlyphDimension">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.Offset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.Foreground">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.Text">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.TextScale">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:BitmapFont2D.PutPixel(Godot.Vector2,Godot.Color)">
+            <summary>
+                Simulates a put pixel taking scale into account.
+            </summary>
+            <param name="pos">The position (in normal coordinates)</param>
+            <param name="color">The color</param>
+        </member>
+        <member name="M:BitmapFont2D.DrawText(Godot.Vector2,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="pos"></param>
+            <param name="text"></param>
+        </member>
+        <member name="M:BitmapFont2D._Draw">
+            <summary>
+            Draw font
+            </summary>
+        </member>
+        <member name="M:BitmapFont2D._Ready">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Brick">
+            <summary>
+                Simple brick which could be damaged
             </summary>
         </member>
         <member name="M:Brick.onCollide(Godot.KinematicCollision2D)">
             <summary>
-            Handle collision
+                Handle collision
             </summary>
             <param name="collision"></param>
         </member>
+        <member name="M:Brick._Ready">
+            <summary>
+                Init
+            </summary>
+        </member>
         <member name="T:ICoinCollector">
             <summary>
-            Coin collector interface
+                Coin collector interface
             </summary>
         </member>
         <member name="M:ICoinCollector.onCoinCollect(Coin)">
             <summary>
-            Called upon coin is touched.
+                Called upon coin is touched.
             </summary>
             <param name="coin">Ref to the coin</param>
         </member>
         <member name="T:Coin">
             <summary>
-            Standard collectable coins
+                Standard collectable coins
             </summary>
         </member>
         <member name="M:Coin._Ready">
             <summary>
-            Init...
+                Init...
             </summary>
         </member>
         <member name="M:Coin.onBodyEnter(Godot.Object)">
             <summary>
-            Coin collected 
+                Coin collected
             </summary>
             <param name="body"></param>
         </member>
         <member name="T:DebugMessageBox">
             <summary>
-            Simple RichText messagebox for showing debug messages on
-            game screen.
+                Simple RichText messagebox for showing debug messages on
+                game screen.
             </summary>
         </member>
         <member name="P:DebugMessageBox.RedrawInterval">
             <summary>
-            The redraw interval in ms
+                The redraw interval in ms
             </summary>
         </member>
-        <member name="T:BindToAttribute">
+        <member name="T:GNodeAttribute">
             <summary>
-            Custom Attribute to bind a local property to a Godot Node in the scene-graph
+                Custom Attribute to bind a local property to a Godot Node in the scene-graph
             </summary>
         </member>
-        <member name="P:BindToAttribute.BindTo">
+        <member name="M:GNodeAttribute.#ctor">
             <summary>
-            Name (and path) of the target note)
+                Standard constructor
             </summary>
         </member>
-        <member name="M:BindToAttribute.#ctor(System.String)">
+        <member name="M:GNodeAttribute.#ctor(System.String)">
             <summary>
-            Construct NoteBindingAttribute
+                Construct NoteBindingAttribute
             </summary>
             <param name="bindTo">Name (and path) of the target note.</param>
         </member>
+        <member name="P:GNodeAttribute.BindTo">
+            <summary>
+                Name (and path) of the target note)
+            </summary>
+        </member>
         <member name="T:DynamicBindings">
             <summary>
-            Contain helper methods for dynamic node bindings.
+                Contain helper methods for dynamic node bindings.
             </summary>
         </member>
         <member name="M:DynamicBindings.SetupNodeBindings(Godot.Node)">
             <summary>
-            Extension method to be used with nodes.
-            Must use with 'this.' to work: this.AutobindNotes()
+                Extension method to be used with nodes.
+                Must use with 'this.' to work: this.AutobindNotes()
             </summary>
             <param name="node"></param>
         </member>
         <member name="M:DynamicBindings.SetupBindings(Godot.Node)">
             <summary>
-            Setup dynamic bindings for a given node instance.
-            Please call this in every '_Ready()' method in Godot nodes
-            to use automatic bindings. 
+                Setup dynamic bindings for a given node instance.
+                Please call this in every '_Ready()' method in Godot nodes
+                to use automatic bindings.
             </summary>
             <param name="node">The node to setup.</param>
             <exception cref="T:System.Exception"></exception>
         </member>
         <member name="T:IDynamicState`1">
             <summary>
-            Generic interface to hold a state
+                Generic interface to hold a state
             </summary>
         </member>
         <member name="T:IDynamicBoolState">
             <summary>
-            Boolean implementation
+                Boolean implementation
             </summary>
         </member>
         <member name="M:IDynamicBoolState.isSatisfied">
             <summary>
-            Conditional checker
+                Conditional checker
             </summary>
             <returns>Returns true is the state is satisfied.</returns>
         </member>
         <member name="T:DynamicStateCombiner">
             <summary>
-            
             </summary>
         </member>
         <member name="M:DynamicStateCombiner.#ctor(System.Func{System.Boolean})">
             <summary>
-            Push function via constructor
+                Push function via constructor
             </summary>
             <param name="fun"></param>
         </member>
         <member name="M:DynamicStateCombiner.isSatisfied">
             <summary>
-            Resolves the conditional state
+                Resolves the conditional state
             </summary>
             <returns></returns>
         </member>
         <member name="M:DynamicStateCombiner.op_Implicit(System.Func{System.Boolean})~DynamicStateCombiner">
             <summary>
-            Implicit conversation to use as type
+                Implicit conversation to use as type
             </summary>
             <param name="fun"></param>
             <returns></returns>
         </member>
         <member name="M:DynamicStateCombiner.op_Implicit(DynamicStateCombiner)~System.Boolean">
             <summary>
-            Implicit conversation to use as type
+                Implicit conversation to use as type
             </summary>
             <param name="dsc"></param>
             <returns></returns>
         </member>
         <member name="M:DynamicStateCombiner.fun(System.Func{System.Boolean})">
             <summary>
-            Static factory method
+                Static factory method
             </summary>
             <param name="f"></param>
             <returns></returns>
         </member>
         <member name="M:DynamicStateCombiner.ToString">
             <summary>
-            Just some formatting
+                Just some formatting
             </summary>
             <returns></returns>
         </member>
         <member name="T:Colosseum.ICollidable">
             <summary>
-            Interface to implement collision handling
+                Interface to implement collision handling
             </summary>
         </member>
         <member name="M:Colosseum.ICollidable.onCollide(Godot.KinematicCollision2D)">
             <summary>
-            Triggered by the collider
+                Triggered by the collider
             </summary>
             <param name="collision"></param>
         </member>
         <member name="T:Colosseum.Motion2D">
             <summary>
-            
-            </summary>
-        </member>
-        <member name="P:Colosseum.Motion2D.Velocity">
-            <summary>
-            Represents the velocity of the 2D motion as Vector2
-            </summary>
-        </member>
-        <member name="P:Colosseum.Motion2D.X">
-            <summary>
-            Returns the X part of the velocity vector
-            </summary>
-        </member>
-        <member name="P:Colosseum.Motion2D.Y">
-            <summary>
-            Returns the Y part of the velocity vector
-            </summary>
-        </member>
-        <member name="P:Colosseum.Motion2D.Abs">
-            <summary>
-            Returns the absolute values of both vector components
             </summary>
         </member>
         <member name="M:Colosseum.Motion2D.#ctor(Godot.Vector2)">
             <summary>
-            Create a new Motion2D by some Vector2
+                Create a new Motion2D by some Vector2
             </summary>
             <param name="velocity"></param>
         </member>
+        <member name="P:Colosseum.Motion2D.Velocity">
+            <summary>
+                Represents the velocity of the 2D motion as Vector2
+            </summary>
+        </member>
+        <member name="P:Colosseum.Motion2D.X">
+            <summary>
+                Returns the X part of the velocity vector
+            </summary>
+        </member>
+        <member name="P:Colosseum.Motion2D.Y">
+            <summary>
+                Returns the Y part of the velocity vector
+            </summary>
+        </member>
+        <member name="P:Colosseum.Motion2D.Abs">
+            <summary>
+                Returns the absolute values of both vector components
+            </summary>
+        </member>
         <member name="M:Colosseum.Motion2D.reset">
             <summary>
-            Reset velocity vector
+                Reset velocity vector
             </summary>
         </member>
         <member name="T:Colosseum.TimeOutFlag">
             <summary>
-            Flag with timeout setting
+                Flag with timeout setting
             </summary>
         </member>
         <member name="T:ILogWriter">
@@ -212,7 +386,7 @@
             Interface to output write for log messages.
             </summary>
         </member>
-        <member name="M:ILogWriter.Write(System.String)">
+        <member name="M:ILogWriter.Write(Logger.LogLevel,System.String)">
             <summary>
             Simple interface method for string output.
             </summary>
@@ -290,19 +464,32 @@
             </summary>
             <param name="message"></param>
         </member>
+        <member name="T:GodotConsoleLogWriter">
+            <summary>
+            Standard Godot console log-writer
+            </summary>
+        </member>
+        <member name="M:GodotConsoleLogWriter.Write(Logger.LogLevel,System.String)">
+            <summary>
+            Write to Godot console.
+            </summary>
+            <param name="level"></param>
+            <param name="message"></param>
+        </member>
+        <member name="T:SystemConsoleLogWriter">
+            <summary>
+            System console log-writer
+            </summary>
+        </member>
+        <member name="M:SystemConsoleLogWriter.Write(Logger.LogLevel,System.String)">
+            <summary>
+            Write to system console.
+            </summary>
+            <param name="level"></param>
+            <param name="message"></param>
+        </member>
         <member name="T:Mario2D">
             <summary>
-            
-            </summary>
-        </member>
-        <member name="T:Mario2D.ActionKey">
-            <summary>
-            Type which holds pressed keys
-            </summary>
-        </member>
-        <member name="T:Mario2D.Parameter">
-            <summary>
-            Common player parameter for kinematic handling
             </summary>
         </member>
         <member name="F:Mario2D.pScore">
@@ -312,63 +499,71 @@
             PROPERTIES ********************************************************************
             FLAGS *************************************************************************
         </member>
-        <member name="M:Mario2D.updateKeys">
-            UPDATES ***********************************************************************
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:Mario2D.SetLives(System.Int32)">
-            <summary>
-            Set players lives
-            </summary>
-            <param name="delta">The lives to add (neg. values will shrink lives)</param>
-        </member>
         <member name="M:Mario2D.onCoinCollect(Coin)">
             <summary>
-            Handle coins
+                Handle coins
             </summary>
             <param name="coin"></param>
             <returns></returns>
         </member>
+        <member name="M:Mario2D.updateKeys">
+            UPDATES ***********************************************************************
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Mario2D.SetLives(System.Int32)">
+            <summary>
+                Set players lives
+            </summary>
+            <param name="delta">The lives to add (neg. values will shrink lives)</param>
+        </member>
         <member name="M:Mario2D.handleCollisions">
             <summary>
-            Check collisions and pass event to all coliders
+                Check collisions and pass event to all coliders
             </summary>
         </member>
         <member name="M:Mario2D.updateStates">
             <summary>
-            
             </summary>
         </member>
         <member name="M:Mario2D.applyGravity(System.Single)">
             <summary>
-            Apply gravity to the player
+                Apply gravity to the player
             </summary>
             <param name="delta"></param>
         </member>
         <member name="M:Mario2D.applyXMotion(System.Single)">
             <summary>
-            Apply x motions to the player
+                Apply x motions to the player
             </summary>
             <param name="delta"></param>
         </member>
         <member name="M:Mario2D._PhysicsProcess(System.Single)">
             MAIN *************************************************************************
             <summary>
-            Update Player
+                Update Player
             </summary>
             <param name="delta"></param>
         </member>
         <member name="M:Mario2D.ResetPlayer">
             <summary>
-            Resets all player properties to initial values
+                Resets all player properties to initial values
             </summary>
         </member>
         <member name="M:Mario2D._Ready">
             INIT *************************************************************************
             <summary>
-            Init method
+                Init method
+            </summary>
+        </member>
+        <member name="T:Mario2D.ActionKey">
+            <summary>
+                Type which holds pressed keys
+            </summary>
+        </member>
+        <member name="T:Mario2D.Parameter">
+            <summary>
+                Common player parameter for kinematic handling
             </summary>
         </member>
         <member name="T:Game">
@@ -410,37 +605,37 @@
         </member>
         <member name="T:PropertyPool">
             <summary>
-            Maintains a registered properties
+                Maintains a registered properties
             </summary>
         </member>
         <member name="M:PropertyPool.Register``1(Property{``0})">
             <summary>
-            Registers a new property at the property-pool.
+                Registers a new property at the property-pool.
             </summary>
             <param name="property">The property to update</param>
         </member>
         <member name="M:PropertyPool.Pull``1(System.String)">
             <summary>
-            Get a property by it's name ID
+                Get a property by it's name ID
             </summary>
             <param name="name">The properties name ID</param>
             <returns></returns>
         </member>
         <member name="M:PropertyPool.Unregister``1(Property{``0})">
             <summary>
-            Removes a property from the pool.
+                Removes a property from the pool.
             </summary>
             <param name="property">The property to update</param>
         </member>
         <member name="M:PropertyPool.AsString">
             <summary>
-            Returns the pool's content as string representation.
+                Returns the pool's content as string representation.
             </summary>
             <returns></returns>
         </member>
         <member name="M:PropertyPool.RegisterNewProperty``1(System.String,``0,System.String,System.Boolean)">
             <summary>
-            Factory method for creating a property and automatically registering it..
+                Factory method for creating a property and automatically registering it..
             </summary>
             <param name="name"></param>
             <param name="value"></param>
@@ -450,64 +645,49 @@
         </member>
         <member name="M:PropertyPool.AddSubscription(IPropertyChangeListener,System.String)">
             <summary>
-            Add a subscription to one or more properties defined by a matching string.
+                Add a subscription to one or more properties defined by a matching string.
             </summary>
             <param name="subscriber"></param>
             <param name="match"></param>
         </member>
         <member name="T:IPropertyChangeListener">
             <summary>
-            Interface for subscriber classes.
+                Interface for subscriber classes.
             </summary>
         </member>
         <member name="M:IPropertyChangeListener.OnPropertyChange``1(Property{``0},PropertyEventArgs{``0})">
             <summary>
-            Called upon an event has been fired.
+                Called upon an event has been fired.
             </summary>
             <param name="sender"></param>
             <param name="args"></param>
         </member>
         <member name="T:PropertyEventArgs`1">
             <summary>
-            Property change event data.
+                Property change event data.
             </summary>
         </member>
         <member name="M:PropertyEventArgs`1.ToString">
             <summary>
-            Pretty print this event.
+                Pretty print this event.
             </summary>
             <returns></returns>
         </member>
         <member name="T:Property`1">
             <summary>
-            Encapsulates a property, binds it to a name and provide an event to catch manipulating.
+                Encapsulates a property, binds it to a name and provide an event to catch manipulating.
             </summary>
         </member>
         <member name="T:Property`1.ChangeEventHandler">
             <summary>
-            Event handler delegate.
+                Event handler delegate.
             </summary>
             <param name="sender">The property where the event is raised.</param>
             <param name="args">Change data.</param>
         </member>
-        <member name="E:Property`1.RaiseChangeEvent">
-            <summary>
-            The change event bound to the event handler delegate.
-            </summary>
-        </member>
-        <member name="F:Property`1._transformTriggers">
-            <summary>
-            Dynamic transformation trigger list. Contains all transformation trigger.
-            </summary>
-        </member>
-        <member name="F:Property`1._triggers">
-            <summary>
-            Dynamic trigger list. Contains all constraint trigger.
-            </summary>
-        </member>
         <member name="M:Property`1.#ctor(System.String,`0,System.String,System.Boolean)">
             <summary>
-            Constructs a property.
+                Constructs a property.
             </summary>
             <param name="name">The name of the property</param>
             <param name="value">The properties value</param>
@@ -516,113 +696,125 @@
         </member>
         <member name="M:Property`1.#ctor(System.String,System.String,System.Boolean)">
             <summary>
-            Constructs a property with a default value.
+                Constructs a property with a default value.
             </summary>
             <param name="name"></param>
             <param name="locked"></param>
         </member>
+        <member name="P:Property`1.TransformTriggers">
+            <summary>
+                Dynamic transformation trigger list. Contains all transformation trigger.
+            </summary>
+        </member>
+        <member name="P:Property`1.Triggers">
+            <summary>
+                Dynamic trigger list. Contains all constraint trigger.
+            </summary>
+        </member>
+        <member name="E:Property`1.RaiseChangeEvent">
+            <summary>
+                The change event bound to the event handler delegate.
+            </summary>
+        </member>
         <member name="M:Property`1.Subscribe(IPropertyChangeListener)">
             <summary>
-            Subscribe to event.
+                Subscribe to event.
             </summary>
             <param name="subscriber"></param>
         </member>
         <member name="M:Property`1.Unsubscribe(IPropertyChangeListener)">
             <summary>
-            UnSubscribe to event.
+                UnSubscribe to event.
             </summary>
             <param name="handler"></param>
         </member>
         <member name="M:Property`1.Formatted">
             <summary>
-            Return the properties value as formatted string using
-            the internal setup Format property.
+                Return the properties value as formatted string using
+                the internal setup Format property.
             </summary>
             <returns></returns>
         </member>
         <member name="M:Property`1.Formatted(System.String)">
             <summary>
-            Return the properties value as formatted string using
-            the given format specifier.
+                Return the properties value as formatted string using
+                the given format specifier.
             </summary>
             <param name="format"></param>
             <returns></returns>
         </member>
         <member name="M:Property`1.OnPropertyChange(PropertyEventArgs{`0})">
             <summary>
-            Event handler. Propagate event to all subscriber.
+                Event handler. Propagate event to all subscriber.
             </summary>
             <param name="e"></param>
         </member>
         <member name="M:Property`1.ToString">
             <summary>
-            String representation of the property.
+                String representation of the property.
             </summary>
             <returns></returns>
         </member>
         <member name="M:Property`1.AddTransformTrigger(System.Func{`0,System.Boolean},System.Func{`0,`0})">
             <summary>
-            Adds a trigger handler which is raised if 'cond' becomes true and transforms
-            it's value via 'handler'.
+                Adds a trigger handler which is raised if 'cond' becomes true and transforms
+                it's value via 'handler'.
             </summary>
             <param name="cond">The condition closure.</param>
             <param name="handler">The handler closure. Should return null on no transformation.</param>
         </member>
         <member name="M:Property`1.ExecuteTransformTrigger(`0)">
             <summary>
-            Checks all transform-triggers for match and applies it's
-            transformation on success. 
+                Checks all transform-triggers for match and applies it's
+                transformation on success.
             </summary>
             <param name="t">The value to check against all riggers.</param>
         </member>
         <member name="M:Property`1.AddTrigger(System.Func{`0,System.Boolean},System.Action{`0})">
             <summary>
-            Adds a trigger handler which is raised if 'cond' becomes true.
-            Does not transforms anything.
+                Adds a trigger handler which is raised if 'cond' becomes true.
+                Does not transforms anything.
             </summary>
             <param name="cond">The condition closure.</param>
             <param name="handler">The handler closure. Should return null on no transformation.</param>
         </member>
         <member name="M:Property`1.ExecuteTrigger(`0)">
             <summary>
-            Checks all triggers for match and call it's handler on success.
+                Checks all triggers for match and call it's handler on success.
             </summary>
             <param name="t">The value to check against all riggers.</param>
         </member>
         <member name="T:QuestionBox">
             <summary>
-            
             </summary>
         </member>
         <member name="T:QuestionBox.ContentType">
             <summary>
-            The questionbox's hidden content
+                The questionbox's hidden content
+            </summary>
+        </member>
+        <member name="F:QuestionBox.active">
+            <summary>
+                The questionbox's current state
             </summary>
         </member>
         <member name="F:QuestionBox.content">
             <summary>
-            External property 
+                External property
             </summary>
             <returns></returns>
         </member>
-        <member name="F:QuestionBox.active">
-            <summary>
-             The questionbox's current state
-            </summary>
-        </member>
         <member name="M:QuestionBox.onCollide(Godot.KinematicCollision2D)">
             <summary>
-            
             </summary>
         </member>
         <member name="M:QuestionBox._Ready">
             <summary>
-            Init...
+                Init...
             </summary>
         </member>
         <member name="M:QuestionBox.ToString">
             <summary>
-            
             </summary>
             <returns></returns>
         </member>
@@ -648,6 +840,24 @@
             <param name="name">The methods name.</param>
             <param name="args">List of args to be passed.</param>
             <param name="clazz">The class instance where the method is located.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.Vec(System.Single,System.Single)">
+            <summary>
+            Shortcut for Vector2 creation.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <returns>A new instance of a Vector2</returns>
+        </member>
+        <member name="M:Util.Color(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Shortcut for Color RGB(A)
+            </summary>
+            <param name="r">Red</param>
+            <param name="g">Green</param>
+            <param name="b">Blue</param>
+            <param name="a">Alpha (default set to 1.0)</param>
             <returns></returns>
         </member>
     </members>
