@@ -233,7 +233,8 @@ pitch_scale = 1.43
 [node name="BitmapFont2D" parent="." instance=ExtResource( 10 )]
 position = Vector2( 8, 144 )
 ImageTexture = ExtResource( 11 )
+LineMargin = 0.0
 Offset = 0
 GlyphDimension = Vector2( 8, 8 )
-CharsDimension = Vector2( 16, 32 )
+CharsDimension = Vector2( 0, 0 )
 [connection signal="timeout" from="TextTimer" to="DebugMessageBox" method="_on_Timer_timeout"]

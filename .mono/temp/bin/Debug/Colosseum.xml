@@ -6,24 +6,22 @@
     <members>
         <member name="T:BitmapGlyph">
             <summary>
-            
             </summary>
         </member>
         <member name="F:BitmapGlyph.data">
             <summary>
-            
             </summary>
         </member>
         <member name="M:BitmapGlyph.#ctor(System.Int32,System.Int32)">
             <summary>
-            Construct a new bitmap glyph with a given dimension.
+                Construct a new bitmap glyph with a given dimension.
             </summary>
             <param name="width"></param>
             <param name="height"></param>
         </member>
         <member name="M:BitmapGlyph.Parse(Godot.Image,Godot.Vector2,Godot.Color)">
             <summary>
-            Parses the image data and converts it to a 1-bit data array.
+                Parses the image data and converts it to a 1-bit data array.
             </summary>
             <param name="image"></param>
             <param name="offset"></param>
@@ -31,7 +29,7 @@
         </member>
         <member name="M:BitmapGlyph.PixelAt(System.Int32,System.Int32)">
             <summary>
-            Tests for pixel at the given coordinate
+                Tests for pixel at the given coordinate
             </summary>
             <param name="x"></param>
             <param name="y"></param>
@@ -39,44 +37,56 @@
         </member>
         <member name="T:BitmapFont">
             <summary>
-            Simple class to load and use plain bitmap files as bitmap font in Godot.
-            </summary>
-        </member>
-        <member name="P:BitmapFont.TransparentColor">
-            <summary>
-            The color which indicates the transparent background.
-            </summary>
-        </member>
-        <member name="P:BitmapFont.CharsDimension">
-            <summary>
-            The the characters count vertical and horizontal.
-            Will be autodetect.
-            </summary>
-        </member>
-        <member name="P:BitmapFont.GlyphDimension">
-            <summary>
-            The dimension of one character in pixels.
-            </summary>
-        </member>
-        <member name="P:BitmapFont.Offset">
-            <summary>
-            The offset of the character index. 
-            </summary>
-        </member>
-        <member name="P:BitmapFont.Count">
-            <summary>
-            The character count.
-            </summary>
-        </member>
-        <member name="P:BitmapFont.imageTexture">
-            <summary>
-            The source image
+                Simple class to load and use plain bitmap files as bitmap font in Godot.
             </summary>
         </member>
         <member name="M:BitmapFont.#ctor">
             <summary>
-            Set default values on creation
+                Set default values on creation
             </summary>
+        </member>
+        <member name="P:BitmapFont.TransparentColor">
+            <summary>
+                The color which indicates the transparent background.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.CharsDimension">
+            <summary>
+                The the characters count vertical and horizontal.
+                Will be autodetect.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.GlyphDimension">
+            <summary>
+                The dimension of one character in pixels.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.Offset">
+            <summary>
+                The offset of the character index.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.Count">
+            <summary>
+                The character count.
+            </summary>
+        </member>
+        <member name="P:BitmapFont.imageTexture">
+            <summary>
+                The source image
+            </summary>
+        </member>
+        <member name="P:BitmapFont.IsLoaded">
+            <summary>
+            Holds all parsed BitmapGlyph instances.
+            </summary>
+        </member>
+        <member name="M:BitmapFont.GetGlyph(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
         </member>
         <member name="M:BitmapFont.DetectCharsDimension">
             <summary>
@@ -85,7 +95,8 @@
         </member>
         <member name="M:BitmapFont.DetectTransparentColor(System.Int32,System.Int32)">
             <summary>
-            
+            Detect transparent color while retrieving the color of a specific point.
+            The default is (0, 0) 
             </summary>
             <param name="x"></param>
             <param name="y"></param>
@@ -93,28 +104,27 @@
         </member>
         <member name="M:BitmapFont.ProcessImage">
             <summary>
-            
+            Try to process the given image with the given configuration.
             </summary>
+            <returns>True if the image could be processed to a bitmap-font</returns>
         </member>
         <member name="M:BitmapFont.process">
             <summary>
-            
             </summary>
         </member>
         <member name="M:BitmapFont.ToString">
             <summary>
-            
             </summary>
             <returns></returns>
         </member>
         <member name="T:BitmapFontException">
             <summary>
-            Bitpmap Font Exception
+                Bitpmap Font Exception
             </summary>
         </member>
         <member name="T:BitmapFont2D">
             <summary>
-            Tool node to edit and preview a bitmap font in realtime.
+                Tool node to edit and preview a bitmap font in realtime.
             </summary>
         </member>
         <member name="M:BitmapFont2D.#ctor">
@@ -124,51 +134,74 @@
         </member>
         <member name="P:BitmapFont2D.ImageTexture">
             <summary>
-            
             </summary>
         </member>
         <member name="P:BitmapFont2D.GlyphDimension">
             <summary>
-            
             </summary>
         </member>
         <member name="P:BitmapFont2D.Offset">
             <summary>
-            
             </summary>
         </member>
         <member name="P:BitmapFont2D.Foreground">
             <summary>
-            
             </summary>
         </member>
         <member name="P:BitmapFont2D.Text">
             <summary>
-            
             </summary>
         </member>
         <member name="P:BitmapFont2D.TextScale">
             <summary>
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.CharsDimension">
+            <summary>
             
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.LineMargin">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.Shadow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:BitmapFont2D.HasShadow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:BitmapFont2D.ConfigureBitmapFont">
+            <summary>
+            Transfer local properties to BitmapFont
             </summary>
         </member>
         <member name="M:BitmapFont2D.PutPixel(Godot.Vector2,Godot.Color)">
             <summary>
-                Simulates a put pixel taking scale into account.
+            Simulates a put pixel taking scale into account.
             </summary>
             <param name="pos">The position (in normal coordinates)</param>
             <param name="color">The color</param>
         </member>
-        <member name="M:BitmapFont2D.DrawText(Godot.Vector2,System.String)">
+        <member name="M:BitmapFont2D.DrawText(Godot.Vector2,System.String,Godot.Color)">
             <summary>
-            
             </summary>
             <param name="pos"></param>
             <param name="text"></param>
         </member>
         <member name="M:BitmapFont2D._Draw">
             <summary>
-            Draw font
+            Draw bitmap-font to canvas.
+            </summary>
+        </member>
+        <member name="M:BitmapFont2D.Refresh">
+            <summary>
+            Take properties and try to reload the bitmap-font.
             </summary>
         </member>
         <member name="M:BitmapFont2D._Ready">
@@ -582,6 +615,11 @@
         <member name="F:Node2D.time">
             PROPERTIES ********************************************************************
         </member>
+        <member name="M:Node2D.setupViewport">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:Node2D._Ready">
              	 Called when the node is ready.
             	 Setup man game stuff.
@@ -820,13 +858,13 @@
         </member>
         <member name="T:Util">
             <summary>
-            Utility method compilation.
+                Utility method compilation.
             </summary>
         </member>
         <member name="M:Util.GetPropertyByName(System.String,System.Object)">
             <summary>
-            Returns the value of a class property by name.
-            Uses reflection in case of dynamic cast problems.  
+                Returns the value of a class property by name.
+                Uses reflection in case of dynamic cast problems.
             </summary>
             <param name="name">The name of the property.</param>
             <param name="clazz">The class instance where the property is bound to.</param>
@@ -834,8 +872,8 @@
         </member>
         <member name="M:Util.InvokeMethodByName(System.String,System.Object[],System.Object)">
             <summary>
-            Invokes a method of a class by name and reference.
-            Uses reflection in case of dynamic cast problems.
+                Invokes a method of a class by name and reference.
+                Uses reflection in case of dynamic cast problems.
             </summary>
             <param name="name">The methods name.</param>
             <param name="args">List of args to be passed.</param>
@@ -844,7 +882,7 @@
         </member>
         <member name="M:Util.Vec(System.Single,System.Single)">
             <summary>
-            Shortcut for Vector2 creation.
+                Shortcut for Vector2 creation.
             </summary>
             <param name="x">The x value.</param>
             <param name="y">The y value.</param>
@@ -852,12 +890,22 @@
         </member>
         <member name="M:Util.Color(System.Single,System.Single,System.Single,System.Single)">
             <summary>
-            Shortcut for Color RGB(A)
+                Shortcut for Color RGB(A)
             </summary>
             <param name="r">Red</param>
             <param name="g">Green</param>
             <param name="b">Blue</param>
             <param name="a">Alpha (default set to 1.0)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Util.DumpObject(System.Object,System.Boolean,System.Boolean)">
+            <summary>
+            Dumps all fields and properties of a class instance.
+            For logging or debug issues.
+            </summary>
+            <param name="clazz">The object instance to dump.</param>
+            <param name="fields">Include fields?</param>
+            <param name="properties">Include properties?</param>
             <returns></returns>
         </member>
     </members>

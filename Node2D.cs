@@ -32,14 +32,14 @@ public class Node2D : Godot.Node2D {
 	public string LevelName { get; set; }
 
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public void setupViewport() {
-		Logger.debug("Set viewport to resolution: " + Game.VIEWPORT_RESOLUTION + " Game has resolution: " +
-					 Game.WINDOW_RESOLUTION);
-
+		Logger.debug($"Set viewport to resolution: {Game.VIEWPORT_RESOLUTION} Game has resolution: {Game.WINDOW_RESOLUTION}");
 
 		GetViewport().SetSizeOverride(true, Game.VIEWPORT_RESOLUTION);
 		GetViewport().SizeOverrideStretch = true;
-
 
 		OS.WindowSize = Game.WINDOW_RESOLUTION;
 	}
