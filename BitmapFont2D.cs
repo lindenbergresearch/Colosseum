@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using static Util;
 
@@ -60,10 +61,11 @@ public class BitmapFont2D : Godot.Node2D {
 		set {
 			var v = value;
 
-			if ((int) v.x == 0) v.x = 1;
-			if ((int) v.y == 0) v.y = 1;
+			if ((int) v.x < 1) v.x = 1;
+			if ((int) v.y < 1) v.y = 1;
 
 			_glyphDimension = v;
+
 			ConfigureBitmapFont();
 			Refresh();
 		}
@@ -166,6 +168,9 @@ public class BitmapFont2D : Godot.Node2D {
 	}
 
 
+	/// <summary>
+	/// Transfer local properties to BitmapFont
+	/// </summary>
 	private void ConfigureBitmapFont() {
 		BitmapFont.imageTexture = _imageTexture;
 		BitmapFont.Offset = _offset;
@@ -190,8 +195,8 @@ public class BitmapFont2D : Godot.Node2D {
 	/// <param name="text"></param>
 	private void DrawText(Vector2 pos, string text, Color color) {
 		for (var c = 0; c < text.Length; c++) {
-			var index = Mathf.Clamp(text[c] - _offset, 0, BitmapFont.Glyphs.Length - 1);
-			var glyph = BitmapFont.Glyphs[index];
+			var index = Mathf.Clamp(text[c] - _offset, 0, BitmapFont.GetGlyphCount() - 1);
+			var glyph = BitmapFont.GetGlyph(index);
 
 
 			for (var y = 0; y < GlyphDimension.y; y++)
@@ -206,7 +211,9 @@ public class BitmapFont2D : Godot.Node2D {
 	/// Draw bitmap-font to canvas.
 	/// </summary>
 	public override void _Draw() {
-		if (_imageTexture == null || _imageTexture.GetData() == null || BitmapFont == null || BitmapFont.Glyphs.Length == 0) return;
+		if (_imageTexture == null || _imageTexture.GetData() == null || BitmapFont == null || BitmapFont.GetGlyphCount() == 0 || !BitmapFont.IsLoaded)
+			return;
+
 
 		var lines = Text.Split('\n');
 		var yoffset = 0;
@@ -222,13 +229,26 @@ public class BitmapFont2D : Godot.Node2D {
 	}
 
 
+	/// <summary>
+	/// Take properties and try to reload the bitmap-font.
+	/// </summary>
 	private void Refresh() {
-		if (_imageTexture == null || _imageTexture.GetData() == null) return;
 
-		BitmapFont.process();
-		CharsDimension = BitmapFont.CharsDimension;
+		try {
+			if (_imageTexture == null || _imageTexture.GetData() == null) return;
 
-		Update();
+			BitmapFont.process();
+
+			if (BitmapFont.IsLoaded) {
+				CharsDimension = BitmapFont.CharsDimension;
+				Update();
+			}
+
+			else GD.PrintErr($"{GetType().Name}: Unable to use bitmap-font with that configuration: {DumpObject(BitmapFont)}");
+		}
+		catch (Exception e) {
+			GD.PrintErr(e);
+		}
 	}
 
 
