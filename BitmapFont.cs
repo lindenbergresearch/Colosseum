@@ -3,6 +3,44 @@ using Godot;
 using static Util;
 
 /// <summary>
+/// 
+/// </summary>
+class BitmapFontConfig : SerializableDataClass {
+	/// <summary>
+	/// POCO for holding 2D vector data
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class Vector<T> {
+		public T X { get; set; }
+		public T Y { get; set; }
+
+
+		public Vector() { }
+
+
+		public Vector(T x, T y) {
+			X = x;
+			Y = y;
+		}
+	}
+
+	public override int VERSION_MAJOR { get; } = 1;
+	public override int VERSION_MINOR { get; } = 0;
+	public override int VERSION_PATCH { get; } = 0;
+
+	public Vector<int> GlyphDimension { get; set; } = new Vector<int>(0, 0);
+	public float LineHeight { get; set; } = 2.0f;
+	public float Scale { get; set; } = 1.0f;
+	public bool HasShadow { get; set; } = false;
+	public int Offset { get; set; } = 0;
+	public Vector<float> ShadowOffset { get; set; } = new Vector<float>(2, 2);
+
+
+	public BitmapFontConfig() { }
+}
+
+/// <summary>
+/// 
 /// </summary>
 public class BitmapGlyph {
 	/// <summary>
@@ -236,6 +274,7 @@ public class BitmapFont {
 	}
 
 
+	
 	/// <summary>
 	/// </summary>
 	/// <returns></returns>
