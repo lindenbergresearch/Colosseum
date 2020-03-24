@@ -4,8 +4,20 @@
         <name>Colosseum</name>
     </assembly>
     <members>
+        <member name="T:BitmapFontConfig">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:BitmapFontConfig.Vector`1">
+            <summary>
+            POCO for holding 2D vector data
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:BitmapGlyph">
             <summary>
+            
             </summary>
         </member>
         <member name="F:BitmapGlyph.data">
@@ -161,7 +173,7 @@
             
             </summary>
         </member>
-        <member name="P:BitmapFont2D.LineMargin">
+        <member name="P:BitmapFont2D.LineHeight">
             <summary>
             
             </summary>
@@ -203,6 +215,17 @@
             <summary>
             Take properties and try to reload the bitmap-font.
             </summary>
+        </member>
+        <member name="M:BitmapFont2D.SaveConfigToJSON">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:BitmapFont2D.ConfigureFromJSON(System.String)">
+            <summary>
+            Setup bitmap properties from json data.
+            </summary>
+            <param name="filename"></param>
         </member>
         <member name="M:BitmapFont2D._Ready">
             <summary>
@@ -856,6 +879,32 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:SerializableDataClass">
+            <summary>
+            Base class for serializing data classes
+            </summary>
+        </member>
+        <member name="P:SerializableDataClass.Timestamp">
+            <summary>
+            Timestamp of serialization
+            </summary>
+        </member>
+        <member name="P:SerializableDataClass.Type">
+            <summary>
+            Type of serialized class
+            </summary>
+        </member>
+        <member name="M:SerializableDataClass.GetVersionStr">
+            <summary>
+            Returns the version as string
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SerializableDataClass.#ctor">
+            <summary>
+            Standard Constructor
+            </summary>
+        </member>
         <member name="T:Util">
             <summary>
                 Utility method compilation.
@@ -898,14 +947,30 @@
             <param name="a">Alpha (default set to 1.0)</param>
             <returns></returns>
         </member>
-        <member name="M:Util.DumpObject(System.Object,System.Boolean,System.Boolean)">
+        <member name="M:Util.SerializeObject``1(``0,System.String)">
             <summary>
-            Dumps all fields and properties of a class instance.
-            For logging or debug issues.
+            Serializes an object to a json file.
             </summary>
-            <param name="clazz">The object instance to dump.</param>
-            <param name="fields">Include fields?</param>
-            <param name="properties">Include properties?</param>
+            <param name="clazz">The class instance to serialize</param>
+            <param name="filename">The target filename (including .json)</param>
+        </member>
+        <member name="M:Util.DeserializeObject``1(System.String)">
+            <summary>
+            Deserialize an object based on a json file.
+            </summary>
+            <param name="filename">The filename of the json file</param>
+            <typeparam name="T">The target type to be deserialized</typeparam>
+            <returns>And instance of the deserialized file</returns>
+        </member>
+        <member name="M:Util.Dump(System.Object,System.String,System.String,System.String)">
+            <summary>
+            Dump all fields from an object and it's references.
+            For debugging issues.
+            </summary>
+            <param name="clazz">The object reference to dump</param>
+            <param name="prefix">Prefix to the output</param>
+            <param name="sopen">The formatting open character</param>
+            <param name="sclose">THe formatting close character</param>
             <returns></returns>
         </member>
     </members>
