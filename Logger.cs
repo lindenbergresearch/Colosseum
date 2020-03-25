@@ -40,7 +40,7 @@ public static class Logger {
 	/// <summary>
 	/// Current loglevel
 	/// </summary>
-	public static LogLevel Level { get; set; } = LogLevel.DEBUG;
+	public static LogLevel Level { get; set; } = LogLevel.TRACE;
 
 	/// <summary>
 	/// Holds all pushed messages.
@@ -73,7 +73,12 @@ public static class Logger {
 		//TODO: find a better solution to add the standard logger
 		if (LogWriters.Count == 0) {
 			LogWriters.Add(new GodotConsoleLogWriter());
-			LogWriters.Add(new SystemConsoleLogWriter());
+			//LogWriters.Add(new SystemConsoleLogWriter());
+			LogWriters.Add(new FileLogWriter());
+
+			foreach (var writer in LogWriters) {
+				writer.Write(LogLevel.INFO, $"--- INIT LOGGER {DateTime.Now} ---");
+			}
 		}
 
 		foreach (var writer in LogWriters) {
@@ -176,5 +181,28 @@ public class SystemConsoleLogWriter : ILogWriter {
 			Console.Error.WriteLine(message);
 		else
 			Console.Out.WriteLine(message);
+	}
+}
+
+/// <summary>
+/// File log write
+/// Quick and diry
+/// </summary>
+public class FileLogWriter : ILogWriter {
+	private static string GetFileName() => $"colloseum_{DateTime.Now.Date.ToString("yy-MM-dd")}.log";
+
+
+	/// <summary>
+	/// Write to logfile
+	/// </summary>
+	/// <param name="level"></param>
+	/// <param name="message"></param>
+	public void Write(Logger.LogLevel level, string message) {
+		try {
+			System.IO.File.AppendAllText(GetFileName(), message + '\n');
+		}
+		catch (Exception e) {
+			GD.PrintErr($"Unable to write log to file: {GetFileName()}");
+		}
 	}
 }
