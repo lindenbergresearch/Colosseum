@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://sprites/Platformer Art Complete Pack/Base pack/Items/coinBronze.png" type="Texture" id=1]
 [ext_resource path="res://sprites/Platformer Art Complete Pack/Base pack/Items/gemRed.png" type="Texture" id=2]
@@ -10,7 +10,6 @@
 [ext_resource path="res://ConsoleMonoFont.tres" type="DynamicFont" id=8]
 [ext_resource path="res://sounds/effects/menu.ogg" type="AudioStream" id=9]
 [ext_resource path="res://BitmapFont2D.tscn" type="PackedScene" id=10]
-[ext_resource path="res://fonts/NESFont3.png" type="Texture" id=11]
 
 [sub_resource type="DynamicFontData" id=1]
 hinting = 0
@@ -232,9 +231,6 @@ pitch_scale = 1.43
 
 [node name="BitmapFont2D" parent="." instance=ExtResource( 10 )]
 position = Vector2( 8, 144 )
-ImageTexture = ExtResource( 11 )
-LineMargin = 0.0
-Offset = 0
-GlyphDimension = Vector2( 8, 8 )
+ImageTexture = null
 CharsDimension = Vector2( 0, 0 )
 [connection signal="timeout" from="TextTimer" to="DebugMessageBox" method="_on_Timer_timeout"]

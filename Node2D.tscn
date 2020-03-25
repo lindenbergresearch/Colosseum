@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Mario2D.tscn" type="PackedScene" id=1]
 [ext_resource path="res://OverworldTiles.tres" type="TileSet" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://Questionbox.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Brick.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=7]
+[ext_resource path="res://BitmapFont2D.tscn" type="PackedScene" id=8]
+[ext_resource path="res://fonts/NESFont1.png" type="Texture" id=9]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 3 )
@@ -156,3 +158,14 @@ position = Vector2( 72, 248 )
 
 [node name="Brick5" parent="Bricks" instance=ExtResource( 6 )]
 position = Vector2( 88, 248 )
+
+[node name="BitmapFont2D" parent="." instance=ExtResource( 8 )]
+
+[node name="BitmapFont2D2" parent="." instance=ExtResource( 8 )]
+position = Vector2( 16, 144 )
+ImageTexture = ExtResource( 9 )
+GlyphDimension = Vector2( 16, 16 )
+Offset = 32
+TextScale = Vector2( 0.2, 0.2 )
+CharsDimension = Vector2( 16, 6 )
+ShadowOffset = Vector2( 2, 2 )
