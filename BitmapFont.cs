@@ -180,6 +180,8 @@ public class BitmapFont {
 	/// Detects the correct char dimension based on the glyph dimension
 	/// </summary>
 	public void DetectCharsDimension() {
+		Logger.trace($"{this}");
+
 		if (imageTexture == null) return;
 
 		if ((int) GlyphDimension.x < MIN_CHAR_DIMENSION || (int) GlyphDimension.y < MIN_CHAR_DIMENSION) return;
@@ -206,6 +208,8 @@ public class BitmapFont {
 	/// <param name="y"></param>
 	/// <returns></returns>
 	private Color DetectTransparentColor(int x = 0, int y = 0) {
+		Logger.trace($"{this}");
+
 		var image = imageTexture.GetData();
 
 		image.Lock();
@@ -221,6 +225,8 @@ public class BitmapFont {
 	/// </summary>
 	/// <returns>True if the image could be processed to a bitmap-font</returns>
 	private bool ProcessImage() {
+		Logger.trace($"{this}");
+
 		var image = imageTexture.GetData();
 		var cindex = 0;
 
@@ -254,6 +260,7 @@ public class BitmapFont {
 	/// <summary>
 	/// </summary>
 	public void process() {
+		Logger.trace($"{this}");
 		IsLoaded = false;
 		CharsDimension = Vec(0, 0);
 

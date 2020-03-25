@@ -251,6 +251,8 @@ public class BitmapFont2D : Godot.Node2D {
 	/// Take properties and try to reload the bitmap-font.
 	/// </summary>
 	private void Refresh() {
+		Logger.trace($"Refresh(): {this}");
+
 		if (lockRefresh) return;
 
 		try {
@@ -269,7 +271,11 @@ public class BitmapFont2D : Godot.Node2D {
 		}
 		catch (Exception e) {
 			GD.PrintErr(e);
+			Logger.trace("Exception: " + e);
 		}
+		
+		Logger.trace($"After Refresh(): {this}");
+
 	}
 
 
@@ -325,6 +331,11 @@ public class BitmapFont2D : Godot.Node2D {
 		finally {
 			lockRefresh = false;
 		}
+	}
+
+
+	public override string ToString() {
+		return $"GlyphDimension={GlyphDimension} Scale={Scale} Offset={Offset} LineHeight={LineHeight} HasShadow={HasShadow} ShadowOffset={ShadowOffset} CharDimensions={CharsDimension}";
 	}
 
 
