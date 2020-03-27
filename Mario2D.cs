@@ -151,7 +151,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 		if (ActionKey.SELECT) Debug = !Debug;
 
 		Grounded = IsOnFloor();
-
+	
 		SkiddingLeft = Grounded && motion.right() && ActionKey.LEFT;
 		SkiddingRight = Grounded && motion.left() && ActionKey.RIGHT;
 		Skidding = SkiddingLeft || SkiddingRight;

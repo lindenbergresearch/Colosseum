@@ -544,6 +544,19 @@
             <param name="level"></param>
             <param name="message"></param>
         </member>
+        <member name="T:FileLogWriter">
+            <summary>
+            File log write
+            Quick and diry
+            </summary>
+        </member>
+        <member name="M:FileLogWriter.Write(Logger.LogLevel,System.String)">
+            <summary>
+            Write to logfile
+            </summary>
+            <param name="level"></param>
+            <param name="message"></param>
+        </member>
         <member name="T:Mario2D">
             <summary>
             </summary>
@@ -878,6 +891,138 @@
             <summary>
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:State">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:State.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:State.pool">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:State.#ctor(System.String,System.Func{System.Boolean})">
+            <summary>
+            Construct a state
+            </summary>
+            <param name="name">The name of the state</param>
+            <param name="state">Bool function</param>
+        </member>
+        <member name="M:State.Resolve">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:State.Add(System.Func{System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="f"></param>
+        </member>
+        <member name="M:State.op_Addition(State,State)">
+            <summary>
+            
+            </summary>
+            <param name="left"></param>
+            <param name="right"></param>
+            <returns></returns>
+        </member>
+        <member name="M:State.op_Implicit(System.ValueTuple{System.String,System.Func{System.Boolean}})~State">
+            <summary>
+            Implicitly convert a tupel to a state
+            </summary>
+            <param name="tupel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:State.op_Implicit(System.Func{System.Boolean})~State">
+            <summary>
+            
+            </summary>
+            <param name="f"></param>
+            <returns></returns>
+        </member>
+        <member name="M:State.op_Implicit(State)~System.Boolean">
+            <summary>
+            Implicitly convert state to bool
+            </summary>
+            <param name="state"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NativeStateAttribute">
+            <summary>
+            Custom Attribute to bind a local bool property to a native state
+            </summary>
+        </member>
+        <member name="P:NativeStateAttribute.Name">
+            <summary>
+            Name (and path) of the target note)
+            </summary>
+        </member>
+        <member name="M:NativeStateAttribute.#ctor">
+            <summary>
+            Standard constructor
+            </summary>
+        </member>
+        <member name="M:NativeStateAttribute.#ctor(System.String)">
+            <summary>
+            Construct NoteBindingAttribute
+            </summary>
+            <param name="bindTo">Name (and path) of the target note.</param>
+        </member>
+        <member name="T:GlobalState">
+            <summary>
+            Manage NativeStates 
+            </summary>
+        </member>
+        <member name="P:GlobalState.NativeStates">
+            <summary>
+            Global NativeState dictionary
+            </summary>
+        </member>
+        <member name="M:GlobalState.AddNativeState(System.String,System.Func{System.Boolean})">
+            <summary>
+            Add a native state
+            </summary>
+            <param name="name"></param>
+            <param name="f"></param>
+        </member>
+        <member name="M:GlobalState.AddNativeState(State)">
+            <summary>
+            
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:GlobalState.State(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NativeStateExtension">
+            <summary>
+            Static helper class for state extensions
+            </summary>
+        </member>
+        <member name="M:NativeStateExtension.SetupNativeStates(System.Object)">
+            <summary>
+            Look for native states at the current instance and add
+            it via a function wrapper to a global dictionary. 
+            </summary>
+            <param name="clazz">The Object instance</param>
+            <returns></returns>
+        </member>
+        <member name="T:NativeStateTypeException">
+            <summary>
+            Type constraint Exception
+            </summary>
         </member>
         <member name="T:SerializableDataClass">
             <summary>
