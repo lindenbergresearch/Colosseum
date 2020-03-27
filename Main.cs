@@ -1,7 +1,8 @@
 using System;
 using Godot;
 using static System.Console;
-using static GlobalState;
+using static State;
+
 
 public class MainApp {
 	[NativeState]
@@ -21,13 +22,12 @@ public class MainApp {
 
 		p.SetupNativeStates();
 
-		NativeStates["Test"].Add(() => DateTime.Now.Minute > 34);
 
 		var news = NativeStates["Test"] + test;
 
-		AddNativeState(news);
 
-		foreach (var nativeState in GlobalState.NativeStates) {
+
+		foreach (var nativeState in NativeStates) {
 			WriteLine($"State: {nativeState.Key} = {nativeState.Value.Resolve()}");
 		}
 	}

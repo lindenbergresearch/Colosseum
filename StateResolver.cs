@@ -8,12 +8,32 @@ using System.Runtime.Serialization;
 /// <summary>
 /// 
 /// </summary>
-public class State {
+public class NativeState : State {
+	protected Func<bool> Logic { get; set; } = () => true;
+
+
 	/// <summary>
 	/// 
 	/// </summary>
-	public string Name { get; set; }
+	/// <param name="name"></param>
+	/// <param name="logic"></param>
+	public NativeState(string name, Func<bool> logic) {
+		Name = name;
+		Logic = logic;
+	}
 
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	public override bool Resolve() => Logic();
+}
+
+/// <summary>
+/// 
+/// </summary>
+public class PolyState : State {
 	/// <summary>
 	/// 
 	/// </summary>
@@ -25,7 +45,7 @@ public class State {
 	/// </summary>
 	/// <param name="name">The name of the state</param>
 	/// <param name="state">Bool function</param>
-	public State(string name, Func<bool> state) {
+	public PolyState(string name, Func<bool> state) {
 		Name = name;
 		pool.Add(state);
 	}
@@ -35,14 +55,24 @@ public class State {
 	/// 
 	/// </summary>
 	/// <returns></returns>
-	public bool Resolve() => pool.All((x => x()));
+	public override bool Resolve() => pool.All((x => x()));
+}
+
+/// <summary>
+/// 
+/// </summary>
+public abstract partial class State {
+	/// <summary>
+	/// 
+	/// </summary>
+	public string Name { get; set; }
 
 
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="f"></param>
-	public void Add(Func<bool> f) => pool.Add(f);
+	/// <returns></returns>
+	public abstract bool Resolve();
 
 
 	/// <summary>
@@ -51,28 +81,19 @@ public class State {
 	/// <param name="left"></param>
 	/// <param name="right"></param>
 	/// <returns></returns>
-	public static State operator +(State left, State right) {
-		return new State(left.Name + right.Name, () => left.Resolve() && right.Resolve());
-	}
-
-
-	/// <summary>
-	/// Implicitly convert a tupel to a state
-	/// </summary>
-	/// <param name="tupel"></param>
-	/// <returns></returns>
-	public static implicit operator State((string, Func<bool>) tupel) {
-		return new State(tupel.Item1, tupel.Item2);
+	public static PolyState operator +(State left, State right) {
+		return new PolyState(left.Name + right.Name, () => left.Resolve() && right.Resolve());
 	}
 
 
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="f"></param>
+	/// <param name="left"></param>
+	/// <param name="right"></param>
 	/// <returns></returns>
-	public static implicit operator State(Func<bool> f) {
-		return new State(f.GetInvocationList()[0].ToString(), f);
+	public static PolyState operator +(State left, Func<bool> right) {
+		return new PolyState(left.Name, () => left.Resolve() && right());
 	}
 
 
@@ -82,13 +103,22 @@ public class State {
 	/// <param name="state"></param>
 	/// <returns></returns>
 	public static implicit operator bool(State state) => state.Resolve();
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	public override string ToString() {
+		return $"{GetType().Name}({Resolve()})";
+	}
 }
 
 
 /// <summary>
 /// Custom Attribute to bind a local bool property to a native state
 /// </summary>
-[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
 public class NativeStateAttribute : Attribute {
 	/// <summary>
 	/// Name (and path) of the target note)
@@ -116,12 +146,12 @@ public class NativeStateAttribute : Attribute {
 /// <summary>
 /// Manage NativeStates 
 /// </summary>
-public class GlobalState {
+public partial class State {
 	/// <summary>
 	/// Global NativeState dictionary
 	/// </summary>
-	public static Dictionary<string, State> NativeStates { get; }
-		= new Dictionary<string, State>();
+	public static Dictionary<string, NativeState> NativeStates { get; }
+		= new Dictionary<string, NativeState>();
 
 
 	/// <summary>
@@ -131,7 +161,7 @@ public class GlobalState {
 	/// <param name="f"></param>
 	public static void AddNativeState(string name, Func<bool> f) {
 		if (NativeStates.ContainsKey(name)) NativeStates.Remove(name);
-		NativeStates.Add(name, new State(name, f));
+		NativeStates.Add(name, new NativeState(name, f));
 	}
 
 
@@ -139,7 +169,7 @@ public class GlobalState {
 	/// 
 	/// </summary>
 	/// <param name="state"></param>
-	public static void AddNativeState(State state)
+	public static void AddNativeState(NativeState state)
 		=> NativeStates.Add(state.Name, state);
 
 
@@ -148,7 +178,7 @@ public class GlobalState {
 	/// </summary>
 	/// <param name="name"></param>
 	/// <returns></returns>
-	public static State State(string name) => NativeStates[name];
+	public static NativeState NativeState(string name) => NativeStates[name];
 }
 
 
@@ -172,9 +202,9 @@ public static class NativeStateExtension {
 					var name = nativeState.Name.Trim().Length > 0 ? nativeState.Name : propertyInfo.Name;
 
 					if (propertyInfo.GetValue(clazz) is bool b) {
-						if (GlobalState.NativeStates.ContainsKey(name))
-							GlobalState.NativeStates.Remove(name);
-						GlobalState.AddNativeState(name, () => (bool) propertyInfo.GetValue(clazz));
+						if (State.NativeStates.ContainsKey(name))
+							State.NativeStates.Remove(name);
+						State.AddNativeState(name, () => (bool) propertyInfo.GetValue(clazz));
 					}
 					else {
 						throw new NativeStateTypeException(
