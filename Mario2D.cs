@@ -3,64 +3,63 @@ using Colosseum;
 using Godot;
 using static Godot.Input;
 using static DynamicStateCombiner;
+using static PropertyPool;
 
 
 /// <summary>
 /// </summary>
 public class Mario2D : KinematicBody2D, ICoinCollector {
+
 	public static Motion2D motion = new Vector2(0, 0);
 
-	private readonly Property<int>
-		pCoins = PropertyPool.RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
+	readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
 
-	private readonly Property<int>
-		pLives = PropertyPool.RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
+	readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
 
 
 	/** PROPERTIES *********************************************************************/
-	private readonly Property<int>
-		pScore = PropertyPool.RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
+	readonly Property<int> pScore = RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
 
 	[GNode("AnimatedSprite")]
-	private Godot.AnimatedSprite _animate;
+	Godot.AnimatedSprite _animate;
 
 	[GNode("BumpSound")]
-	private AudioStreamPlayer _bumpSound;
+	AudioStreamPlayer _bumpSound;
 
 	[GNode("Camera2D")]
-	private Camera2D _camera;
+	Camera2D _camera;
 
 	[GNode("InfoBox")]
-	private RichTextLabel _info;
+	RichTextLabel _info;
 
 	[GNode("JumpSound")]
-	private AudioStreamPlayer2D _jumpAudio;
+	AudioStreamPlayer2D _jumpAudio;
 
 	[GNode("OneLiveUp")]
-	private AudioStreamPlayer _oneLiveUp;
+	AudioStreamPlayer _oneLiveUp;
 
 	[GNode("SkiddingSound")]
-	private AudioStreamPlayer2D _skiddingAudio;
+	AudioStreamPlayer2D _skiddingAudio;
 
 
-	private float CameraTime { get; set; }
+	float CameraTime { get; set; }
 
 	/** PROPERTIES *********************************************************************/
 	/** FLAGS **************************************************************************/
-	private bool Grounded { get; set; }
+	bool Grounded { get; set; }
 
-	private DynamicStateCombiner Jumping { get; set; }
-	private DynamicStateCombiner Falling { get; set; }
-	private DynamicStateCombiner IsDead { get; set; }
-	private bool Walking { get; set; }
-	private bool Running { get; set; }
-	private bool SkiddingLeft { get; set; }
-	private bool SkiddingRight { get; set; }
-	private bool Skidding { get; set; }
+	DynamicStateCombiner Jumping { get; set; }
+	DynamicStateCombiner Falling { get; set; }
+	DynamicStateCombiner IsDead { get; set; }
+	bool Walking { get; set; }
+	bool Running { get; set; }
+	bool SkiddingLeft { get; set; }
+	bool SkiddingRight { get; set; }
+	bool Skidding { get; set; }
 
-	private bool Debug { get; set; }
+	bool Debug { get; set; }
 
-	private Vector2 StartPosition { get; set; }
+	Vector2 StartPosition { get; set; }
 
 
 	/// <summary>
@@ -151,7 +150,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 		if (ActionKey.SELECT) Debug = !Debug;
 
 		Grounded = IsOnFloor();
-	
+
 		SkiddingLeft = Grounded && motion.right() && ActionKey.LEFT;
 		SkiddingRight = Grounded && motion.left() && ActionKey.RIGHT;
 		Skidding = SkiddingLeft || SkiddingRight;
@@ -310,6 +309,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	/// </summary>
 	public override void _Ready() {
 		this.SetupNodeBindings();
+		this.SetupNativeStates();
 
 		Logger.debug("Setup player...");
 
@@ -337,6 +337,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	///     Type which holds pressed keys
 	/// </summary>
 	private static class ActionKey {
+
 		public static bool UP { get; set; }
 		public static bool DOWN { get; set; }
 		public static bool LEFT { get; set; }
@@ -344,12 +345,15 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 		public static bool RUN { get; set; }
 		public static bool JUMP { get; set; }
 		public static bool SELECT { get; set; }
+
 	}
+
 
 	/// <summary>
 	///     Common player parameter for kinematic handling
 	/// </summary>
 	private static class Parameter {
+
 		/*** CONSTANTS *************************************************************/
 		public static readonly float MAX_JUMP_HEIGHT = 70.0f;
 		public static readonly float JUMP_SPEED = 430.0f;
@@ -370,5 +374,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 
 		public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
 		/*** CURRENTS **************************************************************/
+
 	}
+
 }
