@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using File = Godot.File;
 using Object = System.Object;
+using static Godot.Input;
 
 /// <summary>
 /// Base class for serializing data classes
@@ -166,4 +167,13 @@ public static class Util {
 
 		return info.TrimEnd() + sclose;
 	}
+
+
+	/// <summary>
+	/// Functor as key-binding
+	/// </summary>
+	/// <param name="name">The godot name of the key</param>
+	/// <returns>A function which returns true if that key is pressed</returns>
+	public static Func<bool> GetActionPressedBinding(string name)
+		=> () => IsActionPressed(name);
 }
