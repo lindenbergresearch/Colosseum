@@ -168,12 +168,4 @@ public static class Util {
 		return info.TrimEnd() + sclose;
 	}
 
-
-	/// <summary>
-	/// Functor as key-binding
-	/// </summary>
-	/// <param name="name">The godot name of the key</param>
-	/// <returns>A function which returns true if that key is pressed</returns>
-	public static Func<bool> GetActionPressedBinding(string name)
-		=> () => IsActionPressed(name);
 }

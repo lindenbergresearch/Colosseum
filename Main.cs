@@ -15,16 +15,17 @@ public class MainApp {
 	public bool Bar { get; set; }
 
 
+	[NativeState]
+	public bool IsGrounded() => true;
+	
+	
 	static void Main(string[] args) {
 		var p = new MainApp();
-
-		Func<bool> test = () => true;
-
 		p.SetupNativeStates();
 
-
-		var news = NativeStates["Test"] + test;
-
+		Func<bool> f = p.IsGrounded;
+		
+		PolyState foo = (PolyState)p.IsGrounded + p.IsGrounded + p.IsGrounded;
 
 
 		foreach (var nativeState in NativeStates) {

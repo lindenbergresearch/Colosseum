@@ -1,24 +1,20 @@
 using System;
-using Colosseum;
 using Godot;
-using static Godot.Input;
 using static DynamicStateCombiner;
 using static PropertyPool;
 
 
 /// <summary>
+/// Implements a standard marion brs. like plattformer player
 /// </summary>
-public class Mario2D : KinematicBody2D, ICoinCollector {
-
-	public static Motion2D motion = new Vector2(0, 0);
-
-	readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
-
-	readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
+public class Mario2D : Player2D, ICoinCollector {
 
 
 	/** PROPERTIES *********************************************************************/
+	readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
+	readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
 	readonly Property<int> pScore = RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
+	/** PROPERTIES *********************************************************************/
 
 	[GNode("AnimatedSprite")]
 	Godot.AnimatedSprite _animate;
@@ -44,11 +40,10 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 
 	float CameraTime { get; set; }
 
-	/** PROPERTIES *********************************************************************/
-	/** FLAGS **************************************************************************/
 	bool Grounded { get; set; }
 
 	DynamicStateCombiner Jumping { get; set; }
+
 	DynamicStateCombiner Falling { get; set; }
 	DynamicStateCombiner IsDead { get; set; }
 	bool Walking { get; set; }
@@ -58,6 +53,9 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	bool Skidding { get; set; }
 
 	bool Debug { get; set; }
+
+
+	//NativeState Grounded = State.NativeStates["IsGrounded"];
 
 	Vector2 StartPosition { get; set; }
 
@@ -81,24 +79,8 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	}
 
 
-	/// UPDATES ***********************************************************************
 	/// <summary>
-	/// </summary>
-	private void updateKeys() {
-		ActionKey.UP = IsActionPressed("ui_up");
-		ActionKey.DOWN = IsActionPressed("ui_down");
-		ActionKey.LEFT = IsActionPressed("ui_left");
-		ActionKey.RIGHT = IsActionPressed("ui_right");
-
-		ActionKey.RUN = IsActionPressed("ui_accept");
-		ActionKey.JUMP = IsActionJustPressed("ui_cancel");
-
-		ActionKey.SELECT = IsActionJustPressed("ui_select");
-	}
-
-
-	/// <summary>
-	///     Set players lives
+	///  Set players lives
 	/// </summary>
 	/// <param name="delta">The lives to add (neg. values will shrink lives)</param>
 	public void SetLives(int delta = 1) {
@@ -118,18 +100,18 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 		for (var i = 0; i < GetSlideCount(); i++) {
 			var coll = GetSlideCollision(i);
 
-			var directon = "?";
+			var direction = "?";
 
-			if (coll.Normal == Vector2.Down) directon = "TOP---^";
+			if (coll.Normal == Vector2.Down) direction = "TOP    ↑";
 
-			if (coll.Normal == Vector2.Up) directon = "DOWN--v";
+			if (coll.Normal == Vector2.Up) direction = "DOWN   ↓";
 
-			if (coll.Normal == Vector2.Left) directon = "RIGHT -->";
+			if (coll.Normal == Vector2.Left) direction = "RIGHT ->";
 
-			if (coll.Normal == Vector2.Right) directon = "<- LEFT";
+			if (coll.Normal == Vector2.Right) direction = "<-  LEFT";
 
 			Logger.debug(
-				$"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({directon})");
+				$"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({direction})");
 
 			pScore.Value = pScore.Value + 123;
 
@@ -147,12 +129,12 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	/// <summary>
 	/// </summary>
 	private void updateStates() {
-		if (ActionKey.SELECT) Debug = !Debug;
+		if (ActionKey.Select) Debug = !Debug;
 
 		Grounded = IsOnFloor();
 
-		SkiddingLeft = Grounded && motion.right() && ActionKey.LEFT;
-		SkiddingRight = Grounded && motion.left() && ActionKey.RIGHT;
+		SkiddingLeft = Grounded && motion.right() && ActionKey.Left;
+		SkiddingRight = Grounded && motion.left() && ActionKey.Right;
 		Skidding = SkiddingLeft || SkiddingRight;
 
 		var absv = motion.Abs.X;
@@ -191,17 +173,17 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 				_animate.Animation = "Walk";
 			else if (Running) _animate.Animation = "Run";
 
-			if (ActionKey.LEFT && motion.X <= 0.0) {
+			if (ActionKey.Left && motion.X <= 0.0) {
 				speed = -1;
 				_animate.FlipH = true;
 			}
 
-			if (ActionKey.RIGHT && motion.X >= 0.0) {
+			if (ActionKey.Right && motion.X >= 0.0) {
 				speed = 1;
 				_animate.FlipH = false;
 			}
 
-			speed *= ActionKey.RUN ? Parameter.MAX_RUNNING_SPEED : Parameter.MAX_WALKING_SPEED;
+			speed *= ActionKey.Run ? Parameter.MAX_RUNNING_SPEED : Parameter.MAX_WALKING_SPEED;
 			motion.X = Mathf.Lerp(motion.X, speed, Parameter.BODY_WEIGHT_FACTOR);
 		}
 
@@ -230,7 +212,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 				_skiddingAudio.Stop();
 		}
 
-		if (Grounded && ActionKey.JUMP) {
+		if (Grounded && ActionKey.Jump) {
 			motion.Y = -(Parameter.JUMP_SPEED + Math.Abs(motion.X) * Parameter.JUMP_PUSH_FACTOR);
 			_jumpAudio.Play();
 		}
@@ -238,7 +220,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 		if (!Grounded && !Skidding) _animate.Animation = "Jump";
 
 
-		if (!Skidding && !Walking && !Running && Grounded && !(ActionKey.LEFT || ActionKey.RIGHT))
+		if (!Skidding && !Walking && !Running && Grounded && !(ActionKey.Left || ActionKey.Right))
 			_animate.Animation = "Idle";
 
 		_animate.Play();
@@ -278,8 +260,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	///     Update Player
 	/// </summary>
 	/// <param name="delta"></param>
-	public override void _PhysicsProcess(float delta) {
-		updateKeys();
+	public override void PhysicsProcess(float delta) {
 		updateStates();
 
 		applyGravity(delta);
@@ -307,7 +288,7 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	/// <summary>
 	///     Init method
 	/// </summary>
-	public override void _Ready() {
+	public override void Ready() {
 		this.SetupNodeBindings();
 		this.SetupNativeStates();
 
@@ -333,19 +314,11 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 	}
 
 
-	/// <summary>
-	///     Type which holds pressed keys
-	/// </summary>
-	private static class ActionKey {
+	public override void Draw() {
+	}
 
-		public static bool UP { get; set; }
-		public static bool DOWN { get; set; }
-		public static bool LEFT { get; set; }
-		public static bool RIGHT { get; set; }
-		public static bool RUN { get; set; }
-		public static bool JUMP { get; set; }
-		public static bool SELECT { get; set; }
 
+	public override void Process(float delta) {
 	}
 
 
@@ -371,7 +344,6 @@ public class Mario2D : KinematicBody2D, ICoinCollector {
 
 		/*** CONSTANTS *************************************************************/
 		public static readonly Vector2 GRAVITY = new Vector2(0, 1200);
-
 		public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
 		/*** CURRENTS **************************************************************/
 

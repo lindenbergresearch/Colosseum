@@ -25,3 +25,6 @@
 /Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/bin/Tools/System.ValueTuple.xml
 /Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/obj/Tools/Colosseum.exe.config
 /Users/patricklindenberg/Documents/godot/Colosseum/.mono/temp/obj/Tools/Colosseum.csproj.CopyComplete
+/Users/patricklindenberg/Documents/godot/renoir/.mono/temp/obj/Tools/Colosseum.csprojAssemblyReference.cache
+/Users/patricklindenberg/Documents/godot/renoir/.mono/temp/obj/Tools/Colosseum.csproj.CoreCompileInputs.cache
+/Users/patricklindenberg/Documents/godot/renoir/.mono/temp/obj/Tools/Colosseum.pdb

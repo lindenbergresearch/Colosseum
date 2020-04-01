@@ -54,6 +54,21 @@ public class PolyState : State {
 	/// <summary>
 	/// 
 	/// </summary>
+	/// <param name="logic"></param>
+	/// <returns></returns>
+	public static implicit operator PolyState(bool logic) => new PolyState("", () => logic);
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="f"></param>
+	/// <returns></returns>
+	public static implicit operator PolyState(Func<bool> f) => new PolyState("", f);
+	
+	
+	/// <summary>
+	/// 
+	/// </summary>
 	/// <returns></returns>
 	public override bool Resolve() => pool.All((x => x()));
 }
@@ -96,6 +111,7 @@ public abstract partial class State {
 		return new PolyState(left.Name, () => left.Resolve() && right());
 	}
 
+	
 
 	/// <summary>
 	/// Implicitly convert state to bool
@@ -103,6 +119,7 @@ public abstract partial class State {
 	/// <param name="state"></param>
 	/// <returns></returns>
 	public static implicit operator bool(State state) => state.Resolve();
+	
 
 
 	/// <summary>
@@ -179,6 +196,8 @@ public partial class State {
 	/// <param name="name"></param>
 	/// <returns></returns>
 	public static NativeState NativeState(string name) => NativeStates[name];
+	
+	
 }
 
 
@@ -196,19 +215,39 @@ public static class NativeStateExtension {
 		/* get properties of class */
 		foreach (var propertyInfo in clazz.GetType().GetProperties()) {
 			/* get properties information */
-			foreach (var ca in propertyInfo.GetCustomAttributes()) {
+			foreach (var customAttribute in propertyInfo.GetCustomAttributes()) {
 				/* if a native state custom attribute found */
-				if (ca is NativeStateAttribute nativeState) {
+				if (customAttribute is NativeStateAttribute nativeState) {
 					var name = nativeState.Name.Trim().Length > 0 ? nativeState.Name : propertyInfo.Name;
 
-					if (propertyInfo.GetValue(clazz) is bool b) {
-						if (State.NativeStates.ContainsKey(name))
-							State.NativeStates.Remove(name);
+					if (propertyInfo.GetValue(clazz) is bool) {
+						if (State.NativeStates.ContainsKey(name)) State.NativeStates.Remove(name);
 						State.AddNativeState(name, () => (bool) propertyInfo.GetValue(clazz));
+					}
+					else if (propertyInfo.GetValue(clazz) is Func<bool>) {
+						if (State.NativeStates.ContainsKey(name)) State.NativeStates.Remove(name);
+						State.AddNativeState(name, (Func<bool>) propertyInfo.GetValue(clazz));
 					}
 					else {
 						throw new NativeStateTypeException(
 							$"Type constraint violation at: '{name}' <- boolean expected, but {propertyInfo.PropertyType.Name} found.");
+					}
+				}
+			}
+		}
+
+		/* get all methods */
+		foreach (var methodInfo in clazz.GetType().GetMethods()) {
+			/* get all custom attributes from the current method */
+			foreach (var customAttribute in methodInfo.GetCustomAttributes()) {
+				/* check for native state */
+				if (customAttribute is NativeStateAttribute nativeState) {
+					var name = nativeState.Name.Trim().Length > 0 ? nativeState.Name : methodInfo.Name;
+
+					if (methodInfo.ReturnType == typeof(bool)) {
+						if (State.NativeStates.ContainsKey(name)) State.NativeStates.Remove(name);
+						Func<bool> f = () => (bool) methodInfo.Invoke(clazz, null);
+						State.AddNativeState(name, f);
 					}
 				}
 			}
