@@ -5,59 +5,59 @@ using static PropertyPool;
 
 
 /// <summary>
-/// Implements a standard marion brs. like plattformer player
+///     Implements a standard marion brs. like plattformer player
 /// </summary>
 public class Mario2D : Player2D, ICoinCollector {
 
 
 	/** PROPERTIES *********************************************************************/
-	readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
-	readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
-	readonly Property<int> pScore = RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
+	private readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
+	private readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
+	private readonly Property<int> pScore = RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
 	/** PROPERTIES *********************************************************************/
-
 	[GNode("AnimatedSprite")]
-	Godot.AnimatedSprite _animate;
+	private Godot.AnimatedSprite _animate;
 
 	[GNode("BumpSound")]
-	AudioStreamPlayer _bumpSound;
+	private AudioStreamPlayer _bumpSound;
 
 	[GNode("Camera2D")]
-	Camera2D _camera;
+	private Camera2D _camera;
+
+
+	[NativeState("IsOnFloor")]
+	private NativeState _Grounded;
 
 	[GNode("InfoBox")]
-	RichTextLabel _info;
+	private RichTextLabel _info;
 
 	[GNode("JumpSound")]
-	AudioStreamPlayer2D _jumpAudio;
+	private AudioStreamPlayer2D _jumpAudio;
 
 	[GNode("OneLiveUp")]
-	AudioStreamPlayer _oneLiveUp;
+	private AudioStreamPlayer _oneLiveUp;
 
 	[GNode("SkiddingSound")]
-	AudioStreamPlayer2D _skiddingAudio;
+	private AudioStreamPlayer2D _skiddingAudio;
 
 
-	float CameraTime { get; set; }
+	private float CameraTime { get; set; }
 
-	bool Grounded { get; set; }
+	private bool Grounded { get; set; }
 
-	DynamicStateCombiner Jumping { get; set; }
+	private DynamicStateCombiner Jumping { get; set; }
+	private DynamicStateCombiner Falling { get; set; }
+	private DynamicStateCombiner IsDead { get; set; }
 
-	DynamicStateCombiner Falling { get; set; }
-	DynamicStateCombiner IsDead { get; set; }
-	bool Walking { get; set; }
-	bool Running { get; set; }
-	bool SkiddingLeft { get; set; }
-	bool SkiddingRight { get; set; }
-	bool Skidding { get; set; }
+	private bool Walking { get; set; }
+	private bool Running { get; set; }
+	private bool SkiddingLeft { get; set; }
+	private bool SkiddingRight { get; set; }
+	private bool Skidding { get; set; }
 
-	bool Debug { get; set; }
+	private bool Debug { get; set; }
 
-
-	//NativeState Grounded = State.NativeStates["IsGrounded"];
-
-	Vector2 StartPosition { get; set; }
+	private Vector2 StartPosition { get; set; }
 
 
 	/// <summary>
@@ -80,7 +80,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
-	///  Set players lives
+	///     Set players lives
 	/// </summary>
 	/// <param name="delta">The lives to add (neg. values will shrink lives)</param>
 	public void SetLives(int delta = 1) {
