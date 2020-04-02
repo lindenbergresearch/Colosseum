@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Godot;
 
 
 /// <summary>
 /// 
 /// </summary>
 public class NativeState : State {
-	protected Func<bool> Logic { get; set; } = () => true;
+
+	protected Func<bool> Logic { get; set; }
 
 
 	/// <summary>
@@ -28,12 +30,19 @@ public class NativeState : State {
 	/// </summary>
 	/// <returns></returns>
 	public override bool Resolve() => Logic();
+
+
+	public static NativeState State(Func<bool> f)
+		=> new NativeState("", f);
+
 }
+
 
 /// <summary>
 /// 
 /// </summary>
 public class PolyState : State {
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -57,26 +66,30 @@ public class PolyState : State {
 	/// <param name="logic"></param>
 	/// <returns></returns>
 	public static implicit operator PolyState(bool logic) => new PolyState("", () => logic);
-	
+
+
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="f"></param>
 	/// <returns></returns>
 	public static implicit operator PolyState(Func<bool> f) => new PolyState("", f);
-	
-	
+
+
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <returns></returns>
 	public override bool Resolve() => pool.All((x => x()));
+
 }
+
 
 /// <summary>
 /// 
 /// </summary>
 public abstract partial class State {
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -111,7 +124,6 @@ public abstract partial class State {
 		return new PolyState(left.Name, () => left.Resolve() && right());
 	}
 
-	
 
 	/// <summary>
 	/// Implicitly convert state to bool
@@ -119,7 +131,6 @@ public abstract partial class State {
 	/// <param name="state"></param>
 	/// <returns></returns>
 	public static implicit operator bool(State state) => state.Resolve();
-	
 
 
 	/// <summary>
@@ -129,18 +140,22 @@ public abstract partial class State {
 	public override string ToString() {
 		return $"{GetType().Name}({Resolve()})";
 	}
+
 }
 
 
 /// <summary>
 /// Custom Attribute to bind a local bool property to a native state
 /// </summary>
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 public class NativeStateAttribute : Attribute {
+
 	/// <summary>
 	/// Name (and path) of the target note)
 	/// </summary>
 	public string Name { get; set; } = "";
+
+	string Bind { get; }
 
 
 	/// <summary>
@@ -151,12 +166,14 @@ public class NativeStateAttribute : Attribute {
 
 
 	/// <summary>
-	/// Construct NoteBindingAttribute
+	/// 
 	/// </summary>
-	/// <param name="bindTo">Name (and path) of the target note.</param>
-	public NativeStateAttribute(string name) {
-		Name = name;
+	/// <param name="bind"></param>
+	public NativeStateAttribute(string bind) {
+		Bind = bind;
+		Name = $"{bind}";
 	}
+
 }
 
 
@@ -164,6 +181,7 @@ public class NativeStateAttribute : Attribute {
 /// Manage NativeStates 
 /// </summary>
 public partial class State {
+
 	/// <summary>
 	/// Global NativeState dictionary
 	/// </summary>
@@ -196,8 +214,8 @@ public partial class State {
 	/// <param name="name"></param>
 	/// <returns></returns>
 	public static NativeState NativeState(string name) => NativeStates[name];
-	
-	
+
+
 }
 
 
@@ -205,28 +223,33 @@ public partial class State {
 /// Static helper class for state extensions
 /// </summary>
 public static class NativeStateExtension {
+
 	/// <summary>
 	/// Look for native states at the current instance and add
 	/// it via a function wrapper to a global dictionary. 
 	/// </summary>
-	/// <param name="clazz">The Object instance</param>
+	/// <param name="obj">The Object instance</param>
 	/// <returns></returns>
-	public static void SetupNativeStates(this System.Object clazz) {
+	public static void SetupNativeStates(this System.Object obj) {
+		var t = obj.GetType();
+
 		/* get properties of class */
-		foreach (var propertyInfo in clazz.GetType().GetProperties()) {
+		foreach (var propertyInfo in t.GetProperties()) {
+			//Console.WriteLine($"Property: {propertyInfo.Name} Type: {propertyInfo.GetType().Name}");
+
 			/* get properties information */
 			foreach (var customAttribute in propertyInfo.GetCustomAttributes()) {
 				/* if a native state custom attribute found */
 				if (customAttribute is NativeStateAttribute nativeState) {
 					var name = nativeState.Name.Trim().Length > 0 ? nativeState.Name : propertyInfo.Name;
 
-					if (propertyInfo.GetValue(clazz) is bool) {
+					if (propertyInfo.GetValue(obj) is bool) {
 						if (State.NativeStates.ContainsKey(name)) State.NativeStates.Remove(name);
-						State.AddNativeState(name, () => (bool) propertyInfo.GetValue(clazz));
+						State.AddNativeState(name, () => (bool) propertyInfo.GetValue(obj));
 					}
-					else if (propertyInfo.GetValue(clazz) is Func<bool>) {
+					else if (propertyInfo.GetValue(obj) is Func<bool>) {
 						if (State.NativeStates.ContainsKey(name)) State.NativeStates.Remove(name);
-						State.AddNativeState(name, (Func<bool>) propertyInfo.GetValue(clazz));
+						State.AddNativeState(name, (Func<bool>) propertyInfo.GetValue(obj));
 					}
 					else {
 						throw new NativeStateTypeException(
@@ -236,8 +259,26 @@ public static class NativeStateExtension {
 			}
 		}
 
+		//Console.WriteLine($"Examining fields of: {obj.GetType().Name}");
+
+		/* tricky */
+		foreach (var fieldInfo in t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)) {
+			//Console.WriteLine($"Field: {fieldInfo.Name} {fieldInfo.FieldType}");
+
+			foreach (var customAttribute in fieldInfo.GetCustomAttributes()) {
+				if (customAttribute is NativeStateAttribute nativeState && nativeState.Name.Trim().Length > 1) {
+					var m = t.GetMethods().Where(info => info.Name == nativeState.Name).ToList();
+
+					if (m.Count == 1) {
+						Func<bool> f = () => (bool) m[0].Invoke(obj, null);
+						fieldInfo.SetValue(obj, new NativeState(nativeState.Name, f));
+					}
+				}
+			}
+		}
+
 		/* get all methods */
-		foreach (var methodInfo in clazz.GetType().GetMethods()) {
+		foreach (var methodInfo in obj.GetType().GetMethods()) {
 			/* get all custom attributes from the current method */
 			foreach (var customAttribute in methodInfo.GetCustomAttributes()) {
 				/* check for native state */
@@ -246,13 +287,14 @@ public static class NativeStateExtension {
 
 					if (methodInfo.ReturnType == typeof(bool)) {
 						if (State.NativeStates.ContainsKey(name)) State.NativeStates.Remove(name);
-						Func<bool> f = () => (bool) methodInfo.Invoke(clazz, null);
+						Func<bool> f = () => (bool) methodInfo.Invoke(obj, null);
 						State.AddNativeState(name, f);
 					}
 				}
 			}
 		}
 	}
+
 }
 
 
@@ -260,6 +302,7 @@ public static class NativeStateExtension {
 /// Type constraint Exception
 /// </summary>
 public class NativeStateTypeException : Exception {
+
 	public NativeStateTypeException() {
 	}
 
@@ -274,4 +317,5 @@ public class NativeStateTypeException : Exception {
 
 	public NativeStateTypeException(string? message, Exception? innerException) : base(message, innerException) {
 	}
+
 }
