@@ -1,10 +1,13 @@
 using System;
 
+
 /// <summary>
 ///     Generic interface to hold a state
 /// </summary>
 public interface IDynamicState<T> {
+
 	Func<T> Resolve { get; set; }
+
 }
 
 
@@ -12,15 +15,18 @@ public interface IDynamicState<T> {
 ///     Boolean implementation
 /// </summary>
 public interface IDynamicBoolState : IDynamicState<bool> {
+
 	/// <summary>
 	///     Conditional checker
 	/// </summary>
 	/// <returns>Returns true is the state is satisfied.</returns>
 	bool isSatisfied();
+
 }
 
 
 public interface ITimedPropery<T> {
+
 	float Time { get; set; }
 
 	void reset();
@@ -30,11 +36,14 @@ public interface ITimedPropery<T> {
 	bool isTimedOut();
 
 	void start(float timeout, T initial, T finals);
+
 }
+
 
 /// <summary>
 /// </summary>
 public class DynamicStateCombiner : IDynamicBoolState {
+
 	/// <summary>
 	///     Push function via constructor
 	/// </summary>
@@ -93,4 +102,5 @@ public class DynamicStateCombiner : IDynamicBoolState {
 	public override string ToString() {
 		return Resolve() ? "Yes" : "No";
 	}
+
 }
