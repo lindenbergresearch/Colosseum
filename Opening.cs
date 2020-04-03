@@ -1,31 +1,34 @@
 using Godot;
 
+
 /// <summary>
 ///     Opening animation and sound
 /// </summary>
 public class Opening : Node2D {
-    [GNode("AnimationPlayer")]
-    private AnimationPlayer _animationPlayer;
 
-    [GNode("AudioStreamPlayer")]
-    private AudioStreamPlayer _audioStreamPlayer;
+	[GNode("AnimationPlayer")]
+	private AnimationPlayer _animationPlayer;
 
-
-    /// <summary>
-    ///     Pre-delay of opening is setup in Godot Timer properties.
-    /// </summary>
-    public void _on_Timer_timeout() {
-        _animationPlayer.CurrentAnimation = "Zoomer";
-        _animationPlayer.Play();
-
-        _audioStreamPlayer.Play();
-    }
+	[GNode("AudioStreamPlayer")]
+	private AudioStreamPlayer _audioStreamPlayer;
 
 
-    /// <summary>
-    ///     Init
-    /// </summary>
-    public override void _Ready() {
-        this.SetupNodeBindings();
-    }
+	/// <summary>
+	///     Pre-delay of opening is setup in Godot Timer properties.
+	/// </summary>
+	public void _on_Timer_timeout() {
+		_animationPlayer.CurrentAnimation = "Zoomer";
+		_animationPlayer.Play();
+
+		_audioStreamPlayer.Play();
+	}
+
+
+	/// <summary>
+	///     Init
+	/// </summary>
+	public override void _Ready() {
+		this.SetupNodeBindings();
+	}
+
 }

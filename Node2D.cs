@@ -1,21 +1,26 @@
 using System;
 using Godot;
 
+
 /// <summary>
 /// Basic configuration
 /// </summary>
 public static class Game {
+
 	public static readonly int TILE_SIZE = 8;
 	public static readonly int SCALE_FACTOR = 3;
 	public static readonly Vector2 VIEWPORT_TILES = new Vector2(60, 40);
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;
+
 }
+
 
 /// <summary>
 /// ROOT node 
 /// </summary>
 public class Node2D : Godot.Node2D {
+
 	private readonly Property<string> pLevelName =
 		PropertyPool.RegisterNewProperty("main.level.name", "", "$main.playerinfo");
 
@@ -73,4 +78,5 @@ public class Node2D : Godot.Node2D {
 		if (pTime.Value != rounded)
 			pTime.Value = rounded;
 	}
+
 }

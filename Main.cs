@@ -1,24 +1,44 @@
-using System;
-using Renoir;
-
-public class MainApp : IPropertyChangeListener {
-    [Register("main.play.foo", "{0:D6}", "$main.foo")]
-    public Property<int> Foo { get; set; }
+using static System.Console;
 
 
-    public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
-        Console.WriteLine($"Property changed: {args}");
-    }
+public class Foo {
 
-    private static void Main(string[] args) {
-        var ma = new MainApp();
-
-        ma.SetupGlobalProperties();
-
-        PropertyPool.AddSubscription(ma, "$main.*");
-        ma.Foo.Value = 123;
+	public bool Flag { get; set; }
 
 
-        Console.WriteLine($"{ma.Foo.Formatted()}");
-    }
+	public bool IsOnFloor() {
+		return Flag;
+	}
+
+}
+
+
+public class MainApp : Foo {
+
+	[NativeState("IsOnFloor")]
+	private readonly State Grounded;
+
+
+	public MainApp() {
+		this.SetupNativeStates();
+	}
+
+
+	private bool Foo => IsOnFloor();
+
+
+	private static void Main(string[] args) {
+		var ma = new MainApp();
+
+
+		ma.Flag = true;
+
+		WriteLine($"result: {ma.Grounded} foo: {ma.Foo}");
+
+		ma.Flag = false;
+
+
+		WriteLine($"result: {ma.Grounded} foo: {ma.Foo}");
+	}
+
 }
