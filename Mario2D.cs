@@ -2,7 +2,7 @@ using System;
 using Godot;
 using static DynamicStateCombiner;
 using static PropertyPool;
-using static Renoir.RMath;
+using static Renoir.Logger;
 
 
 /// <summary>
@@ -20,24 +20,18 @@ public class Mario2D : Player2D, ICoinCollector {
 	[GNode("AnimatedSprite")]
 	private Godot.AnimatedSprite _animate;
 
-	[GNode("BumpSound")]
-	private AudioStreamPlayer _bumpSound;
+	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
 
-	[GNode("Camera2D")]
-	private Camera2D _camera;
+	[GNode("Camera2D")] private Camera2D _camera;
 
 
-	[GNode("InfoBox")]
-	private RichTextLabel _info;
+	[GNode("InfoBox")] private RichTextLabel _info;
 
-	[GNode("JumpSound")]
-	private AudioStreamPlayer2D _jumpAudio;
+	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
 
-	[GNode("OneLiveUp")]
-	private AudioStreamPlayer _oneLiveUp;
+	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
 
-	[GNode("SkiddingSound")]
-	private AudioStreamPlayer2D _skiddingAudio;
+	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
 
 
 	private float CameraTime { get; set; }
@@ -70,7 +64,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// <param name="coin"></param>
 	/// <returns></returns>
 	public bool onCoinCollect(Coin coin) {
-		Logger.debug($"Collecting coin: {coin}");
+		debug($"Collecting coin: {coin}");
 
 		pCoins.Value += 1;
 
@@ -114,18 +108,18 @@ public class Mario2D : Player2D, ICoinCollector {
 
 			if (coll.Normal == Vector2.Right) direction = "<-  LEFT";
 
-			Logger.debug(
-				$"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({direction})");
+			debug($"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({direction})");
 
-			pScore.Value = pScore.Value + 123;
+			pScore.Value += 123;
 
-			if (coll.Collider is TileMap && coll.Normal == Vector2.Down) {
-				_bumpSound.Play();
-				continue;
+			switch (coll.Collider) {
+				case TileMap _ when coll.Normal == Vector2.Down:
+					_bumpSound.Play();
+					continue;
+				case ICollidable collider:
+					collider.onCollide(coll);
+					break;
 			}
-
-
-			if (coll.Collider is ICollidable collider) collider.onCollide(coll);
 		}
 	}
 
@@ -138,8 +132,6 @@ public class Mario2D : Player2D, ICoinCollector {
 
 		Walking = Grounded && !Skidding && motion.Abs.X <= Parameter.MAX_WALKING_SPEED && motion.Abs.X > 0;
 		Running = Grounded && !Skidding && motion.Abs.X > Parameter.MAX_WALKING_SPEED;
-
-		var c = 123.12f.exceeds(12);
 	}
 
 
@@ -204,8 +196,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 			if (!_skiddingAudio.Playing && Math.Abs(v) > Parameter.MAX_WALKING_SPEED)
 				_skiddingAudio.Play();
-		}
-		else {
+		} else {
 			if (_skiddingAudio.Playing)
 				_skiddingAudio.Stop();
 		}
@@ -242,8 +233,7 @@ public class Mario2D : Player2D, ICoinCollector {
 		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
 			CameraTime = 0;
 			_camera.LimitBottom = 1000000;
-		}
-		else {
+		} else {
 			if (CameraTime >= 2 && _camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
 				if (_camera.LimitBottom == 1000000) _camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
 
@@ -276,7 +266,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	///     Resets all player properties to initial values
 	/// </summary>
 	public void ResetPlayer() {
-		Logger.debug("Reset player...");
+		debug("Reset player...");
 		pLives.Value = 3;
 		pCoins.Value = 0;
 	}
@@ -290,7 +280,7 @@ public class Mario2D : Player2D, ICoinCollector {
 		this.SetupNodeBindings();
 		this.SetupNativeStates();
 
-		Logger.debug("Setup player...");
+		debug("Setup player...");
 
 		ResetPlayer();
 
@@ -345,7 +335,5 @@ public class Mario2D : Player2D, ICoinCollector {
 
 		public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
 		/*** CURRENTS **************************************************************/
-
 	}
-
 }

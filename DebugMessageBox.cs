@@ -1,5 +1,6 @@
 using System.Linq;
 using Godot;
+using static Renoir.Logger;
 
 
 /// <summary>
@@ -8,14 +9,11 @@ using Godot;
 /// </summary>
 public class DebugMessageBox : RichTextLabel {
 
-	[GNode("../ColorRectDebug")]
-	private ColorRect _colorRect;
+	[GNode("../ColorRectDebug")] private ColorRect _colorRect;
 
-	[GNode("../MessageSound")]
-	private AudioStreamPlayer _messageSound;
+	[GNode("../MessageSound")] private AudioStreamPlayer _messageSound;
 
-	[GNode("../TextTimer")]
-	private Timer _timer;
+	[GNode("../TextTimer")] private Timer _timer;
 
 	private float current = -1;
 	private int i;
@@ -43,20 +41,20 @@ public class DebugMessageBox : RichTextLabel {
 	private void UpdateMessageBox(float delta) {
 		current += delta * 1000.0f;
 
-		if (current == -1 || current >= RedrawInterval && Logger.messages.Count != i) {
+		if (current == -1 || current >= RedrawInterval && messages.Count != i) {
 			if (!_messageSound.Playing) _messageSound.Play();
 
 			_timer.Stop();
 
-			i = Logger.messages.Count;
+			i = messages.Count;
 			current = 0;
 
 			Visible = true;
 			_colorRect.Visible = true;
 
-			Logger.messages.Reverse();
-			var subset = Logger.messages.Take(17).ToList();
-			Logger.messages.Reverse();
+			messages.Reverse();
+			var subset = messages.Take(17).ToList();
+			messages.Reverse();
 
 			var text = "";
 
@@ -71,7 +69,6 @@ public class DebugMessageBox : RichTextLabel {
 
 
 	public override void _Process(float delta) {
-		if (Logger.PrintDebug) UpdateMessageBox(delta);
+		if (PrintDebug) UpdateMessageBox(delta);
 	}
-
 }

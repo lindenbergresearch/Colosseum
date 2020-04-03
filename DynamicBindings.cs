@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Godot;
+using static Renoir.Logger;
 
 
 /// <summary>
@@ -29,7 +30,6 @@ public class GNodeAttribute : Attribute {
 	///     Name (and path) of the target note)
 	/// </summary>
 	public string BindTo { get; set; } = "";
-
 }
 
 
@@ -62,7 +62,7 @@ public static class DynamicBindings {
 	public static void SetupBindings(Node node) {
 		var t = node.GetType();
 
-		Logger.trace($"Setup dynamic node-bindings for: '{t}'");
+		trace($"Setup dynamic node-bindings for: '{t}'");
 
 		foreach (var field in t.GetFields(bindingFlags))
 		foreach (var attr in field.GetCustomAttributes())
@@ -82,8 +82,7 @@ public static class DynamicBindings {
 
 				field.SetValue(node, bindNode);
 
-				Logger.trace($"'{field}' has been bound to node: '{binder.BindTo}'");
+				trace($"'{field}' has been bound to node: '{binder.BindTo}'");
 			}
 	}
-
 }

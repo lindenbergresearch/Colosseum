@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using static Util;
+using static Renoir.Logger;
 
 
 /// <summary>
@@ -39,9 +40,7 @@ internal class BitmapFontConfig : SerializableDataClass {
 
 		public T X { get; set; }
 		public T Y { get; set; }
-
 	}
-
 }
 
 
@@ -99,7 +98,6 @@ public class BitmapGlyph {
 	public bool PixelAt(int x, int y) {
 		return data[x, y] == 1;
 	}
-
 }
 
 
@@ -188,7 +186,7 @@ public class BitmapFont {
 	///     Detects the correct char dimension based on the glyph dimension
 	/// </summary>
 	public void DetectCharsDimension() {
-		Logger.trace($"{this}");
+		trace($"{this}");
 
 		if (imageTexture == null) return;
 
@@ -216,7 +214,7 @@ public class BitmapFont {
 	/// <param name="y"></param>
 	/// <returns></returns>
 	private Color DetectTransparentColor(int x = 0, int y = 0) {
-		Logger.trace($"{this}");
+		trace($"{this}");
 
 		var image = imageTexture.GetData();
 
@@ -233,7 +231,7 @@ public class BitmapFont {
 	/// </summary>
 	/// <returns>True if the image could be processed to a bitmap-font</returns>
 	private bool ProcessImage() {
-		Logger.trace($"{this}");
+		trace($"{this}");
 
 		var image = imageTexture.GetData();
 		var cindex = 0;
@@ -268,7 +266,7 @@ public class BitmapFont {
 	/// <summary>
 	/// </summary>
 	public void process() {
-		Logger.trace($"{this}");
+		trace($"{this}");
 		IsLoaded = false;
 		CharsDimension = Vec(0, 0);
 
@@ -295,7 +293,6 @@ public class BitmapFont {
 	public override string ToString() {
 		return $"{GetType().Name}: GlyphDimention={GlyphDimension} CharsDimension={CharsDimension} Offset={Offset} Count={Count} Texture={imageTexture.ResourceName}";
 	}
-
 }
 
 
@@ -314,5 +311,4 @@ public class BitmapFontException : Exception {
 
 	public BitmapFontException(string message, Exception innerException) : base(message, innerException) {
 	}
-
 }

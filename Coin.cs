@@ -1,4 +1,5 @@
 using Godot;
+using static Renoir.Logger;
 
 
 /// <summary>
@@ -11,7 +12,6 @@ public interface ICoinCollector {
 	/// </summary>
 	/// <param name="coin">Ref to the coin</param>
 	bool onCoinCollect(Coin coin);
-
 }
 
 
@@ -20,11 +20,9 @@ public interface ICoinCollector {
 /// </summary>
 public class Coin : Area2D {
 
-	[GNode("AnimatedSprite")]
-	private Godot.AnimatedSprite _animatedSprite;
+	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
 
-	[GNode("AudioStreamPlayer")]
-	private AudioStreamPlayer _audioStreamPlayer;
+	[GNode("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
 
 
 	public bool Picked { get; set; }
@@ -49,14 +47,14 @@ public class Coin : Area2D {
 	/// </summary>
 	/// <param name="body"></param>
 	public void onBodyEnter(Object body) {
-		Logger.debug($"Body entered this coin: {body}");
+		debug($"Body entered this coin: {body}");
 
 		if (Picked || !(body is ICoinCollector)) {
-			Logger.debug($"Body: {body} couldn't collect coins.");
+			debug($"Body: {body} couldn't collect coins.");
 			return;
 		}
 
-		Logger.debug($"Calling interface on: {body}");
+		debug($"Calling interface on: {body}");
 
 		Picked = (body as ICoinCollector).onCoinCollect(this);
 
@@ -70,5 +68,4 @@ public class Coin : Area2D {
 		SetProcessInput(false);
 		Disconnect("body_entered", this, nameof(onBodyEnter));
 	}
-
 }

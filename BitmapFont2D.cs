@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using static Util;
+using static Renoir.Logger;
 using File = System.IO.File;
 
 
@@ -248,7 +249,7 @@ public class BitmapFont2D : Godot.Node2D {
 	///     Take properties and try to reload the bitmap-font.
 	/// </summary>
 	private void Refresh() {
-		Logger.trace($"Refresh(): {this}");
+		trace($"Refresh(): {this}");
 
 		if (lockRefresh) return;
 
@@ -263,18 +264,15 @@ public class BitmapFont2D : Godot.Node2D {
 			if (BitmapFont.IsLoaded) {
 				CharsDimension = BitmapFont.CharsDimension;
 				Update();
-			}
-
-			else {
+			} else {
 				GD.PrintErr($"{GetType().Name}: Unable to use bitmap-font with that configuration: {Dump(BitmapFont)}");
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			GD.PrintErr(e);
-			Logger.trace("Exception: " + e);
+			trace("Exception: " + e);
 		}
 
-		Logger.trace($"After Refresh(): {this}");
+		trace($"After Refresh(): {this}");
 	}
 
 
@@ -297,8 +295,7 @@ public class BitmapFont2D : Godot.Node2D {
 			_config.ShadowOffset.Y = (int) ShadowOffset.y;
 
 			SerializeObject(_config, jsonFile);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			GD.PrintErr($"Unable to save bitmap-file config data to json file: {jsonFile}");
 		}
 	}
@@ -322,11 +319,9 @@ public class BitmapFont2D : Godot.Node2D {
 			ShadowOffset = new Vector2(_config.ShadowOffset.X, _config.ShadowOffset.Y);
 
 			GD.Print("Bitmap-font successfully configured by json file.");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			GD.PrintErr($"Unable to load bitmap-font config data from json file: {filename}");
-		}
-		finally {
+		} finally {
 			lockRefresh = false;
 		}
 	}
@@ -341,5 +336,4 @@ public class BitmapFont2D : Godot.Node2D {
 	/// </summary>
 	public override void _Ready() {
 	}
-
 }
