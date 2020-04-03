@@ -2,351 +2,345 @@ using System;
 using Godot;
 using static DynamicStateCombiner;
 using static PropertyPool;
-
+using static Renoir.RMath;
 
 /// <summary>
-///     Implements a standard marion brs. like plattformer player
+/// Main Player character
 /// </summary>
 public class Mario2D : Player2D, ICoinCollector {
+    /** PROPERTIES *********************************************************************/
+    private readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
 
+    private readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
+    private readonly Property<int> pScore = RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
 
-	/** PROPERTIES *********************************************************************/
-	private readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
-	private readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
-	private readonly Property<int> pScore = RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
-	/** PROPERTIES *********************************************************************/
-	[GNode("AnimatedSprite")]
-	private Godot.AnimatedSprite _animate;
+    /** PROPERTIES *********************************************************************/
+    [GNode("AnimatedSprite")]
+    private Godot.AnimatedSprite _animate;
 
-	[GNode("BumpSound")]
-	private AudioStreamPlayer _bumpSound;
+    [GNode("BumpSound")]
+    private AudioStreamPlayer _bumpSound;
 
-	[GNode("Camera2D")]
-	private Camera2D _camera;
+    [GNode("Camera2D")]
+    private Camera2D _camera;
 
 
-	[NativeState("IsOnFloor")]
-	private NativeState _Grounded;
+    [GNode("InfoBox")]
+    private RichTextLabel _info;
 
-	[GNode("InfoBox")]
-	private RichTextLabel _info;
+    [GNode("JumpSound")]
+    private AudioStreamPlayer2D _jumpAudio;
 
-	[GNode("JumpSound")]
-	private AudioStreamPlayer2D _jumpAudio;
+    [GNode("OneLiveUp")]
+    private AudioStreamPlayer _oneLiveUp;
 
-	[GNode("OneLiveUp")]
-	private AudioStreamPlayer _oneLiveUp;
+    [GNode("SkiddingSound")]
+    private AudioStreamPlayer2D _skiddingAudio;
 
-	[GNode("SkiddingSound")]
-	private AudioStreamPlayer2D _skiddingAudio;
 
+    private float CameraTime { get; set; }
 
-	private float CameraTime { get; set; }
+    private bool Grounded => IsOnFloor();
 
-	private bool Grounded { get; set; }
 
-	private DynamicStateCombiner Jumping { get; set; }
-	private DynamicStateCombiner Falling { get; set; }
-	private DynamicStateCombiner IsDead { get; set; }
+    private DynamicStateCombiner Jumping { get; set; }
+    private DynamicStateCombiner Falling { get; set; }
+    private DynamicStateCombiner IsDead { get; set; }
 
-	private bool Walking { get; set; }
-	private bool Running { get; set; }
-	private bool SkiddingLeft { get; set; }
-	private bool SkiddingRight { get; set; }
-	private bool Skidding { get; set; }
+    private bool Walking { get; set; }
+    private bool Running { get; set; }
 
-	private bool Debug { get; set; }
 
-	private Vector2 StartPosition { get; set; }
+    private bool SkiddingLeft => Grounded && motion.MovingRight && ActionKey.Left;
+    private bool SkiddingRight => Grounded && motion.MovingLeft && ActionKey.Right;
+    private bool Skidding => SkiddingLeft || SkiddingRight;
 
 
-	/// <summary>
-	///     Handle coins
-	/// </summary>
-	/// <param name="coin"></param>
-	/// <returns></returns>
-	public bool onCoinCollect(Coin coin) {
-		Logger.debug($"Collecting coin: {coin}");
+    private bool Debug { get; set; }
 
-		pCoins.Value += 1;
 
-		if (pCoins.Value == 15) {
-			SetLives();
-			pCoins.Value = 0;
-		}
+    private Vector2 StartPosition { get; set; }
 
-		return true;
-	}
 
+    /// <summary>
+    ///     Handle coins
+    /// </summary>
+    /// <param name="coin"></param>
+    /// <returns></returns>
+    public bool onCoinCollect(Coin coin) {
+        Logger.debug($"Collecting coin: {coin}");
 
-	/// <summary>
-	///     Set players lives
-	/// </summary>
-	/// <param name="delta">The lives to add (neg. values will shrink lives)</param>
-	public void SetLives(int delta = 1) {
-		if (delta > 0) _oneLiveUp.Play();
+        pCoins.Value += 1;
 
-		pLives.Value += delta;
-	}
+        if (pCoins.Value == 15) {
+            SetLives();
+            pCoins.Value = 0;
+        }
 
+        return true;
+    }
 
-	/// <summary>
-	///     Check collisions and pass event to all coliders
-	/// </summary>
-	private void handleCollisions() {
-		// exclude bottom collisions
-		if (Grounded) return;
 
-		for (var i = 0; i < GetSlideCount(); i++) {
-			var coll = GetSlideCollision(i);
+    /// <summary>
+    ///     Set players lives
+    /// </summary>
+    /// <param name="delta">The lives to add (neg. values will shrink lives)</param>
+    public void SetLives(int delta = 1) {
+        if (delta > 0) _oneLiveUp.Play();
 
-			var direction = "?";
+        pLives.Value += delta;
+    }
 
-			if (coll.Normal == Vector2.Down) direction = "TOP    ↑";
 
-			if (coll.Normal == Vector2.Up) direction = "DOWN   ↓";
+    /// <summary>
+    ///     Check collisions and pass event to all coliders
+    /// </summary>
+    private void handleCollisions() {
+        // exclude bottom collisions
+        if (Grounded) return;
 
-			if (coll.Normal == Vector2.Left) direction = "RIGHT ->";
+        for (var i = 0; i < GetSlideCount(); i++) {
+            var coll = GetSlideCollision(i);
 
-			if (coll.Normal == Vector2.Right) direction = "<-  LEFT";
+            var direction = "?";
 
-			Logger.debug(
-				$"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({direction})");
+            if (coll.Normal == Vector2.Down) direction = "TOP    ↑";
 
-			pScore.Value = pScore.Value + 123;
+            if (coll.Normal == Vector2.Up) direction = "DOWN   ↓";
 
-			if (coll.Collider is TileMap && coll.Normal == Vector2.Down) {
-				_bumpSound.Play();
-				continue;
-			}
+            if (coll.Normal == Vector2.Left) direction = "RIGHT ->";
 
+            if (coll.Normal == Vector2.Right) direction = "<-  LEFT";
 
-			if (coll.Collider is ICollidable collider) collider.onCollide(coll);
-		}
-	}
+            Logger.debug(
+                $"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({direction})");
 
+            pScore.Value = pScore.Value + 123;
 
-	/// <summary>
-	/// </summary>
-	private void updateStates() {
-		if (ActionKey.Select) Debug = !Debug;
+            if (coll.Collider is TileMap && coll.Normal == Vector2.Down) {
+                _bumpSound.Play();
+                continue;
+            }
 
-		Grounded = IsOnFloor();
 
-		SkiddingLeft = Grounded && motion.right() && ActionKey.Left;
-		SkiddingRight = Grounded && motion.left() && ActionKey.Right;
-		Skidding = SkiddingLeft || SkiddingRight;
+            if (coll.Collider is ICollidable collider) collider.onCollide(coll);
+        }
+    }
 
-		var absv = motion.Abs.X;
 
-		Walking = Grounded && !Skidding && absv <= Parameter.MAX_WALKING_SPEED && absv > 0;
-		Running = Grounded && !Skidding && motion.Abs.X > Parameter.MAX_WALKING_SPEED;
-	}
+    /// <summary>
+    /// </summary>
+    private void updateStates() {
+        if (ActionKey.Select) Debug = !Debug;
 
 
-	/// <summary>
-	///     Apply gravity to the player
-	/// </summary>
-	/// <param name="delta"></param>
-	private void applyGravity(float delta) {
-		if (GlobalPosition.x <= 8 && motion.left()) {
-			motion.reset();
-			return;
-		}
+        Walking = Grounded && !Skidding && motion.Abs.X <= Parameter.MAX_WALKING_SPEED && motion.Abs.X > 0;
+        Running = Grounded && !Skidding && motion.Abs.X > Parameter.MAX_WALKING_SPEED;
 
-		motion += delta * Parameter.GRAVITY;
-		motion = MoveAndSlide(motion, Parameter.FLOOR_NORMAL);
-	}
+        var c = 123.12f.exceeds(12);
+    }
 
 
-	/// <summary>
-	///     Apply x motions to the player
-	/// </summary>
-	/// <param name="delta"></param>
-	private void applyXMotion(float delta) {
-		var speed = 0.0f;
+    /// <summary>
+    ///     Apply gravity to the player
+    /// </summary>
+    /// <param name="delta"></param>
+    private void applyGravity(float delta) {
+        if (GlobalPosition.x <= 8 && motion.MovingLeft) {
+            motion.reset();
+            return;
+        }
 
-		if (motion.X < Parameter.EPSILON_VELOCITY && motion.X > -Parameter.EPSILON_VELOCITY) motion.X = 0;
+        motion += delta * Parameter.GRAVITY;
+        motion = MoveAndSlide(motion, Parameter.FLOOR_NORMAL);
+    }
 
-		if (!Skidding) {
-			if (Walking)
-				_animate.Animation = "Walk";
-			else if (Running) _animate.Animation = "Run";
 
-			if (ActionKey.Left && motion.X <= 0.0) {
-				speed = -1;
-				_animate.FlipH = true;
-			}
+    /// <summary>
+    ///     Apply x motions to the player
+    /// </summary>
+    /// <param name="delta"></param>
+    private void applyXMotion(float delta) {
+        var speed = 0.0f;
 
-			if (ActionKey.Right && motion.X >= 0.0) {
-				speed = 1;
-				_animate.FlipH = false;
-			}
+        if (motion.X < Parameter.EPSILON_VELOCITY && motion.X > -Parameter.EPSILON_VELOCITY) motion.X = 0;
 
-			speed *= ActionKey.Run ? Parameter.MAX_RUNNING_SPEED : Parameter.MAX_WALKING_SPEED;
-			motion.X = Mathf.Lerp(motion.X, speed, Parameter.BODY_WEIGHT_FACTOR);
-		}
+        if (!Skidding) {
+            if (Walking) _animate.Animation = "Walk";
+            else if (Running) _animate.Animation = "Run";
 
-		if (Skidding) {
-			_animate.Animation = "Skid";
+            if (ActionKey.Left && motion.X <= 0.0) {
+                speed = -1;
+                _animate.FlipH = true;
+            }
 
-			var v = motion.X;
+            if (ActionKey.Right && motion.X >= 0.0) {
+                speed = 1;
+                _animate.FlipH = false;
+            }
 
-			if (SkiddingLeft) {
-				v -= Parameter.SKID_DECELERATION;
-				if (v < 0) v = 0;
-			}
+            speed *= ActionKey.Run ? Parameter.MAX_RUNNING_SPEED : Parameter.MAX_WALKING_SPEED;
+            motion.X = Mathf.Lerp(motion.X, speed, Parameter.BODY_WEIGHT_FACTOR);
+        }
 
-			if (SkiddingRight) {
-				v += Parameter.SKID_DECELERATION;
-				if (v > 0) v = 0;
-			}
+        if (Skidding) {
+            _animate.Animation = "Skid";
 
-			motion.X = v;
+            var v = motion.X;
 
-			if (!_skiddingAudio.Playing && Math.Abs(v) > Parameter.MAX_WALKING_SPEED)
-				_skiddingAudio.Play();
-		}
-		else {
-			if (_skiddingAudio.Playing)
-				_skiddingAudio.Stop();
-		}
+            if (SkiddingLeft) {
+                v -= Parameter.SKID_DECELERATION;
+                if (v < 0) v = 0;
+            }
 
-		if (Grounded && ActionKey.Jump) {
-			motion.Y = -(Parameter.JUMP_SPEED + Math.Abs(motion.X) * Parameter.JUMP_PUSH_FACTOR);
-			_jumpAudio.Play();
-		}
+            if (SkiddingRight) {
+                v += Parameter.SKID_DECELERATION;
+                if (v > 0) v = 0;
+            }
 
-		if (!Grounded && !Skidding) _animate.Animation = "Jump";
+            motion.X = v;
 
+            if (!_skiddingAudio.Playing && Math.Abs(v) > Parameter.MAX_WALKING_SPEED)
+                _skiddingAudio.Play();
+        }
+        else {
+            if (_skiddingAudio.Playing)
+                _skiddingAudio.Stop();
+        }
 
-		if (!Skidding && !Walking && !Running && Grounded && !(ActionKey.Left || ActionKey.Right))
-			_animate.Animation = "Idle";
+        if (Grounded && ActionKey.Jump) {
+            motion.Y = -(Parameter.JUMP_SPEED + Math.Abs(motion.X) * Parameter.JUMP_PUSH_FACTOR);
+            _jumpAudio.Play();
+        }
 
-		_animate.Play();
+        if (!Grounded && !Skidding) _animate.Animation = "Jump";
 
-		printDebug();
-		_info.Visible = Debug;
-	}
 
+        if (!Skidding && !Walking && !Running && Grounded && !(ActionKey.Left || ActionKey.Right))
+            _animate.Animation = "Idle";
 
-	private void printDebug() {
-		var vect = string.Format("V = {0,6:000.0}, {1,6:000.0}", motion.X, motion.Y);
-		var pos = string.Format("P = {0,6:000.0}, {1,6:000.0}", GlobalPosition.x, GlobalPosition.y);
-		_info.Text =
-			$"Velocity: {vect}\nPosition: {pos}\nSL: {SkiddingLeft} SR: {SkiddingRight}\nGrounded: {Grounded}\nWalk: {Walking} Run: {Running}\nJump: {Jumping} Fall: {Falling}";
-	}
+        _animate.Play();
 
+        printDebug();
+        _info.Visible = Debug;
+    }
 
-	private void updateCamera(float delta) {
-		CameraTime += delta;
 
-		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
-			CameraTime = 0;
-			_camera.LimitBottom = 1000000;
-		}
-		else {
-			if (CameraTime >= 2 && _camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
-				if (_camera.LimitBottom == 1000000) _camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
+    private void printDebug() {
+        var vect = string.Format("V = {0,6:000.0}, {1,6:000.0}", motion.X, motion.Y);
+        var pos = string.Format("P = {0,6:000.0}, {1,6:000.0}", GlobalPosition.x, GlobalPosition.y);
+        _info.Text =
+            $"Velocity: {vect}\nPosition: {pos}\nSL: {SkiddingLeft} SR: {SkiddingRight}\nGrounded: {Grounded}\nWalk: {Walking} Run: {Running}\nJump: {Jumping} Fall: {Falling}";
+    }
 
-				_camera.LimitBottom = (int) Mathf.Lerp(_camera.LimitBottom, Game.VIEWPORT_RESOLUTION.y, 0.01f);
-			}
-		}
-	}
 
+    private void updateCamera(float delta) {
+        CameraTime += delta;
 
-	/// MAIN *************************************************************************
-	/// <summary>
-	///     Update Player
-	/// </summary>
-	/// <param name="delta"></param>
-	public override void PhysicsProcess(float delta) {
-		updateStates();
+        if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
+            CameraTime = 0;
+            _camera.LimitBottom = 1000000;
+        }
+        else {
+            if (CameraTime >= 2 && _camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
+                if (_camera.LimitBottom == 1000000) _camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
 
-		applyGravity(delta);
-		applyXMotion(delta);
+                _camera.LimitBottom = (int) Mathf.Lerp(_camera.LimitBottom, Game.VIEWPORT_RESOLUTION.y, 0.01f);
+            }
+        }
+    }
 
-		handleCollisions();
 
-		//updateCamera(delta);
+    /// MAIN *************************************************************************
+    /// <summary>
+    ///     Update Player
+    /// </summary>
+    /// <param name="delta"></param>
+    public override void PhysicsProcess(float delta) {
+        updateStates();
 
-		if (GlobalPosition.y > 1000) GlobalPosition = StartPosition;
-	}
+        applyGravity(delta);
+        applyXMotion(delta);
 
+        handleCollisions();
 
-	/// <summary>
-	///     Resets all player properties to initial values
-	/// </summary>
-	public void ResetPlayer() {
-		Logger.debug("Reset player...");
-		pLives.Value = 3;
-		pCoins.Value = 0;
-	}
+        //updateCamera(delta);
 
+        if (GlobalPosition.y > 1000) GlobalPosition = StartPosition;
+    }
 
-	/// INIT *************************************************************************
-	/// <summary>
-	///     Init method
-	/// </summary>
-	public override void Ready() {
-		this.SetupNodeBindings();
-		this.SetupNativeStates();
 
-		Logger.debug("Setup player...");
+    /// <summary>
+    ///     Resets all player properties to initial values
+    /// </summary>
+    public void ResetPlayer() {
+        Logger.debug("Reset player...");
+        pLives.Value = 3;
+        pCoins.Value = 0;
+    }
 
-		ResetPlayer();
 
-		pCoins.Format = "{0:D3}";
-		pScore.Format = "{0:D7}";
-		pLives.Format = "{0:D2}";
+    /// INIT *************************************************************************
+    /// <summary>
+    ///     Init method
+    /// </summary>
+    public override void Ready() {
+        this.SetupNodeBindings();
+        this.SetupNativeStates();
 
-		Jumping = fun(() => !Grounded && motion.upward());
-		Falling = fun(() => !Grounded && motion.downward());
-		IsDead = fun(() => pLives.Value == 0);
+        Logger.debug("Setup player...");
 
+        ResetPlayer();
 
-		_info.Text = "!";
+        pCoins.Format = "{0:D3}";
+        pScore.Format = "{0:D7}";
+        pLives.Format = "{0:D2}";
 
-		_camera.LimitLeft = 0;
-		_camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
+        Jumping = fun(() => !Grounded && motion.MovingUp);
+        Falling = fun(() => !Grounded && motion.MovingDown);
+        IsDead = fun(() => pLives.Value == 0);
 
-		StartPosition = GlobalPosition;
-	}
 
+        _info.Text = "!";
 
-	public override void Draw() {
-	}
+        _camera.LimitLeft = 0;
+        _camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
 
+        StartPosition = GlobalPosition;
+    }
 
-	public override void Process(float delta) {
-	}
 
+    public override void Draw() {
+    }
 
-	/// <summary>
-	///     Common player parameter for kinematic handling
-	/// </summary>
-	private static class Parameter {
 
-		/*** CONSTANTS *************************************************************/
-		public static readonly float MAX_JUMP_HEIGHT = 70.0f;
-		public static readonly float JUMP_SPEED = 430.0f;
-		public static readonly float JUMP_PUSH_FACTOR = 0.20f;
-		public static readonly float MAX_WALKING_SPEED = 110.0f;
-		public static readonly float MAX_WALL_PUSH_SPEED = MAX_WALKING_SPEED / 2.0f;
-		public static readonly float MAX_RUNNING_SPEED = 180.0f;
-		public static readonly float X_ACCELERATION_FRONT = 400.0f;
-		public static readonly float SLOWING_DECELERATION = 392.0f;
-		public static readonly float CROUCHING_DECELERATION = 288.0f;
-		public static readonly float SKID_DECELERATION = 8.0f;
-		public static readonly float MOVE_OVER_SPEED = 48.0f;
-		public static readonly float BODY_WEIGHT_FACTOR = 0.1f;
-		public static readonly float EPSILON_VELOCITY = 5.0f;
+    public override void Process(float delta) {
+    }
 
-		/*** CONSTANTS *************************************************************/
-		public static readonly Vector2 GRAVITY = new Vector2(0, 1200);
-		public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
-		/*** CURRENTS **************************************************************/
 
-	}
+    /// <summary>
+    ///     Common player parameter for kinematic handling
+    /// </summary>
+    private static class Parameter {
+        /*** CONSTANTS *************************************************************/
+        public static readonly float MAX_JUMP_HEIGHT = 70.0f;
+        public static readonly float JUMP_SPEED = 430.0f;
+        public static readonly float JUMP_PUSH_FACTOR = 0.20f;
+        public static readonly float MAX_WALKING_SPEED = 110.0f;
+        public static readonly float MAX_WALL_PUSH_SPEED = MAX_WALKING_SPEED / 2.0f;
+        public static readonly float MAX_RUNNING_SPEED = 180.0f;
+        public static readonly float X_ACCELERATION_FRONT = 400.0f;
+        public static readonly float SLOWING_DECELERATION = 392.0f;
+        public static readonly float CROUCHING_DECELERATION = 288.0f;
+        public static readonly float SKID_DECELERATION = 8.0f;
+        public static readonly float MOVE_OVER_SPEED = 48.0f;
+        public static readonly float BODY_WEIGHT_FACTOR = 0.1f;
+        public static readonly float EPSILON_VELOCITY = 5.0f;
 
+        /*** CONSTANTS *************************************************************/
+        public static readonly Vector2 GRAVITY = new Vector2(0, 1200);
+
+        public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
+        /*** CURRENTS **************************************************************/
+    }
 }

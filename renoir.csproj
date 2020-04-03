@@ -44,55 +44,56 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GodotSharp">
-      <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
-      <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.CSharp"/>
-    <Reference Include="System"/>
+      <Reference Include="GodotSharp">
+          <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharp.dll</HintPath>
+          <Private>False</Private>
+      </Reference>
+      <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
+          <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
+          <Private>False</Private>
+      </Reference>
+      <Reference Include="Microsoft.CSharp"/>
+      <Reference Include="System"/>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AnimatedSprite.cs"/>
-    <Compile Include="BitmapFont.cs"/>
-    <Compile Include="BitmapFont2D.cs"/>
-    <Compile Include="Brick.cs"/>
-    <Compile Include="Coin.cs"/>
-    <Compile Include="CollisionShape2D.cs"/>
-    <Compile Include="DebugMessageBox.cs"/>
-    <Compile Include="DynamicBindings.cs"/>
-    <Compile Include="DynamicStateCombiner.cs"/>
-    <Compile Include="ICollidable.cs"/>
-    <Compile Include="Level.cs"/>
-    <Compile Include="Logger.cs"/>
-    <Compile Include="Main.cs"/>
-    <Compile Include="Mario2D.cs"/>
-    <Compile Include="Motion2D.cs"/>
-    <Compile Include="Node2D.cs"/>
-    <Compile Include="Opening.cs"/>
-    <Compile Include="Player2D.cs"/>
-    <Compile Include="PlayerInfoText.cs"/>
-    <Compile Include="PlayerUtil.cs"/>
-    <Compile Include="PolyStateCombiner.cs"/>
-    <Compile Include="Property.cs"/>
-    <Compile Include="QuestionBox.cs"/>
-    <Compile Include="StateResolver.cs"/>
-    <Compile Include="Util.cs"/>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0"/>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
-    <PackageReference Include="System.Buffers" Version="4.5.1"/>
-    <PackageReference Include="System.Memory" Version="4.5.4"/>
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0"/>
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1"/>
-    <PackageReference Include="System.Text.Encodings.Web" Version="4.7.0"/>
-    <PackageReference Include="System.Text.Json" Version="4.7.1"/>
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4"/>
-    <PackageReference Include="System.ValueTuple" Version="4.5.0"/>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+    <ItemGroup>
+        <Compile Include="AnimatedSprite.cs"/>
+        <Compile Include="BitmapFont.cs"/>
+        <Compile Include="BitmapFont2D.cs"/>
+        <Compile Include="Brick.cs"/>
+        <Compile Include="Coin.cs"/>
+        <Compile Include="CollisionShape2D.cs"/>
+        <Compile Include="DebugMessageBox.cs"/>
+        <Compile Include="DynamicBindings.cs"/>
+        <Compile Include="DynamicStateCombiner.cs"/>
+        <Compile Include="ICollidable.cs"/>
+        <Compile Include="Level.cs"/>
+        <Compile Include="Logger.cs"/>
+        <Compile Include="Main.cs"/>
+        <Compile Include="Mario2D.cs"/>
+        <Compile Include="Motion2D.cs"/>
+        <Compile Include="Node2D.cs"/>
+        <Compile Include="Opening.cs"/>
+        <Compile Include="Player2D.cs"/>
+        <Compile Include="PlayerInfoText.cs"/>
+        <Compile Include="PlayerUtil.cs"/>
+        <Compile Include="PolyStateCombiner.cs"/>
+        <Compile Include="Property.cs"/>
+        <Compile Include="QuestionBox.cs"/>
+        <Compile Include="RMath.cs"/>
+        <Compile Include="StateResolver.cs"/>
+        <Compile Include="Util.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
+        <PackageReference Include="System.Buffers" Version="4.5.1"/>
+        <PackageReference Include="System.Memory" Version="4.5.4"/>
+        <PackageReference Include="System.Numerics.Vectors" Version="4.5.0"/>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1"/>
+        <PackageReference Include="System.Text.Encodings.Web" Version="4.7.0"/>
+        <PackageReference Include="System.Text.Json" Version="4.7.1"/>
+        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4"/>
+        <PackageReference Include="System.ValueTuple" Version="4.5.0"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
 </Project>
