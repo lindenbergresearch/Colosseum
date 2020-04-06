@@ -76,6 +76,16 @@ public class Motion2D {
 
 
 	/// <summary>
+	///     Converts a Tuple2 -> Motion2D
+	/// </summary>
+	/// <param name="tuple"></param>
+	/// <returns></returns>
+	public static implicit operator Motion2D((int x, int y) tuple) {
+		return new Motion2D(new Vector2(tuple.x, tuple.y));
+	}
+
+
+	/// <summary>
 	///     Converts a Motion2D -> Vector2
 	/// </summary>
 	/// <param name="motion2D"></param>
@@ -83,5 +93,4 @@ public class Motion2D {
 	public static implicit operator Vector2(Motion2D motion2D) {
 		return new Vector2(motion2D.Velocity);
 	}
-
 }

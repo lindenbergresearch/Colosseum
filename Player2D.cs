@@ -10,7 +10,7 @@ public abstract class Player2D : KinematicBody2D {
 	/// <summary>
 	///     Motion vector
 	/// </summary>
-	public static Motion2D motion = new Vector2(0, 0);
+	public static Motion2D motion = (0, 0);
 
 
 	/// <summary>
@@ -81,7 +81,5 @@ public abstract class Player2D : KinematicBody2D {
 		public static bool Run => IsActionPressed("ui_accept");
 		public static bool Jump => IsActionPressed("ui_cancel");
 		public static bool Select => IsActionPressed("ui_select");
-
 	}
-
 }
