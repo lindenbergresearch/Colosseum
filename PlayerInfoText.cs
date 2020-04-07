@@ -6,11 +6,20 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
 
     private Property<int> pScore, pTime, pCoins, pLives;
 
-    public Label ScoreLabel { get; set; }
-    public Label TimeLabel { get; set; }
-    public Label CoinsLabel { get; set; }
-    public Label LivesLabel { get; set; }
-    public Label LevelNameLabel { get; set; }
+    [GNode("ScoreLabel")]
+    private Label ScoreLabel;
+
+    [GNode("TimeLabel")]
+    private Label TimeLabel;
+
+    [GNode("CoinsLabel")]
+    private Label CoinsLabel;
+
+    [GNode("LivesLabel")]
+    private Label LivesLabel;
+
+    [GNode("LevelNameLabel")]
+    private Label LevelNameLabel;
 
 
     public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
@@ -30,12 +39,6 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
         pCoins = GetProperty<int>("main.player.coins");
         pLives = GetProperty<int>("main.player.lives");
         pLevelName = GetProperty<string>("main.level.name");
-
-        ScoreLabel = GetNode<Label>("ScoreLabel");
-        TimeLabel = GetNode<Label>("TimeLabel");
-        CoinsLabel = GetNode<Label>("CoinsLabel");
-        LivesLabel = GetNode<Label>("LivesLabel");
-        LevelNameLabel = GetNode<Label>("LevelNameLabel");
     }
 
 
