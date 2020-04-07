@@ -1,4 +1,5 @@
 using Godot;
+using static PropertyPool;
 
 public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
     private Property<string> pLevelName;
@@ -22,13 +23,13 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
 
 
     public override void _Ready() {
-        PropertyPool.AddSubscription(this, "$main.playerinfo");
+        AddSubscription(this, "$main.playerinfo");
 
-        pScore = PropertyPool.Pull<int>("main.player.score");
-        pTime = PropertyPool.Pull<int>("main.level.time");
-        pCoins = PropertyPool.Pull<int>("main.player.coins");
-        pLives = PropertyPool.Pull<int>("main.player.lives");
-        pLevelName = PropertyPool.Pull<string>("main.level.name");
+        pScore = GetProperty<int>("main.player.score");
+        pTime = GetProperty<int>("main.level.time");
+        pCoins = GetProperty<int>("main.player.coins");
+        pLives = GetProperty<int>("main.player.lives");
+        pLevelName = GetProperty<string>("main.level.name");
 
         ScoreLabel = GetNode<Label>("ScoreLabel");
         TimeLabel = GetNode<Label>("TimeLabel");

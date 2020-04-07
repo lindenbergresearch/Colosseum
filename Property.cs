@@ -33,7 +33,7 @@ public class PropertyPool {
     /// </summary>
     /// <param name="name">The properties name ID</param>
     /// <returns></returns>
-    public static Property<T> Pull<T>(string id) {
+    public static Property<T> GetProperty<T>(string id) {
         var tmp = pool[id];
 
         if (tmp is Property<T> t) return t;
