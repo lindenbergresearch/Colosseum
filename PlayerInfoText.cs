@@ -4,6 +4,7 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
     private Property<string> pLevelName;
 
     private Property<int> pScore, pTime, pCoins, pLives;
+
     public Label ScoreLabel { get; set; }
     public Label TimeLabel { get; set; }
     public Label CoinsLabel { get; set; }

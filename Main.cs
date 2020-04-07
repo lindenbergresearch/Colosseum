@@ -2,9 +2,7 @@ using System;
 using Renoir;
 
 public class MainApp : IPropertyChangeListener {
-    private int foo = 12;
-
-    [Register("main.play.foo", "$main.foo")]
+    [Register("main.play.foo", "{0:D6}", "$main.foo")]
     public Property<int> Foo { get; set; }
 
 
@@ -15,11 +13,12 @@ public class MainApp : IPropertyChangeListener {
     private static void Main(string[] args) {
         var ma = new MainApp();
 
-        ma.SetupPropertyBroker();
+        ma.SetupGlobalProperties();
 
         PropertyPool.AddSubscription(ma, "$main.*");
-
-
         ma.Foo.Value = 123;
+
+
+        Console.WriteLine($"{ma.Foo.Formatted()}");
     }
 }

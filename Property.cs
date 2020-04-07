@@ -63,9 +63,7 @@ public class PropertyPool {
     /// <returns></returns>
     public static string AsString() {
         var s = "[";
-
         foreach (var property in pool) s += property + (property.Key != pool.Last().Key ? ", " : "");
-
         return s;
     }
 
@@ -515,7 +513,6 @@ public class Property<T> : BaseProperty {
 
         return p;
     }
-
 
     /*===== OPERATOR CONVERSATIONS =================================================================================*/
 }
