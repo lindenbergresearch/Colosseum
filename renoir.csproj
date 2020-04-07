@@ -78,6 +78,7 @@
         <Compile Include="PlayerUtil.cs"/>
         <Compile Include="PolyStateCombiner.cs"/>
         <Compile Include="Property.cs"/>
+        <Compile Include="PropertyBroker.cs"/>
         <Compile Include="QuestionBox.cs"/>
         <Compile Include="RMath.cs"/>
         <Compile Include="StateResolver.cs"/>

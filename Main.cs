@@ -1,39 +1,25 @@
-using static System.Console;
+using System;
+using Renoir;
+
+public class MainApp : IPropertyChangeListener {
+    private int foo = 12;
+
+    [Register("main.play.foo", "$main.foo")]
+    public Property<int> Foo { get; set; }
 
 
-public class Foo {
-    public bool Flag { get; set; }
-
-    public bool IsOnFloor() {
-        return Flag;
+    public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
+        Console.WriteLine($"Property changed: {args}");
     }
-}
-
-
-public class MainApp : Foo {
-    [NativeState("IsOnFloor")]
-    private readonly State Grounded;
-
-
-    private bool Foo => IsOnFloor();
-
-
-    public MainApp() {
-        this.SetupNativeStates();
-    }
-
 
     private static void Main(string[] args) {
         var ma = new MainApp();
 
+        ma.SetupPropertyBroker();
 
-        ma.Flag = true;
-
-        WriteLine($"result: {ma.Grounded} foo: {ma.Foo}");
-
-        ma.Flag = false;
+        PropertyPool.AddSubscription(ma, "$main.*");
 
 
-        WriteLine($"result: {ma.Grounded} foo: {ma.Foo}");
+        ma.Foo.Value = 123;
     }
 }

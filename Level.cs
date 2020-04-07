@@ -1,5 +1,2 @@
-
-	public class Level {
-		
-	}
-
+public class Level {
+}

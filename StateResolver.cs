@@ -28,7 +28,9 @@ public class NativeState : State {
     }
 
 
-    public static implicit operator NativeState(Func<bool> f) => new NativeState(f.GetType().Name, f);
+    public static implicit operator NativeState(Func<bool> f) {
+        return new NativeState(f.GetType().Name, f);
+    }
 }
 
 

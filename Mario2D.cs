@@ -5,7 +5,7 @@ using static PropertyPool;
 using static Renoir.RMath;
 
 /// <summary>
-/// Main Player character
+///     Main Player character
 /// </summary>
 public class Mario2D : Player2D, ICoinCollector {
     /** PROPERTIES *********************************************************************/
