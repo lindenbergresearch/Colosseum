@@ -19,7 +19,9 @@ namespace Renoir {
 		/// <param name="property"></param>
 		/// <param name="name"></param>
 		public static void Register(string name, object property) {
-			pool.Add(name, property);
+			Logger.trace($"Registering property: {property}");
+			if (!pool.ContainsKey(name)) pool.Add(name, property);
+			else pool[name] = property;
 		}
 
 
@@ -28,6 +30,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="property">The property to update</param>
 		public static void Register<T>(Property<T> property) {
+			Logger.trace($"Registering property: {property}");
 			if (pool.ContainsKey(property.Name)) pool[property.Name] = property;
 			else pool.Add(property.Name, property);
 		}
@@ -415,8 +418,10 @@ namespace Renoir {
 
 
 		public static implicit operator string(Property<T> p) {
-			return p.Value.ToString();
+			return p.Format.Length > 1 ? p.Formatted() : p.Value.ToString();
 		}
+
+
 		/*===== IMPLICIT CONVERSATIONS =================================================================================*/
 
 
