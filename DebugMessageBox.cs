@@ -17,22 +17,26 @@ public class DebugMessageBox : RichTextLabel {
 
 	private float current = -1;
 	private int i;
+	private bool show;
 
 	/// <summary>
 	///     The redraw interval in ms
 	/// </summary>
 	[Export]
-	public int RedrawInterval { get; set; } = 500;
+	public int RedrawInterval { get; set; } = 100;
 
 
-	private void _on_Timer_timeout() {
+	/*private void _on_Timer_timeout() {
 		Visible = false;
 		_colorRect.Visible = false;
-	}
+	}*/
 
 
 	public override void _Ready() {
 		this.SetupNodeBindings();
+
+		Visible = false;
+		_colorRect.Visible = false;
 
 		Text = "[READY]";
 	}
@@ -44,16 +48,16 @@ public class DebugMessageBox : RichTextLabel {
 		if (current == -1 || current >= RedrawInterval && messages.Count != i) {
 			if (!_messageSound.Playing) _messageSound.Play();
 
-			_timer.Stop();
+			//_timer.Stop();
 
 			i = messages.Count;
 			current = 0;
 
-			Visible = true;
+			//Visible = true;
 			_colorRect.Visible = true;
 
 			messages.Reverse();
-			var subset = messages.Take(17).ToList();
+			var subset = messages.Take(50).ToList();
 			messages.Reverse();
 
 			var text = "";
@@ -63,12 +67,21 @@ public class DebugMessageBox : RichTextLabel {
 			foreach (var message in subset) text += message + "\n";
 
 			Text = text;
-			_timer.Start();
+
+			//_timer.Start();
 		}
 	}
 
 
 	public override void _Process(float delta) {
-		if (PrintDebug) UpdateMessageBox(delta);
+		if (Input.IsActionJustReleased("ui_tab")) {
+			show = !show;
+
+			Visible = show;
+			_colorRect.Visible = show;
+		}
+
+
+		if (PrintDebug && show) UpdateMessageBox(delta);
 	}
 }
