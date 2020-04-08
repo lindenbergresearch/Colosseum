@@ -10,7 +10,6 @@ using static Renoir.Logger;
 /// </summary>
 public class Mario2D : Player2D, ICoinCollector {
 	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
-
 	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
 	[GNode("Camera2D")] private Camera2D _camera;
 	[GNode("InfoBox")] private RichTextLabel _info;
@@ -18,13 +17,13 @@ public class Mario2D : Player2D, ICoinCollector {
 	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
 	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
 
-	[Register("main.player.coins", "", "$main.playerinfo")]
+	[Register("main.player.coins", "{0:D3}", "$main.playerinfo")]
 	public Property<int> pCoins { get; set; }
 
-	[Register("main.player.lives", "", "$main.playerinfo")]
+	[Register("main.player.lives", "{0:D2}", "$main.playerinfo")]
 	public Property<int> pLives { get; set; }
 
-	[Register("main.player.score", "", "$main.playerinfo")]
+	[Register("main.player.score", "{0:D7}", "$main.playerinfo")]
 	public Property<int> pScore { get; set; }
 
 
@@ -60,7 +59,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	public bool onCoinCollect(Coin coin) {
 		debug($"Collecting coin: {coin}");
 
-		pCoins.Value += 1;
+		pCoins += 1;
 
 		if (pCoins.Value == 15) {
 			SetLives();
@@ -78,7 +77,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	public void SetLives(int delta = 1) {
 		if (delta > 0) _oneLiveUp.Play();
 
-		pLives.Value += delta;
+		pLives += delta;
 	}
 
 
@@ -104,7 +103,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 			debug($"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({direction})");
 
-			pScore.Value += 123;
+			pScore += 123;
 
 			switch (coll.Collider) {
 				case TileMap _ when coll.Normal == Vector2.Down:
@@ -279,10 +278,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 		ResetPlayer();
 
-		pCoins.Format = "{0:D3}";
-		pScore.Format = "{0:D7}";
-		pLives.Format = "{0:D2}";
-
+		
 		Jumping = fun(() => !Grounded && motion.MovingUp);
 		Falling = fun(() => !Grounded && motion.MovingDown);
 		IsDead = fun(() => pLives.Value == 0);
