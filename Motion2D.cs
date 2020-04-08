@@ -7,6 +7,11 @@ using Godot;
 /// </summary>
 public class Motion2D {
 
+	/// <summary>
+	///     Normal vector for standard bottom ground
+	/// </summary>
+	public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
+
 	// internal velocity
 	private Vector2 velocity;
 

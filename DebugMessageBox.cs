@@ -57,7 +57,7 @@ public class DebugMessageBox : RichTextLabel {
 			_colorRect.Visible = true;
 
 			messages.Reverse();
-			var subset = messages.Take(50).ToList();
+			var subset = messages.ToList();
 			messages.Reverse();
 
 			var text = "";

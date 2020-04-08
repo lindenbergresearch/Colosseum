@@ -31,12 +31,11 @@ __meta__ = {
 
 [node name="TextTimer" type="Timer" parent="."]
 wait_time = 12.077
-autostart = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
-anchor_top = -0.01875
+anchor_top = -0.025
 anchor_right = 1.0
-anchor_bottom = -0.01875
+anchor_bottom = -0.025
 margin_bottom = 30.0
 color = Color( 0.160784, 0.0745098, 0.0745098, 0.145098 )
 __meta__ = {
@@ -182,12 +181,13 @@ __meta__ = {
 }
 
 [node name="ColorRectDebug" type="ColorRect" parent="."]
+visible = false
 anchor_top = 0.0125
 anchor_right = 1.0
 anchor_bottom = 0.20625
-margin_top = 20.0
-margin_bottom = 58.0
-color = Color( 0.0392157, 0.0862745, 0.145098, 0.211765 )
+margin_top = -12.0
+margin_bottom = 254.0
+color = Color( 0.0392157, 0.0862745, 0.145098, 0.890196 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
@@ -199,7 +199,7 @@ anchor_bottom = 0.0125
 margin_left = 4.0
 margin_top = 24.0
 margin_right = 2364.0
-margin_bottom = 484.0
+margin_bottom = 1444.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_scale = Vector2( 0.2, 0.2 )
@@ -216,13 +216,13 @@ text = "19:14:51.189 DEBUG [Mario2D.cs<358>::Void _Ready()] Setup player...
 19:15:12.974 DEBUG [Mario2D.cs<164>::Void handleCollisions()] Pos: (89.58061, 303.92) Vel: (0, 0) Source: [TileMap:1364] Normal: (0, -1) (DOWN--v)
 19:15:14.277 DEBUG [Mario2D.cs<164>::Void handleCollisions()] Pos: (72.84438, 256.08) Vel: (0, 0) Source: [StaticBody2D:1611] Normal: (0, 1) (TOP---^)
 "
-scroll_active = false
+scroll_following = true
 script = ExtResource( 7 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_use_anchors_": false
 }
-RedrawInterval = 210
+RedrawInterval = 100
 
 [node name="MessageSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )

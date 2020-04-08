@@ -1,45 +1,46 @@
 using Godot;
-using static PropertyPool;
+using Renoir;
+using static Renoir.PropertyPool;
+
 
 public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
-    private Property<string> pLevelName;
+	[GNode("CoinsLabel")] private Label CoinsLabel;
+	[GNode("LevelNameLabel")] private Label LevelNameLabel;
+	[GNode("LivesLabel")] private Label LivesLabel;
 
-    private Property<int> pScore, pTime, pCoins, pLives;
+	[GNode("ScoreLabel")] private Label ScoreLabel;
+	[GNode("TimeLabel")] private Label TimeLabel;
+	[Register("main.level.name", "", "$main.playerinfo")]
+	public Property<string> pLevelName { get; set; }
 
-    [GNode("ScoreLabel")]
-    private Label ScoreLabel;
+	[Register("main.level.time", "{0:D3}", "$main.playerinfo")]
+	public Property<int> pTime { get; set; }
 
-    [GNode("TimeLabel")]
-    private Label TimeLabel;
+	[Register("main.player.coins", "", "$main.playerinfo")]
+	public Property<int> pCoins { get; set; }
 
-    [GNode("CoinsLabel")]
-    private Label CoinsLabel;
+	[Register("main.player.lives", "", "$main.playerinfo")]
+	public Property<int> pLives { get; set; }
 
-    [GNode("LivesLabel")]
-    private Label LivesLabel;
-
-    [GNode("LevelNameLabel")]
-    private Label LevelNameLabel;
-
-
-    public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
-        ScoreLabel.Text = pScore.Formatted();
-        TimeLabel.Text = pTime.Formatted();
-        CoinsLabel.Text = pCoins.Formatted();
-        LivesLabel.Text = pLives.Formatted();
-        LevelNameLabel.Text = pLevelName;
-    }
+	[Register("main.player.score", "", "$main.playerinfo")]
+	public Property<int> pScore { get; set; }
 
 
-    public override void _Ready() {
-        AddSubscription(this, "$main.playerinfo");
+	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
+		ScoreLabel.Text = pScore;
+		TimeLabel.Text = pTime;
+		CoinsLabel.Text = pCoins;
+		LivesLabel.Text = pLives;
+		LevelNameLabel.Text = pLevelName;
+	}
 
-        pScore = GetProperty<int>("main.player.score");
-        pTime = GetProperty<int>("main.level.time");
-        pCoins = GetProperty<int>("main.player.coins");
-        pLives = GetProperty<int>("main.player.lives");
-        pLevelName = GetProperty<string>("main.level.name");
-    }
+
+	public override void _Ready() {
+		this.SetupGlobalProperties();
+		this.SetupNodeBindings();
+
+		AddSubscription(this, "$main.playerinfo");
+	}
 
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

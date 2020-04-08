@@ -29,21 +29,19 @@ namespace Renoir {
 		///     Available log levels.
 		/// </summary>
 		public enum LogLevel {
-
 			TRACE,
 			DEBUG,
 			INFO,
 			WARN,
 			ERROR,
 			FATAL
-
 		}
 
 
 		/// <summary>
 		///     Holds all pushed messages.
 		/// </summary>
-		public static List<string> messages = new List<string>();
+		public static List<string> messages = new List<string>(4096);
 
 
 		/// <summary>
@@ -60,6 +58,14 @@ namespace Renoir {
 		///     Holds all output writers
 		/// </summary>
 		public static List<ILogWriter> LogWriters { get; set; } = new List<ILogWriter>();
+
+
+		/// <summary>
+		///     Remove all messages.
+		/// </summary>
+		public static void ResetMessageBuffer() {
+			messages.Clear();
+		}
 
 
 		/// <summary>

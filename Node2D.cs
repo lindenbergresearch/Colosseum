@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Renoir;
 using static Renoir.Logger;
 
 
@@ -7,7 +8,6 @@ using static Renoir.Logger;
 /// Basic configuration
 /// </summary>
 public static class Game {
-
 	public static readonly int TILE_SIZE = 8;
 	public static readonly int SCALE_FACTOR = 3;
 	public static readonly Vector2 VIEWPORT_TILES = new Vector2(60, 40);
@@ -21,17 +21,16 @@ public static class Game {
 /// </summary>
 public class Node2D : Godot.Node2D {
 
-	private readonly Property<string> pLevelName =
-		PropertyPool.RegisterNewProperty("main.level.name", "", "$main.playerinfo");
 
-	/** PROPERTIES *********************************************************************/
-	private readonly Property<int> pTime = PropertyPool.RegisterNewProperty("main.level.time", 0, "$main.playerinfo");
-
-	/** PROPERTIES *********************************************************************/
 	private float time;
 
-	[Export] public bool EnableDebug { get; set; }
+	[Register("main.level.name", "", "$main.playerinfo")]
+	public Property<string> pLevelName { get; set; }
 
+	[Register("main.level.time", "{0:D3}", "$main.playerinfo")]
+	public Property<int> pTime { get; set; }
+
+	[Export] public bool EnableDebug { get; set; }
 	[Export] public string LevelName { get; set; }
 
 
@@ -54,15 +53,17 @@ public class Node2D : Godot.Node2D {
 	 *
 	 */
 	public override void _Ready() {
+		this.SetupGlobalProperties();
+
 		PrintDebug = EnableDebug;
 		setupViewport();
 
 		time = 300;
 		pTime.Value = 0;
 
-		pTime.Format = "{0:D3}";
-
 		pLevelName.Value = LevelName;
+
+		Input.SetCustomMouseCursor(ResourceLoader.Load("mouse_pointer.png"));
 	}
 
 

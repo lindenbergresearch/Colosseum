@@ -1,7 +1,7 @@
 using System;
 using Godot;
+using Renoir;
 using static DynamicStateCombiner;
-using static PropertyPool;
 using static Renoir.Logger;
 
 
@@ -9,29 +9,23 @@ using static Renoir.Logger;
 ///     Main Player character
 /// </summary>
 public class Mario2D : Player2D, ICoinCollector {
-
-	/** PROPERTIES *********************************************************************/
-	private readonly Property<int> pCoins = RegisterNewProperty("main.player.coins", 0, "$main.playerinfo");
-
-	private readonly Property<int> pLives = RegisterNewProperty("main.player.lives", 0, "$main.playerinfo");
-	private readonly Property<int> pScore = RegisterNewProperty("main.player.score", 0, "$main.playerinfo");
-
-	/** PROPERTIES *********************************************************************/
-	[GNode("AnimatedSprite")]
-	private Godot.AnimatedSprite _animate;
+	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
 
 	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
-
 	[GNode("Camera2D")] private Camera2D _camera;
-
-
 	[GNode("InfoBox")] private RichTextLabel _info;
-
 	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
-
 	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
-
 	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
+
+	[Register("main.player.coins", "", "$main.playerinfo")]
+	public Property<int> pCoins { get; set; }
+
+	[Register("main.player.lives", "", "$main.playerinfo")]
+	public Property<int> pLives { get; set; }
+
+	[Register("main.player.score", "", "$main.playerinfo")]
+	public Property<int> pScore { get; set; }
 
 
 	private float CameraTime { get; set; }
@@ -146,7 +140,7 @@ public class Mario2D : Player2D, ICoinCollector {
 		}
 
 		motion += delta * Parameter.GRAVITY;
-		motion = MoveAndSlide(motion, Parameter.FLOOR_NORMAL);
+		motion = MoveAndSlide(motion, Motion2D.FLOOR_NORMAL);
 	}
 
 
@@ -277,6 +271,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	///     Init method
 	/// </summary>
 	public override void Ready() {
+		this.SetupGlobalProperties();
 		this.SetupNodeBindings();
 		this.SetupNativeStates();
 
@@ -332,8 +327,6 @@ public class Mario2D : Player2D, ICoinCollector {
 
 		/*** CONSTANTS *************************************************************/
 		public static readonly Vector2 GRAVITY = new Vector2(0, 1200);
-
-		public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
 		/*** CURRENTS **************************************************************/
 	}
 }

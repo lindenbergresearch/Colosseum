@@ -418,6 +418,7 @@ namespace Renoir {
 
 
 		public static implicit operator string(Property<T> p) {
+			if (p._value == null) return "<null>";
 			return p.Format.Length > 1 ? p.Formatted() : p.Value.ToString();
 		}
 
