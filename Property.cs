@@ -10,7 +10,17 @@ namespace Renoir {
 	///     Maintains a registered properties
 	/// </summary>
 	public class PropertyPool {
+
+		/// <summary>
+		/// holds all global properties
+		/// </summary>
 		private static readonly Dictionary<string, object> pool = new Dictionary<string, object>();
+
+
+		/// <summary>
+		/// Current property id counter
+		/// </summary>
+		public static int CurrentId { get; set; } = 100;
 
 
 		/// <summary>
@@ -195,9 +205,9 @@ namespace Renoir {
 		/// <param name="args">Change data.</param>
 		public delegate void ChangeEventHandler(Property<T> sender, PropertyEventArgs<T> args);
 
-
-		private static long lastid = 100;
-
+		/// <summary>
+		/// generic typed property value
+		/// </summary>
 		private T _value;
 
 
@@ -220,7 +230,7 @@ namespace Renoir {
 			Group = group;
 			_value = value;
 			Locked = locked;
-			ID = lastid++;
+			ID = PropertyPool.CurrentId++;
 		}
 
 
@@ -233,7 +243,7 @@ namespace Renoir {
 			Name = name;
 			Group = group;
 			Locked = locked;
-			ID = lastid++;
+			ID = PropertyPool.CurrentId++;
 		}
 
 
