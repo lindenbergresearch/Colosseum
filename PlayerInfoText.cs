@@ -7,9 +7,9 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
 	[GNode("CoinsLabel")] private Label CoinsLabel;
 	[GNode("LevelNameLabel")] private Label LevelNameLabel;
 	[GNode("LivesLabel")] private Label LivesLabel;
-
 	[GNode("ScoreLabel")] private Label ScoreLabel;
 	[GNode("TimeLabel")] private Label TimeLabel;
+
 	[Register("main.level.name", "", "$main.playerinfo")]
 	public Property<string> pLevelName { get; set; }
 
@@ -41,11 +41,4 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
 
 		AddSubscription(this, "$main.playerinfo");
 	}
-
-
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
 }
