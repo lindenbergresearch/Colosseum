@@ -32,9 +32,10 @@ public class Mario2D : Player2D, ICoinCollector {
 	private bool Grounded => IsOnFloor();
 
 
-	private DynamicStateCombiner Jumping { get; set; }
-	private DynamicStateCombiner Falling { get; set; }
-	private DynamicStateCombiner IsDead { get; set; }
+	private bool Jumping => !Grounded && motion.MovingUp;
+	private bool Falling => !Grounded && motion.MovingDown;
+	private bool GameOver => pLives.Value == 0;
+	private bool InMotion => motion.Abs.X > 0;
 
 	private bool Walking { get; set; }
 	private bool Running { get; set; }
@@ -123,8 +124,8 @@ public class Mario2D : Player2D, ICoinCollector {
 		if (ActionKey.Select) Debug = !Debug;
 
 
-		Walking = Grounded && !Skidding && motion.Abs.X <= Parameter.MAX_WALKING_SPEED && motion.Abs.X > 0;
-		Running = Grounded && !Skidding && motion.Abs.X > Parameter.MAX_WALKING_SPEED;
+		Walking = Grounded && !Skidding && motion.Abs.X <= Parameter.MaxWalkingSpeed && motion.Abs.X > 0;
+		Running = Grounded && !Skidding && motion.Abs.X > Parameter.MaxWalkingSpeed;
 	}
 
 
@@ -150,7 +151,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	private void applyXMotion(float delta) {
 		var speed = 0.0f;
 
-		if (motion.X < Parameter.EPSILON_VELOCITY && motion.X > -Parameter.EPSILON_VELOCITY) motion.X = 0;
+		if (motion.X < Parameter.EpsilonVelocity && motion.X > -Parameter.EpsilonVelocity) motion.X = 0;
 
 		if (!Skidding) {
 			if (Walking) _animate.Animation = "Walk";
@@ -166,8 +167,8 @@ public class Mario2D : Player2D, ICoinCollector {
 				_animate.FlipH = false;
 			}
 
-			speed *= ActionKey.Run ? Parameter.MAX_RUNNING_SPEED : Parameter.MAX_WALKING_SPEED;
-			motion.X = Mathf.Lerp(motion.X, speed, Parameter.BODY_WEIGHT_FACTOR);
+			speed *= ActionKey.Run ? Parameter.MaxRunningSpeed : Parameter.MaxWalkingSpeed;
+			motion.X = Mathf.Lerp(motion.X, speed, Parameter.BodyWeightFactor);
 		}
 
 		if (Skidding) {
@@ -176,18 +177,18 @@ public class Mario2D : Player2D, ICoinCollector {
 			var v = motion.X;
 
 			if (SkiddingLeft) {
-				v -= Parameter.SKID_DECELERATION;
+				v -= Parameter.SkidDeceleration;
 				if (v < 0) v = 0;
 			}
 
 			if (SkiddingRight) {
-				v += Parameter.SKID_DECELERATION;
+				v += Parameter.SkidDeceleration;
 				if (v > 0) v = 0;
 			}
 
 			motion.X = v;
 
-			if (!_skiddingAudio.Playing && Math.Abs(v) > Parameter.MAX_WALKING_SPEED)
+			if (!_skiddingAudio.Playing && Math.Abs(v) > Parameter.MaxWalkingSpeed)
 				_skiddingAudio.Play();
 		} else {
 			if (_skiddingAudio.Playing)
@@ -195,7 +196,7 @@ public class Mario2D : Player2D, ICoinCollector {
 		}
 
 		if (Grounded && ActionKey.Jump) {
-			motion.Y = -(Parameter.JUMP_SPEED + Math.Abs(motion.X) * Parameter.JUMP_PUSH_FACTOR);
+			motion.Y = -(Parameter.JumpSpeed + Math.Abs(motion.X) * Parameter.JumpPushFactor);
 			_jumpAudio.Play();
 		}
 
@@ -278,11 +279,6 @@ public class Mario2D : Player2D, ICoinCollector {
 
 		ResetPlayer();
 
-		
-		Jumping = fun(() => !Grounded && motion.MovingUp);
-		Falling = fun(() => !Grounded && motion.MovingDown);
-		IsDead = fun(() => pLives.Value == 0);
-
 
 		_info.Text = "!";
 
@@ -302,27 +298,25 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
-	///     Common player parameter for kinematic handling
+	/// Common player parameter for kinematic handling
 	/// </summary>
-	private static class Parameter {
+	private class Parameter {
 
-		/*** CONSTANTS *************************************************************/
-		public static readonly float MAX_JUMP_HEIGHT = 70.0f;
-		public static readonly float JUMP_SPEED = 430.0f;
-		public static readonly float JUMP_PUSH_FACTOR = 0.20f;
-		public static readonly float MAX_WALKING_SPEED = 110.0f;
-		public static readonly float MAX_WALL_PUSH_SPEED = MAX_WALKING_SPEED / 2.0f;
-		public static readonly float MAX_RUNNING_SPEED = 180.0f;
-		public static readonly float X_ACCELERATION_FRONT = 400.0f;
-		public static readonly float SLOWING_DECELERATION = 392.0f;
-		public static readonly float CROUCHING_DECELERATION = 288.0f;
-		public static readonly float SKID_DECELERATION = 8.0f;
-		public static readonly float MOVE_OVER_SPEED = 48.0f;
-		public static readonly float BODY_WEIGHT_FACTOR = 0.1f;
-		public static readonly float EPSILON_VELOCITY = 5.0f;
+		//public static  float MAX_JUMP_HEIGHT = 70.0f;
+		public static float JumpSpeed { get; set; } = 430.0f;
+		public static float JumpPushFactor { get; set; } = 0.20f;
+		public static float MaxWalkingSpeed { get; set; } = 110.0f;
+		public static float MaxWallPushSpeed { get; set; } = MaxWalkingSpeed / 2.0f;
+		public static float MaxRunningSpeed { get; set; } = 180.0f;
+		public static float XAccelerationFront { get; set; } = 400.0f;
+		public static float SlowingDeceleration { get; set; } = 392.0f;
+		public static float CrouchingDeceleration { get; set; } = 288.0f;
+		public static float SkidDeceleration { get; set; } = 8.0f;
+		public static float MoveOverSpeed { get; set; } = 48.0f;
+		public static float BodyWeightFactor { get; set; } = 0.1f;
+		public static float EpsilonVelocity { get; set; } = 5.0f;
 
-		/*** CONSTANTS *************************************************************/
-		public static readonly Vector2 GRAVITY = new Vector2(0, 1200);
-		/*** CURRENTS **************************************************************/
+		//TODO: should be moved to some subclass of level ...
+		public static Vector2 GRAVITY = new Vector2(0, 1200);
 	}
 }
