@@ -81,7 +81,7 @@
         <Compile Include="Property.cs"/>
         <Compile Include="PropertyAttribute.cs"/>
         <Compile Include="QuestionBox.cs"/>
-        <Compile Include="RMath.cs"/>
+        <Compile Include="CommonExtensions.cs"/>
         <Compile Include="StateResolver.cs"/>
         <Compile Include="Util.cs"/>
     </ItemGroup>
