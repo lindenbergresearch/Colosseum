@@ -221,7 +221,6 @@ namespace Renoir {
 			_value = value;
 			Locked = locked;
 			ID = lastid++;
-			Console.Out.WriteLine(name + " => " + lastid + " - " + ID);
 		}
 
 
@@ -235,7 +234,6 @@ namespace Renoir {
 			Group = group;
 			Locked = locked;
 			ID = lastid++;
-			Console.Out.WriteLine(name + " => " + lastid + " - " + ID);
 		}
 
 
