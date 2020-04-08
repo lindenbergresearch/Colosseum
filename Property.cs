@@ -80,7 +80,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Returns the pool's content as string representation.
+		/// Returns the pool's content as string representation.
+		/// Rather a feature for debug issues to dump the content.
 		/// </summary>
 		/// <returns></returns>
 		public static string AsString() {
@@ -101,31 +102,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Factory method for creating a property and automatically registering it..
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="value"></param>
-		/// <param name="group"></param>
-		/// <param name="locked"></param>
-		/// <returns></returns>
-		public static Property<T> RegisterNewProperty<T>(string name, T value, string group = "", bool locked = false) {
-			var p = new Property<T>(name, value, group, locked);
-			Register(p);
-			return p;
-		}
-
-
-		/// <summary>
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <param name="castTo"></param>
-		/// <returns></returns>
-		public static Property<dynamic> Cast(object obj, Type castTo) {
-			return Convert.ChangeType(obj, castTo) as Property<dynamic>;
-		}
-
-
-		/// <summary>
 		///     Add a subscription to one or more properties defined by a matching string.
 		/// </summary>
 		/// <param name="subscriber"></param>
@@ -133,7 +109,6 @@ namespace Renoir {
 		public static void AddSubscription(IPropertyChangeListener subscriber, string match) {
 			var isGroup = match.Trim().StartsWith("$");
 			var r = @"^" + match.Trim().Replace(".", @"\.").Replace("$", @"\$").Replace("*", @".*") + "$";
-			var Pattern = new Regex(r, RegexOptions.Compiled);
 
 			foreach (var pair in pool) {
 				var id = pair.Key;
