@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Newtonsoft.Json;
 using Renoir;
 using static DynamicStateCombiner;
 using static Renoir.Logger;
@@ -50,6 +51,8 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	private Vector2 StartPosition { get; set; }
+
+	private PlayerParameter Parameter { get; set; }
 
 
 	/// <summary>
@@ -139,7 +142,7 @@ public class Mario2D : Player2D, ICoinCollector {
 			return;
 		}
 
-		motion += delta * Parameter.GRAVITY;
+		motion += delta * Parameter.Gravity;
 		motion = MoveAndSlide(motion, Motion2D.FLOOR_NORMAL);
 	}
 
@@ -298,25 +301,47 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
+	/// 
+	/// </summary>
+	public abstract class BasicParameter {
+		/// <summary>
+		/// Serialize parameters to JSON
+		/// </summary>
+		/// <param name="parameter">Parameter class instance</param>
+		/// <returns></returns>
+		public string Serialize()
+			=> JsonConvert.SerializeObject(this);
+
+
+		/// <summary>
+		/// Deserialize parameters from JSON
+		/// </summary>
+		/// <param name="json"></param>
+		/// <returns></returns>
+		public static BasicParameter DeSerialize(string json)
+			=> JsonConvert.DeserializeObject<BasicParameter>(json);
+	}
+
+
+	/// <summary>
 	/// Common player parameter for kinematic handling
 	/// </summary>
-	private class Parameter {
-
-		//public static  float MAX_JUMP_HEIGHT = 70.0f;
-		public static float JumpSpeed { get; set; } = 430.0f;
-		public static float JumpPushFactor { get; set; } = 0.20f;
-		public static float MaxWalkingSpeed { get; set; } = 110.0f;
-		public static float MaxWallPushSpeed { get; set; } = MaxWalkingSpeed / 2.0f;
-		public static float MaxRunningSpeed { get; set; } = 180.0f;
-		public static float XAccelerationFront { get; set; } = 400.0f;
-		public static float SlowingDeceleration { get; set; } = 392.0f;
-		public static float CrouchingDeceleration { get; set; } = 288.0f;
-		public static float SkidDeceleration { get; set; } = 8.0f;
-		public static float MoveOverSpeed { get; set; } = 48.0f;
-		public static float BodyWeightFactor { get; set; } = 0.1f;
-		public static float EpsilonVelocity { get; set; } = 5.0f;
+	public class PlayerParameter : BasicParameter {
+		//public   float MAX_JUMP_HEIGHT = 70.0f;
+		public float JumpSpeed { get; set; } = 430f;
+		public float JumpPushFactor { get; set; } = 0.20f;
+		public float MaxWalkingSpeed { get; set; } = 110f;
+		public float MaxWallPushSpeed { get; set; } = 50f;
+		public float MaxRunningSpeed { get; set; } = 180f;
+		public float XAccelerationFront { get; set; } = 400f;
+		public float SlowingDeceleration { get; set; } = 392f;
+		public float CrouchingDeceleration { get; set; } = 288f;
+		public float SkidDeceleration { get; set; } = 8f;
+		public float MoveOverSpeed { get; set; } = 48f;
+		public float BodyWeightFactor { get; set; } = 0.1f;
+		public float EpsilonVelocity { get; set; } = 5f;
 
 		//TODO: should be moved to some subclass of level ...
-		public static Vector2 GRAVITY = new Vector2(0, 1200);
+		public Vector2 Gravity = new Vector2(0, 1200);
 	}
 }
