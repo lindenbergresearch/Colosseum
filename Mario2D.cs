@@ -1,6 +1,5 @@
 using System;
 using Godot;
-using Newtonsoft.Json;
 using Renoir;
 using static DynamicStateCombiner;
 using static Renoir.Logger;
@@ -9,7 +8,7 @@ using static Renoir.Logger;
 /// <summary>
 ///     Main Player character
 /// </summary>
-public class Mario2D : Player2D, ICoinCollector {
+public partial class Mario2D : Player2D, ICoinCollector {
 	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
 	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
 	[GNode("Camera2D")] private Camera2D _camera;
@@ -52,7 +51,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 	private Vector2 StartPosition { get; set; }
 
-	private PlayerParameter Parameter { get; set; }
+	private PlayerParameter Parameter { get; set; } = new PlayerParameter();
 
 
 	/// <summary>
@@ -283,6 +282,10 @@ public class Mario2D : Player2D, ICoinCollector {
 		ResetPlayer();
 
 
+		//Parameter.SaveJson("PlayerParameter.json");
+		Parameter = BasicParameter.LoadFromJson<PlayerParameter>("PlayerParameter.json");
+
+
 		_info.Text = "!";
 
 		_camera.LimitLeft = 0;
@@ -301,45 +304,22 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
-	/// 
-	/// </summary>
-	public abstract class BasicParameter {
-		/// <summary>
-		/// Serialize parameters to JSON
-		/// </summary>
-		/// <param name="parameter">Parameter class instance</param>
-		/// <returns></returns>
-		public string Serialize()
-			=> JsonConvert.SerializeObject(this);
-
-
-		/// <summary>
-		/// Deserialize parameters from JSON
-		/// </summary>
-		/// <param name="json"></param>
-		/// <returns></returns>
-		public static BasicParameter DeSerialize(string json)
-			=> JsonConvert.DeserializeObject<BasicParameter>(json);
-	}
-
-
-	/// <summary>
 	/// Common player parameter for kinematic handling
 	/// </summary>
 	public class PlayerParameter : BasicParameter {
 		//public   float MAX_JUMP_HEIGHT = 70.0f;
-		public float JumpSpeed { get; set; } = 430f;
-		public float JumpPushFactor { get; set; } = 0.20f;
-		public float MaxWalkingSpeed { get; set; } = 110f;
-		public float MaxWallPushSpeed { get; set; } = 50f;
-		public float MaxRunningSpeed { get; set; } = 180f;
-		public float XAccelerationFront { get; set; } = 400f;
-		public float SlowingDeceleration { get; set; } = 392f;
-		public float CrouchingDeceleration { get; set; } = 288f;
-		public float SkidDeceleration { get; set; } = 8f;
-		public float MoveOverSpeed { get; set; } = 48f;
-		public float BodyWeightFactor { get; set; } = 0.1f;
-		public float EpsilonVelocity { get; set; } = 5f;
+		public float JumpSpeed { get; set; }
+		public float JumpPushFactor { get; set; }
+		public float MaxWalkingSpeed { get; set; }
+		public float MaxWallPushSpeed { get; set; }
+		public float MaxRunningSpeed { get; set; }
+		public float XAccelerationFront { get; set; }
+		public float SlowingDeceleration { get; set; }
+		public float CrouchingDeceleration { get; set; }
+		public float SkidDeceleration { get; set; }
+		public float MoveOverSpeed { get; set; }
+		public float BodyWeightFactor { get; set; }
+		public float EpsilonVelocity { get; set; }
 
 		//TODO: should be moved to some subclass of level ...
 		public Vector2 Gravity = new Vector2(0, 1200);
