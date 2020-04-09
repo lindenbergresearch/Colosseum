@@ -60,6 +60,8 @@ public class Motion2D {
 	public bool MovingDown => velocity.y > 0;
 	public bool MovingLeft => velocity.x < 0;
 	public bool MovingRight => velocity.x > 0;
+	public bool MovingHorizontal => MovingRight || MovingLeft;
+	public bool MovingVertical => MovingUp || MovingDown;
 
 
 	/// <summary>
