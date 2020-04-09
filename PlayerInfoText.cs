@@ -10,19 +10,18 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeListener {
 	[GNode("ScoreLabel")] private Label ScoreLabel;
 	[GNode("TimeLabel")] private Label TimeLabel;
 
-	[Register("main.level.name", "", "$main.playerinfo")]
+	[Register("main.level.name", "$main.playerinfo")] 
 	public Property<string> pLevelName { get; set; }
 
-	[Register("main.level.time", "{0:D3}", "$main.playerinfo")]
+	[Register("main.level.time", "$main.playerinfo", "{0:D3}")]
 	public Property<int> pTime { get; set; }
-
-	[Register("main.player.coins", "", "$main.playerinfo")]
+	[Register("main.player.coins", "$main.playerinfo", "{0:D3}")]
 	public Property<int> pCoins { get; set; }
 
-	[Register("main.player.lives", "", "$main.playerinfo")]
+	[Register("main.player.lives", "$main.playerinfo", "{0:D2}")]
 	public Property<int> pLives { get; set; }
 
-	[Register("main.player.score", "", "$main.playerinfo")]
+	[Register("main.player.score", "$main.playerinfo", "{0:D7}")]
 	public Property<int> pScore { get; set; }
 
 

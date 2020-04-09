@@ -63,7 +63,7 @@ namespace Renoir {
 		/// <param name="name"></param>
 		/// <param name="format"></param>
 		/// <param name="group"></param>
-		public RegisterAttribute(string name, string format = "", string group = "") {
+		public RegisterAttribute(string name, string group = "", string format = "") {
 			Name = name;
 			Format = format;
 			Group = group;

@@ -17,13 +17,13 @@ public class Mario2D : Player2D, ICoinCollector {
 	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
 	private PlayerParameter player = new PlayerParameter();
 
-	[Register("main.player.coins", "{0:D3}", "$main.playerinfo")]
+	[Register("main.player.coins", "$main.playerinfo", "{0:D3}")]
 	public Property<int> pCoins { get; set; }
 
-	[Register("main.player.lives", "{0:D2}", "$main.playerinfo")]
+	[Register("main.player.lives", "$main.playerinfo", "{0:D2}")]
 	public Property<int> pLives { get; set; }
 
-	[Register("main.player.score", "{0:D7}", "$main.playerinfo")]
+	[Register("main.player.score", "$main.playerinfo", "{0:D7}")]
 	public Property<int> pScore { get; set; }
 
 
@@ -73,7 +73,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
-	///     Check collisions and pass event to all colliders
+	///     Check collisions and pass event to all collider
 	/// </summary>
 	private void handleCollisions() {
 		foreach (var coll in GetCollider()) {
@@ -83,6 +83,7 @@ public class Mario2D : Player2D, ICoinCollector {
 			if (coll.Normal == Vector2.Left) direction = "→";
 			if (coll.Normal == Vector2.Right) direction = "←";
 
+			/* match collider type **/
 			switch (coll.Collider) {
 				case TileMap _ when coll.Normal == Vector2.Down:
 					_bumpSound.Play();

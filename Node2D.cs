@@ -8,8 +8,8 @@ using static Renoir.Logger;
 /// Basic configuration
 /// </summary>
 public static class Game {
-	public static readonly int TILE_SIZE = 8;
-	public static readonly int SCALE_FACTOR = 3;
+	public const int TILE_SIZE = 8;
+	public const int SCALE_FACTOR = 3;
 	public static readonly Vector2 VIEWPORT_TILES = new Vector2(60, 40);
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;
@@ -24,10 +24,10 @@ public class Node2D : Godot.Node2D {
 
 	private float time;
 
-	[Register("main.level.name", "", "$main.playerinfo")]
+	[Register("main.level.name", "$main.playerinfo")]
 	public Property<string> pLevelName { get; set; }
 
-	[Register("main.level.time", "{0:D3}", "$main.playerinfo")]
+	[Register("main.level.time", "$main.playerinfo", "{0:D3}")]
 	public Property<int> pTime { get; set; }
 
 	[Export] public bool EnableDebug { get; set; }
