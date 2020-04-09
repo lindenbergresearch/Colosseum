@@ -7,7 +7,7 @@ using static Renoir.Logger;
 /// <summary>
 ///     Main Player character
 /// </summary>
-public partial class Mario2D : Player2D, ICoinCollector {
+public class Mario2D : Player2D, ICoinCollector {
 	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
 	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
 	[GNode("Camera2D")] private Camera2D _camera;
@@ -15,7 +15,7 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
 	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
 	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
-
+	private PlayerParameter player = new PlayerParameter();
 
 	[Register("main.player.coins", "{0:D3}", "$main.playerinfo")]
 	public Property<int> pCoins { get; set; }
@@ -30,7 +30,7 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	private bool Grounded => IsOnFloor();
 	private bool Jumping => !Grounded && motion.MovingUp;
 	private bool Falling => !Grounded && motion.MovingDown;
-	private bool Walking => Grounded && !Skidding && motion.Abs.X <= player.MaxWalkingSpeed && motion.MovingHorizontal;
+	private bool Walking => Grounded && !Skidding && motion.MovingHorizontal && motion.Abs.X <= player.MaxWalkingSpeed;
 	private bool Running => Grounded && !Skidding && motion.Abs.X > player.MaxWalkingSpeed;
 	private bool SkiddingLeft => Grounded && motion.MovingRight && ActionKey.Left;
 	private bool SkiddingRight => Grounded && motion.MovingLeft && ActionKey.Right;
@@ -39,7 +39,6 @@ public partial class Mario2D : Player2D, ICoinCollector {
 
 	private bool Debug { get; set; }
 	private Vector2 StartPosition { get; set; }
-	private PlayerParameter player = new PlayerParameter();
 	private float CameraTime { get; set; }
 
 
@@ -74,34 +73,22 @@ public partial class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
-	///     Check collisions and pass event to all coliders
+	///     Check collisions and pass event to all colliders
 	/// </summary>
 	private void handleCollisions() {
-		// exclude bottom collisions
-		if (Grounded) return;
-
-		for (var i = 0; i < GetSlideCount(); i++) {
-			var coll = GetSlideCollision(i);
-
+		foreach (var coll in GetCollider()) {
 			var direction = "?";
-
-			if (coll.Normal == Vector2.Down) direction = "TOP    ↑";
-
-			if (coll.Normal == Vector2.Up) direction = "DOWN   ↓";
-
-			if (coll.Normal == Vector2.Left) direction = "RIGHT ->";
-
-			if (coll.Normal == Vector2.Right) direction = "<-  LEFT";
-
-			debug($"Pos: {coll.Position} Vel: {coll.ColliderVelocity} Source: {coll.Collider} Normal: {coll.Normal} ({direction})");
-
-			pScore += 123;
+			if (coll.Normal == Vector2.Down) direction = "↑";
+			if (coll.Normal == Vector2.Up) direction = "↓";
+			if (coll.Normal == Vector2.Left) direction = "→";
+			if (coll.Normal == Vector2.Right) direction = "←";
 
 			switch (coll.Collider) {
 				case TileMap _ when coll.Normal == Vector2.Down:
 					_bumpSound.Play();
 					continue;
 				case ICollidable collider:
+					debug($"position={coll.Position} velocity={coll.ColliderVelocity} collider={coll.Collider} vector={coll.Normal} {direction}");
 					collider.onCollide(coll);
 					break;
 			}
@@ -217,7 +204,6 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	}
 
 
-	/// MAIN *************************************************************************
 	/// <summary>
 	///     Update Player
 	/// </summary>
@@ -245,7 +231,6 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	}
 
 
-	/// INIT *************************************************************************
 	/// <summary>
 	///     Init method
 	/// </summary>
@@ -283,6 +268,10 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	/// Common player parameter for kinematic handling
 	/// </summary>
 	public class PlayerParameter : BasicParameter {
+
+		//TODO: should be moved to some subclass of level ...
+		public Vector2 Gravity = new Vector2(0, 1200);
+
 		//public   float MAX_JUMP_HEIGHT = 70.0f;
 		public float JumpSpeed { get; set; }
 		public float JumpPushFactor { get; set; }
@@ -296,8 +285,5 @@ public partial class Mario2D : Player2D, ICoinCollector {
 		public float MoveOverSpeed { get; set; }
 		public float BodyWeightFactor { get; set; }
 		public float EpsilonVelocity { get; set; }
-
-		//TODO: should be moved to some subclass of level ...
-		public Vector2 Gravity = new Vector2(0, 1200);
 	}
 }
