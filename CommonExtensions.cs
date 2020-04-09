@@ -1,4 +1,7 @@
-﻿namespace Renoir {
+﻿using System.IO;
+using Newtonsoft.Json;
+
+namespace Renoir {
 
 	/// <summary>
 	///     Extension methods for numeric stuff
@@ -17,20 +20,35 @@
 
 
 	/// <summary>
-	/// String extensions
+	///     String extensions
 	/// </summary>
 	public static class RString {
 
 		/// <summary>
-		/// Directly write a string to a file
+		///     Directly write a string to a file
 		/// </summary>
 		/// <param name="text">The string</param>
 		/// <param name="filePath">The full path of the target filename</param>
 		public static void ToTextFile(this string text, string filePath) {
-			System.IO.File.WriteAllText(filePath, text);
+			File.WriteAllText(filePath, text);
 		}
-
-
 	}
+
+
+	/// <summary>
+	///     Object extentions
+	/// </summary>
+	public static class RObject {
+
+		/// <summary>
+		///     Converts the current data of an object to a JSON string
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static string ToJson(this object obj) {
+			return JsonConvert.SerializeObject(obj);
+		}
+	}
+
 
 }
