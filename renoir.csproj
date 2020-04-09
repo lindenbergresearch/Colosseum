@@ -53,49 +53,51 @@
             <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="Microsoft.CSharp"/>
-        <Reference Include="System"/>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AnimatedSprite.cs"/>
-        <Compile Include="BitmapFont.cs"/>
-        <Compile Include="BitmapFont2D.cs"/>
-        <Compile Include="Brick.cs"/>
-        <Compile Include="Coin.cs"/>
-        <Compile Include="CollisionShape2D.cs"/>
-        <Compile Include="DebugMessageBox.cs"/>
-        <Compile Include="DynamicBindings.cs"/>
-        <Compile Include="DynamicStateCombiner.cs"/>
-        <Compile Include="ICollidable.cs"/>
-        <Compile Include="Level.cs"/>
-        <Compile Include="Logger.cs"/>
-        <Compile Include="Main.cs"/>
-        <Compile Include="Mario2D.cs"/>
-        <Compile Include="Motion2D.cs"/>
-        <Compile Include="Node2D.cs"/>
-        <Compile Include="Opening.cs"/>
-        <Compile Include="Player2D.cs"/>
-        <Compile Include="PlayerInfoText.cs"/>
-        <Compile Include="PlayerUtil.cs"/>
-        <Compile Include="PolyStateCombiner.cs"/>
-        <Compile Include="Property.cs"/>
-        <Compile Include="PropertyAttribute.cs"/>
-        <Compile Include="QuestionBox.cs"/>
-        <Compile Include="CommonExtensions.cs"/>
-        <Compile Include="StateResolver.cs"/>
-        <Compile Include="Util.cs"/>
+        <Compile Include="AnimatedSprite.cs" />
+        <Compile Include="BasicParameter.cs" />
+        <Compile Include="BitmapFont.cs" />
+        <Compile Include="BitmapFont2D.cs" />
+        <Compile Include="Brick.cs" />
+        <Compile Include="Coin.cs" />
+        <Compile Include="CollisionShape2D.cs" />
+        <Compile Include="DebugMessageBox.cs" />
+        <Compile Include="DynamicBindings.cs" />
+        <Compile Include="ICollidable.cs" />
+        <Compile Include="Level.cs" />
+        <Compile Include="Logger.cs" />
+        <Compile Include="Main.cs" />
+        <Compile Include="Mario2D.cs" />
+        <Compile Include="Motion2D.cs" />
+        <Compile Include="Node2D.cs" />
+        <Compile Include="Opening.cs" />
+        <Compile Include="Player2D.cs" />
+        <Compile Include="PlayerInfoText.cs" />
+        <Compile Include="PlayerUtil.cs" />
+        <Compile Include="PolyStateCombiner.cs" />
+        <Compile Include="Property.cs" />
+        <Compile Include="PropertyAttribute.cs" />
+        <Compile Include="QuestionBox.cs" />
+        <Compile Include="CommonExtensions.cs" />
+        <Compile Include="Util.cs" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces"/>
-        <PackageReference Include="Newtonsoft.Json"/>
-        <PackageReference Include="System.Buffers"/>
-        <PackageReference Include="System.Memory"/>
-        <PackageReference Include="System.Numerics.Vectors"/>
-        <PackageReference Include="System.Runtime.CompilerServices.Unsafe"/>
-        <PackageReference Include="System.Text.Encodings.Web"/>
-        <PackageReference Include="System.Text.Json"/>
-        <PackageReference Include="System.Threading.Tasks.Extensions"/>
-        <PackageReference Include="System.ValueTuple"/>
+        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="System.Buffers" />
+        <PackageReference Include="System.Memory" />
+        <PackageReference Include="System.Numerics.Vectors" />
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
+        <PackageReference Include="System.Text.Encodings.Web" />
+        <PackageReference Include="System.Text.Json" />
+        <PackageReference Include="System.Threading.Tasks.Extensions" />
+        <PackageReference Include="System.ValueTuple" />
     </ItemGroup>
-    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+    <ItemGroup>
+      <Content Include="PlayerParameter.json" />
+    </ItemGroup>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,7 +1,6 @@
 using System;
 using Godot;
 using Renoir;
-using static DynamicStateCombiner;
 using static Renoir.Logger;
 
 
@@ -253,7 +252,6 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	public override void Ready() {
 		this.SetupGlobalProperties();
 		this.SetupNodeBindings();
-		this.SetupNativeStates();
 
 		debug("Setup player...");
 
