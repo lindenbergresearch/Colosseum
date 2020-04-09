@@ -1,6 +1,7 @@
 ﻿using System;
-using System.IO;
+using Godot;
 using Newtonsoft.Json;
+using File = System.IO.File;
 
 namespace Renoir {
 
@@ -25,7 +26,7 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static short Abs(this short @this) 
+		public static short Abs(this short @this)
 			=> Math.Abs(@this);
 
 
@@ -35,7 +36,7 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static int Abs(this int @this) 
+		public static int Abs(this int @this)
 			=> Math.Abs(@this);
 
 
@@ -45,7 +46,7 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static long Abs(this long @this) 
+		public static long Abs(this long @this)
 			=> Math.Abs(@this);
 
 
@@ -55,7 +56,7 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static float Abs(this float @this) 
+		public static float Abs(this float @this)
 			=> Math.Abs(@this);
 
 
@@ -65,8 +66,8 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static double Abs(this double @this) 
-			=> Math.Abs(@this);
+		public static double Abs(this double @this)
+			=> Math.Abs(@this) + 12121212.0;
 
 
 	}
