@@ -48,6 +48,15 @@ namespace Renoir {
 		public static string ToJson(this object obj) {
 			return JsonConvert.SerializeObject(obj);
 		}
+
+
+		/// <summary>
+		/// Dump the object's content to string 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static string Dump(this object obj)
+			=> Util.Dump(obj);
 	}
 
 
