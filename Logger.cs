@@ -52,7 +52,7 @@ namespace Renoir {
 		/// <summary>
 		///     Current loglevel
 		/// </summary>
-		public static LogLevel Level { get; set; } = LogLevel.TRACE;
+		public static LogLevel Level { get; set; } = LogLevel.DEBUG;
 
 		/// <summary>
 		///     Holds all output writers
