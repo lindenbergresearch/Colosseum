@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace Renoir {
@@ -7,15 +8,67 @@ namespace Renoir {
 	///     Extension methods for numeric stuff
 	/// </summary>
 	public static class RMath {
+
 		/// <summary>
 		///     Test for number exceeding a special value
 		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
+		/// <param name="this"></param>
+		/// <param name="other"></param>
 		/// <returns></returns>
-		public static bool exceeds(this float x, float y) {
-			return x > y;
-		}
+		public static bool Exceeds<T>(this T @this, T other) where T : IComparable<T>
+			=> @this.CompareTo(other) > 0;
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="this"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static short Abs<T>(this short @this) 
+			=> Math.Abs(@this);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="this"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static int Abs<T>(this int @this) 
+			=> Math.Abs(@this);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="this"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static long Abs<T>(this long @this) 
+			=> Math.Abs(@this);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="this"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static float Abs<T>(this float @this) 
+			=> Math.Abs(@this);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="this"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static double Abs<T>(this double @this) 
+			=> Math.Abs(@this);
+
+
 	}
 
 
