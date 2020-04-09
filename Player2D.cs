@@ -11,7 +11,7 @@ public abstract class Player2D : KinematicBody2D {
 	/// <summary>
 	///     Motion vector
 	/// </summary>
-	public static Motion2D motion = (0, 0);
+	public static Motion2D Motion { get; set; } = (0, 0);
 
 
 	/// <summary>
@@ -74,7 +74,7 @@ public abstract class Player2D : KinematicBody2D {
 	/// 	Return all collider since last move.
 	/// </summary>
 	/// <returns></returns>
-	public List<KinematicCollision2D> GetCollider() {
+	protected IEnumerable<KinematicCollision2D> GetCollider() {
 		var collider = new List<KinematicCollision2D>();
 
 		for (var i = 0; i < GetSlideCount(); i++) {

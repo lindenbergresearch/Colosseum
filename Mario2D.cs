@@ -28,12 +28,12 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	private bool Grounded => IsOnFloor();
-	private bool Jumping => !Grounded && motion.MovingUp;
-	private bool Falling => !Grounded && motion.MovingDown;
-	private bool Walking => Grounded && !Skidding && motion.MovingHorizontal && motion.Abs.X <= player.MaxWalkingSpeed;
-	private bool Running => Grounded && !Skidding && motion.Abs.X > player.MaxWalkingSpeed;
-	private bool SkiddingLeft => Grounded && motion.MovingRight && ActionKey.Left;
-	private bool SkiddingRight => Grounded && motion.MovingLeft && ActionKey.Right;
+	private bool Jumping => !Grounded && Motion.MovingUp;
+	private bool Falling => !Grounded && Motion.MovingDown;
+	private bool Walking => Grounded && !Skidding && Motion.MovingHorizontal && Motion.X.Abs() <= player.MaxWalkingSpeed;
+	private bool Running => Grounded && !Skidding && Motion.X.Abs() > player.MaxWalkingSpeed;
+	private bool SkiddingLeft => Grounded && Motion.MovingRight && ActionKey.Left;
+	private bool SkiddingRight => Grounded && Motion.MovingLeft && ActionKey.Right;
 	private bool Skidding => SkiddingLeft || SkiddingRight;
 
 
@@ -51,8 +51,9 @@ public class Mario2D : Player2D, ICoinCollector {
 		debug($"Collecting coin: {coin}");
 
 		pCoins += 1;
+		pScore += 250;
 
-		if (pCoins.Value == 15) {
+		if (pCoins.Value == 100) {
 			SetLives();
 			pCoins.Value = 0;
 		}
@@ -102,13 +103,13 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// </summary>
 	/// <param name="delta"></param>
 	private void applyGravity(float delta) {
-		if (GlobalPosition.x <= 8 && motion.MovingLeft) {
-			motion.reset();
-			return;
-		}
+		// if (GlobalPosition.x <= 8 && motion.MovingLeft) {
+		// 	motion.Reset();
+		// 	return;
+		// }
 
-		motion += delta * player.Gravity;
-		motion = MoveAndSlide(motion, Motion2D.FLOOR_NORMAL);
+		Motion += delta * player.Gravity;
+		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 	}
 
 
@@ -119,30 +120,30 @@ public class Mario2D : Player2D, ICoinCollector {
 	private void applyXMotion(float delta) {
 		var speed = 0.0f;
 
-		if (motion.X < player.EpsilonVelocity && motion.X > -player.EpsilonVelocity) motion.X = 0;
+		if (Motion.X < player.EpsilonVelocity && Motion.X > -player.EpsilonVelocity) Motion.X = 0;
 
 		if (!Skidding) {
 			if (Walking) _animate.Animation = "Walk";
 			else if (Running) _animate.Animation = "Run";
 
-			if (ActionKey.Left && motion.X <= 0.0) {
+			if (ActionKey.Left && Motion.X <= 0.0) {
 				speed = -1;
 				_animate.FlipH = true;
 			}
 
-			if (ActionKey.Right && motion.X >= 0.0) {
+			if (ActionKey.Right && Motion.X >= 0.0) {
 				speed = 1;
 				_animate.FlipH = false;
 			}
 
 			speed *= ActionKey.Run ? player.MaxRunningSpeed : player.MaxWalkingSpeed;
-			motion.X = Mathf.Lerp(motion.X, speed, player.BodyWeightFactor);
+			Motion.X = Mathf.Lerp(Motion.X, speed, player.BodyWeightFactor);
 		}
 
 		if (Skidding) {
 			_animate.Animation = "Skid";
 
-			var v = motion.X;
+			var v = Motion.X;
 
 			if (SkiddingLeft) {
 				v -= player.SkidDeceleration;
@@ -154,7 +155,7 @@ public class Mario2D : Player2D, ICoinCollector {
 				if (v > 0) v = 0;
 			}
 
-			motion.X = v;
+			Motion.X = v;
 
 			if (!_skiddingAudio.Playing && Math.Abs(v) > player.MaxWalkingSpeed)
 				_skiddingAudio.Play();
@@ -164,7 +165,7 @@ public class Mario2D : Player2D, ICoinCollector {
 		}
 
 		if (Grounded && ActionKey.Jump) {
-			motion.Y = -(player.JumpSpeed + Math.Abs(motion.X) * player.JumpPushFactor);
+			Motion.Y = -(player.JumpSpeed + Math.Abs(Motion.X) * player.JumpPushFactor);
 			_jumpAudio.Play();
 		}
 
@@ -182,7 +183,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	private void printDebug() {
-		var vect = string.Format("V = {0,6:000.0}, {1,6:000.0}", motion.X, motion.Y);
+		var vect = string.Format("V = {0,6:000.0}, {1,6:000.0}", Motion.X, Motion.Y);
 		var pos = string.Format("P = {0,6:000.0}, {1,6:000.0}", GlobalPosition.x, GlobalPosition.y);
 		_info.Text =
 			$"Velocity: {vect}\nPosition: {pos}\nSL: {SkiddingLeft} SR: {SkiddingRight}\nGrounded: {Grounded}\nWalk: {Walking} Run: {Running}\nJump: {Jumping} Fall: {Falling}";
