@@ -17,6 +17,7 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
 	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
 
+
 	[Register("main.player.coins", "{0:D3}", "$main.playerinfo")]
 	public Property<int> pCoins { get; set; }
 
@@ -27,31 +28,20 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	public Property<int> pScore { get; set; }
 
 
-	private float CameraTime { get; set; }
-
 	private bool Grounded => IsOnFloor();
-
-
 	private bool Jumping => !Grounded && motion.MovingUp;
 	private bool Falling => !Grounded && motion.MovingDown;
-	private bool GameOver => pLives.Value == 0;
-	private bool InMotion => motion.Abs.X > 0;
-
-	private bool Walking { get; set; }
-	private bool Running { get; set; }
-
-
+	private bool Walking => Grounded && !Skidding && motion.Abs.X <= player.MaxWalkingSpeed && motion.MovingHorizontal;
+	private bool Running => Grounded && !Skidding && motion.Abs.X > player.MaxWalkingSpeed;
 	private bool SkiddingLeft => Grounded && motion.MovingRight && ActionKey.Left;
 	private bool SkiddingRight => Grounded && motion.MovingLeft && ActionKey.Right;
 	private bool Skidding => SkiddingLeft || SkiddingRight;
 
 
 	private bool Debug { get; set; }
-
-
 	private Vector2 StartPosition { get; set; }
-
-	private PlayerParameter Parameter { get; set; } = new PlayerParameter();
+	private PlayerParameter player = new PlayerParameter();
+	private float CameraTime { get; set; }
 
 
 	/// <summary>
@@ -121,17 +111,6 @@ public partial class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
-	/// </summary>
-	private void updateStates() {
-		if (ActionKey.Select) Debug = !Debug;
-
-
-		Walking = Grounded && !Skidding && motion.Abs.X <= Parameter.MaxWalkingSpeed && motion.Abs.X > 0;
-		Running = Grounded && !Skidding && motion.Abs.X > Parameter.MaxWalkingSpeed;
-	}
-
-
-	/// <summary>
 	///     Apply gravity to the player
 	/// </summary>
 	/// <param name="delta"></param>
@@ -141,7 +120,7 @@ public partial class Mario2D : Player2D, ICoinCollector {
 			return;
 		}
 
-		motion += delta * Parameter.Gravity;
+		motion += delta * player.Gravity;
 		motion = MoveAndSlide(motion, Motion2D.FLOOR_NORMAL);
 	}
 
@@ -153,7 +132,7 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	private void applyXMotion(float delta) {
 		var speed = 0.0f;
 
-		if (motion.X < Parameter.EpsilonVelocity && motion.X > -Parameter.EpsilonVelocity) motion.X = 0;
+		if (motion.X < player.EpsilonVelocity && motion.X > -player.EpsilonVelocity) motion.X = 0;
 
 		if (!Skidding) {
 			if (Walking) _animate.Animation = "Walk";
@@ -169,8 +148,8 @@ public partial class Mario2D : Player2D, ICoinCollector {
 				_animate.FlipH = false;
 			}
 
-			speed *= ActionKey.Run ? Parameter.MaxRunningSpeed : Parameter.MaxWalkingSpeed;
-			motion.X = Mathf.Lerp(motion.X, speed, Parameter.BodyWeightFactor);
+			speed *= ActionKey.Run ? player.MaxRunningSpeed : player.MaxWalkingSpeed;
+			motion.X = Mathf.Lerp(motion.X, speed, player.BodyWeightFactor);
 		}
 
 		if (Skidding) {
@@ -179,18 +158,18 @@ public partial class Mario2D : Player2D, ICoinCollector {
 			var v = motion.X;
 
 			if (SkiddingLeft) {
-				v -= Parameter.SkidDeceleration;
+				v -= player.SkidDeceleration;
 				if (v < 0) v = 0;
 			}
 
 			if (SkiddingRight) {
-				v += Parameter.SkidDeceleration;
+				v += player.SkidDeceleration;
 				if (v > 0) v = 0;
 			}
 
 			motion.X = v;
 
-			if (!_skiddingAudio.Playing && Math.Abs(v) > Parameter.MaxWalkingSpeed)
+			if (!_skiddingAudio.Playing && Math.Abs(v) > player.MaxWalkingSpeed)
 				_skiddingAudio.Play();
 		} else {
 			if (_skiddingAudio.Playing)
@@ -198,7 +177,7 @@ public partial class Mario2D : Player2D, ICoinCollector {
 		}
 
 		if (Grounded && ActionKey.Jump) {
-			motion.Y = -(Parameter.JumpSpeed + Math.Abs(motion.X) * Parameter.JumpPushFactor);
+			motion.Y = -(player.JumpSpeed + Math.Abs(motion.X) * player.JumpPushFactor);
 			_jumpAudio.Play();
 		}
 
@@ -245,11 +224,10 @@ public partial class Mario2D : Player2D, ICoinCollector {
 	/// </summary>
 	/// <param name="delta"></param>
 	public override void PhysicsProcess(float delta) {
-		updateStates();
+		if (ActionKey.Select) Debug = !Debug;
 
 		applyGravity(delta);
 		applyXMotion(delta);
-
 		handleCollisions();
 
 		//updateCamera(delta);
@@ -283,7 +261,7 @@ public partial class Mario2D : Player2D, ICoinCollector {
 
 
 		//Parameter.SaveJson("PlayerParameter.json");
-		Parameter = BasicParameter.LoadFromJson<PlayerParameter>("PlayerParameter.json");
+		player = BasicParameter.LoadFromJson<PlayerParameter>("PlayerParameter.json");
 
 
 		_info.Text = "!";
