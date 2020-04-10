@@ -1,71 +1,74 @@
 using Godot;
 using static Renoir.Logger;
 
-
-/// <summary>
-///     Coin collector interface
-/// </summary>
-public interface ICoinCollector {
+namespace Renoir {
 
 	/// <summary>
-	///     Called upon coin is touched.
+	///     Coin collector interface
 	/// </summary>
-	/// <param name="coin">Ref to the coin</param>
-	bool onCoinCollect(Coin coin);
-}
+	public interface ICoinCollector {
 
-
-/// <summary>
-///     Standard collectable coins
-/// </summary>
-public class Coin : Area2D {
-
-	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
-
-	[GNode("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
-
-
-	public bool Picked { get; set; }
-
-
-	/// <summary>
-	///     Init...
-	/// </summary>
-	public override void _Ready() {
-		this.SetupNodeBindings();
-
-		Picked = false;
-
-		_animatedSprite.Play();
-
-		Connect("body_entered", this, nameof(onBodyEnter));
+		/// <summary>
+		///     Called upon coin is touched.
+		/// </summary>
+		/// <param name="coin">Ref to the coin</param>
+		bool onCoinCollect(Coin coin);
 	}
 
 
 	/// <summary>
-	///     Coin collected
+	///     Standard collectable coins
 	/// </summary>
-	/// <param name="body"></param>
-	public void onBodyEnter(Object body) {
-		debug($"Body entered this coin: {body}");
+	public class Coin : Area2D {
 
-		if (Picked || !(body is ICoinCollector)) {
-			debug($"Body: {body} couldn't collect coins.");
-			return;
+		[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
+
+		[GNode("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
+
+
+		public bool Picked { get; set; }
+
+
+		/// <summary>
+		///     Init...
+		/// </summary>
+		public override void _Ready() {
+			this.SetupNodeBindings();
+
+			Picked = false;
+
+			_animatedSprite.Play();
+
+			Connect("body_entered", this, nameof(onBodyEnter));
 		}
 
-		debug($"Calling interface on: {body}");
 
-		Picked = (body as ICoinCollector).onCoinCollect(this);
+		/// <summary>
+		///     Coin collected
+		/// </summary>
+		/// <param name="body"></param>
+		public void onBodyEnter(Object body) {
+			debug($"Body entered this coin: {body}");
 
-		if (!Picked) return;
+			if (Picked || !(body is ICoinCollector)) {
+				debug($"Body: {body} couldn't collect coins.");
+				return;
+			}
 
-		_audioStreamPlayer.Play();
-		Picked = true;
-		Visible = false;
-		SetProcess(false);
-		SetPhysicsProcess(false);
-		SetProcessInput(false);
-		Disconnect("body_entered", this, nameof(onBodyEnter));
+			debug($"Calling interface on: {body}");
+
+			Picked = (body as ICoinCollector).onCoinCollect(this);
+
+			if (!Picked) return;
+
+			_audioStreamPlayer.Play();
+			Picked = true;
+			Visible = false;
+			SetProcess(false);
+			SetPhysicsProcess(false);
+			SetProcessInput(false);
+			Disconnect("body_entered", this, nameof(onBodyEnter));
+		}
 	}
+
 }
