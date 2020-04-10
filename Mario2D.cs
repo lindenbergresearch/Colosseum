@@ -93,7 +93,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// <summary>
 	///     Check collisions and pass event to all collider
 	/// </summary>
-	private void HandleCollisions() {
+	protected override void UpdateCollisions(float delta) {
 		foreach (var coll in GetCollider()) {
 			var direction = "?";
 			if (coll.Normal == Vector2.Down) direction = "↑";
@@ -119,13 +119,13 @@ public class Mario2D : Player2D, ICoinCollector {
 	///     Apply x motions to the player
 	/// </summary>
 	/// <param name="delta"></param>
-	private void UpdateMotion(float delta) {
+	override protected void UpdateMotion(float delta) {
 		Motion += delta * player.Gravity;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
 		/* if x velocity is small enough round it to zero to avoid small drifting */
 		if (Motion.X.InsideRange(player.EpsilonVelocity, false)) Motion.X = 0;
-		
+
 		if (Idle || Walking || Running) {
 			var v = 0.0f;
 
@@ -161,7 +161,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// <summary>
 	/// Update player animations
 	/// </summary>
-	private void UpdateAnimation() {
+	override protected void UpdateAnimation(float delta) {
 		/* set animation depending on the current state */
 		if (Idle) _animate.Animation = "Idle";
 		if (Walking) _animate.Animation = "Walk";
@@ -181,7 +181,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// <summary>
 	/// Update sound fx
 	/// </summary>
-	private void UpdateAudio() {
+	override protected void UpdateAudio(float delta) {
 		if (Skidding && !_skiddingAudio.Playing && Running) _skiddingAudio.Play();
 		else if (_skiddingAudio.Playing) _skiddingAudio.Stop();
 
@@ -217,13 +217,8 @@ public class Mario2D : Player2D, ICoinCollector {
 	///     Update Player
 	/// </summary>
 	/// <param name="delta"></param>
-	public override void PhysicsProcess(float delta) {
+	override protected void PhysicsProcess(float delta) {
 		if (ActionKey.Select) Debug = !Debug;
-
-		UpdateMotion(delta);
-		UpdateAnimation();
-		UpdateAudio();
-		HandleCollisions();
 
 		//updateCamera(delta);
 
@@ -247,14 +242,10 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// <summary>
 	///     Init method
 	/// </summary>
-	public override void Ready() {
-		this.SetupGlobalProperties();
-		this.SetupNodeBindings();
-
-		debug("Setup player...");
+	override public void Ready() {
+		debug("Initialize Player");
 
 		ResetPlayer();
-
 
 		//Parameter.SaveJson("PlayerParameter.json");
 		player = BasicParameter.LoadFromJson<PlayerParameter>("PlayerParameter.json");
@@ -269,11 +260,11 @@ public class Mario2D : Player2D, ICoinCollector {
 	}
 
 
-	public override void Draw() {
+	override protected void Draw() {
 	}
 
 
-	public override void Process(float delta) {
+	override protected void Process(float delta) {
 	}
 
 

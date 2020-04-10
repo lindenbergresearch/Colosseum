@@ -18,21 +18,49 @@ namespace Renoir {
 		/// <summary>
 		///     Routing function for Draw event.
 		/// </summary>
-		public abstract void Draw();
+		protected abstract void Draw();
 
 
 		/// <summary>
 		///     Routing function for PhysicsProcess event.
 		/// </summary>
 		/// <param name="delta">Delta time in seconds</param>
-		public abstract void PhysicsProcess(float delta);
+		protected abstract void PhysicsProcess(float delta);
 
 
 		/// <summary>
 		///     Routing function for Process event.
 		/// </summary>
 		/// <param name="delta">Delta time in seconds</param>
-		public abstract void Process(float delta);
+		protected abstract void Process(float delta);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="delta"></param>
+		protected abstract void UpdateMotion(float delta);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="delta"></param>
+		protected abstract void UpdateAnimation(float delta);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="delta"></param>
+		protected abstract void UpdateAudio(float delta);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="delta"></param>
+		protected abstract void UpdateCollisions(float delta);
 
 
 		/// <summary>
@@ -52,6 +80,13 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="delta"></param>
 		public override void _PhysicsProcess(float delta) {
+			/* call standard update handler */
+			UpdateMotion(delta);
+			UpdateAnimation(delta);
+			UpdateAudio(delta);
+			UpdateCollisions(delta);
+
+			/* call custom handler */
 			PhysicsProcess(delta);
 		}
 
@@ -67,6 +102,9 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		public override void _Ready() {
+			this.SetupGlobalProperties();
+			this.SetupNodeBindings();
+
 			Ready();
 		}
 
@@ -91,13 +129,12 @@ namespace Renoir {
 		///     Map action keys
 		/// </summary>
 		protected static class ActionKey {
-
 			public static bool Up => IsActionPressed("ui_up");
 			public static bool Down => IsActionPressed("ui_down");
 			public static bool Left => IsActionPressed("ui_left");
 			public static bool Right => IsActionPressed("ui_right");
 			public static bool Run => IsActionPressed("ui_accept");
-			public static bool Jump => IsActionPressed("ui_cancel");
+			public static bool Jump => IsActionJustPressed("ui_cancel"); //IsActionPressed("ui_cancel");
 			public static bool Select => IsActionPressed("ui_select");
 		}
 	}
