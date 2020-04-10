@@ -103,11 +103,6 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// </summary>
 	/// <param name="delta"></param>
 	private void applyGravity(float delta) {
-		// if (GlobalPosition.x <= 8 && motion.MovingLeft) {
-		// 	motion.Reset();
-		// 	return;
-		// }
-
 		Motion += delta * player.Gravity;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 	}
