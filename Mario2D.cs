@@ -103,7 +103,7 @@ public class Mario2D : Player2D, ICoinCollector {
 
 			/* match collider type **/
 			switch (coll.Collider) {
-				case TileMap _ when coll.Normal == Vector2.Down:
+				case TileMap _ when coll.Normal.y == 1:
 					_bumpSound.Play();
 					continue;
 				case ICollidable collider:
