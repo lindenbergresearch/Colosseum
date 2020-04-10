@@ -26,7 +26,6 @@ public class Mario2D : Player2D, ICoinCollector {
 	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
 	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
 	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
-	private PlayerParameter player = new PlayerParameter();
 
 	[Register("main.player.coins", "$main.playerinfo", "{0:D3}")]
 	public Property<int> pCoins { get; set; }
@@ -57,6 +56,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	private float CameraTime { get; set; }
 
 	private PowerStateEnum PowerState { get; set; } = PowerStateEnum.SMALL;
+	private PlayerParameter player = new PlayerParameter();
 
 
 	/// <summary>
@@ -123,8 +123,9 @@ public class Mario2D : Player2D, ICoinCollector {
 		Motion += delta * player.Gravity;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
-		if (Motion.X < player.EpsilonVelocity && Motion.X > -player.EpsilonVelocity) Motion.X = 0;
-
+		/* if x velocity is small enough round it to zero to avoid small drifting */
+		if (Motion.X.InsideRange(player.EpsilonVelocity, false)) Motion.X = 0;
+		
 		if (Idle || Walking || Running) {
 			var v = 0.0f;
 
