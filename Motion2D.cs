@@ -50,10 +50,16 @@ namespace Renoir {
 			set => velocity.y = value;
 		}
 
+
 		/// <summary>
-		///     Returns the absolute values of both vector components
+		/// 	Returns the absolute values of both vector components
 		/// </summary>
-		public Motion2D Abs => new Motion2D(new Vector2(Math.Abs(velocity.x), Math.Abs(velocity.y)));
+		/// <returns></returns>
+		public Motion2D Abs() {
+			var @this = this;
+			velocity = velocity.Abs();
+			return @this;
+		}
 
 
 		// Shorthand direction states
@@ -69,7 +75,8 @@ namespace Renoir {
 		///     Reset velocity vector
 		/// </summary>
 		public void Reset() {
-			velocity = new Vector2(0, 0);
+			velocity.x = 0;
+			velocity.y = 0;
 		}
 
 
