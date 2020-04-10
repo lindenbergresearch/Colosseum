@@ -8,6 +8,17 @@ using static Renoir.Logger;
 ///     Main Player character
 /// </summary>
 public class Mario2D : Player2D, ICoinCollector {
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private enum PowerStateEnum {
+		SMALL,
+		BIG,
+		FIRE
+	}
+
+
 	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
 	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
 	[GNode("Camera2D")] private Camera2D _camera;
@@ -35,11 +46,17 @@ public class Mario2D : Player2D, ICoinCollector {
 	private bool SkiddingLeft => Grounded && Motion.MovingRight && ActionKey.Left;
 	private bool SkiddingRight => Grounded && Motion.MovingLeft && ActionKey.Right;
 	private bool Skidding => SkiddingLeft || SkiddingRight;
+	private bool Idle => Grounded && !Walking && !Running && !Jumping && !Falling && !Skidding;
+	private bool TurnLeft => ActionKey.Left && Motion.X <= 0.0;
+	private bool TurnRight => ActionKey.Right && Motion.X >= 0.0;
+	private bool AboutToJump => Grounded && ActionKey.Jump;
 
 
 	private bool Debug { get; set; }
 	private Vector2 StartPosition { get; set; }
 	private float CameraTime { get; set; }
+
+	private PowerStateEnum PowerState { get; set; } = PowerStateEnum.SMALL;
 
 
 	/// <summary>
@@ -76,7 +93,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// <summary>
 	///     Check collisions and pass event to all collider
 	/// </summary>
-	private void handleCollisions() {
+	private void HandleCollisions() {
 		foreach (var coll in GetCollider()) {
 			var direction = "?";
 			if (coll.Normal == Vector2.Down) direction = "↑";
@@ -90,7 +107,7 @@ public class Mario2D : Player2D, ICoinCollector {
 					_bumpSound.Play();
 					continue;
 				case ICollidable collider:
-					debug($"position={coll.Position} velocity={coll.ColliderVelocity} collider={coll.Collider} vector={coll.Normal} {direction}");
+					trace($"position={coll.Position} velocity={coll.ColliderVelocity} collider={coll.Collider} vector={coll.Normal} {direction}");
 					collider.onCollide(coll);
 					break;
 			}
@@ -99,45 +116,26 @@ public class Mario2D : Player2D, ICoinCollector {
 
 
 	/// <summary>
-	///     Apply gravity to the player
-	/// </summary>
-	/// <param name="delta"></param>
-	private void applyGravity(float delta) {
-		Motion += delta * player.Gravity;
-		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
-	}
-
-
-	/// <summary>
 	///     Apply x motions to the player
 	/// </summary>
 	/// <param name="delta"></param>
-	private void applyXMotion(float delta) {
-		var speed = 0.0f;
+	private void UpdateMotion(float delta) {
+		Motion += delta * player.Gravity;
+		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
 		if (Motion.X < player.EpsilonVelocity && Motion.X > -player.EpsilonVelocity) Motion.X = 0;
 
-		if (!Skidding) {
-			if (Walking) _animate.Animation = "Walk";
-			else if (Running) _animate.Animation = "Run";
+		if (Idle || Walking || Running) {
+			var v = 0.0f;
 
-			if (ActionKey.Left && Motion.X <= 0.0) {
-				speed = -1;
-				_animate.FlipH = true;
-			}
+			if (TurnLeft) v = -1;
+			if (TurnRight) v = 1;
 
-			if (ActionKey.Right && Motion.X >= 0.0) {
-				speed = 1;
-				_animate.FlipH = false;
-			}
-
-			speed *= ActionKey.Run ? player.MaxRunningSpeed : player.MaxWalkingSpeed;
-			Motion.X = Mathf.Lerp(Motion.X, speed, player.BodyWeightFactor);
+			v *= ActionKey.Run ? player.MaxRunningSpeed : player.MaxWalkingSpeed;
+			Motion.X = Mathf.Lerp(Motion.X, v, player.BodyWeightFactor);
 		}
 
 		if (Skidding) {
-			_animate.Animation = "Skid";
-
 			var v = Motion.X;
 
 			if (SkiddingLeft) {
@@ -151,29 +149,42 @@ public class Mario2D : Player2D, ICoinCollector {
 			}
 
 			Motion.X = v;
-
-			if (!_skiddingAudio.Playing && Math.Abs(v) > player.MaxWalkingSpeed)
-				_skiddingAudio.Play();
-		} else {
-			if (_skiddingAudio.Playing)
-				_skiddingAudio.Stop();
 		}
 
-		if (Grounded && ActionKey.Jump) {
-			Motion.Y = -(player.JumpSpeed + Math.Abs(Motion.X) * player.JumpPushFactor);
-			_jumpAudio.Play();
+		if (AboutToJump) {
+			Motion.Y = -(player.JumpSpeed + Motion.X.Abs() * player.JumpPushFactor);
 		}
+	}
 
-		if (!Grounded && !Skidding) _animate.Animation = "Jump";
 
+	/// <summary>
+	/// Update player animations
+	/// </summary>
+	private void UpdateAnimation() {
+		/* set animation depending on the current state */
+		if (Idle) _animate.Animation = "Idle";
+		if (Walking) _animate.Animation = "Walk";
+		if (Running) _animate.Animation = "Run";
+		if (Jumping || Falling) _animate.Animation = "Jump";
+		if (Skidding) _animate.Animation = "Skid";
 
-		if (!Skidding && !Walking && !Running && Grounded && !(ActionKey.Left || ActionKey.Right))
-			_animate.Animation = "Idle";
+		/* set correct sprite direction */
+		if (TurnLeft) _animate.FlipH = true;
+		if (TurnRight) _animate.FlipH = false;
 
+		/* start animation */
 		_animate.Play();
+	}
 
-		printDebug();
-		_info.Visible = Debug;
+
+	/// <summary>
+	/// Update sound fx
+	/// </summary>
+	private void UpdateAudio() {
+		if (Skidding && !_skiddingAudio.Playing && Running) _skiddingAudio.Play();
+		else if (_skiddingAudio.Playing) _skiddingAudio.Stop();
+
+		if (AboutToJump) _jumpAudio.Play();
 	}
 
 
@@ -185,7 +196,7 @@ public class Mario2D : Player2D, ICoinCollector {
 	}
 
 
-	private void updateCamera(float delta) {
+	private void UpdateCamera(float delta) {
 		CameraTime += delta;
 
 		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
@@ -208,11 +219,15 @@ public class Mario2D : Player2D, ICoinCollector {
 	public override void PhysicsProcess(float delta) {
 		if (ActionKey.Select) Debug = !Debug;
 
-		applyGravity(delta);
-		applyXMotion(delta);
-		handleCollisions();
+		UpdateMotion(delta);
+		UpdateAnimation();
+		UpdateAudio();
+		HandleCollisions();
 
 		//updateCamera(delta);
+
+		printDebug();
+		_info.Visible = Debug;
 
 		if (GlobalPosition.y > 1000) GlobalPosition = StartPosition;
 	}
