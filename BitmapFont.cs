@@ -239,7 +239,7 @@ public class BitmapFont {
 		if ((int) CharsDimension.x < MIN_CHAR_DIMENSION || (int) CharsDimension.y < MIN_CHAR_DIMENSION) return false;
 
 		if (CharsDimension.x * CharsDimension.y > 512) {
-			GD.PrintErr($"Suspicious character count: {CharsDimension}={CharsDimension.x * CharsDimension.y}");
+			//GD.PrintErr($"Suspicious character count: {CharsDimension}={CharsDimension.x * CharsDimension.y}");
 			return false;
 		}
 
@@ -254,7 +254,7 @@ public class BitmapFont {
 
 			if (cindex < _glyphs.Length)
 				_glyphs[cindex] = glyph;
-			else GD.PrintErr($"Impossible: {CharsDimension} index: {cindex}");
+			else //GD.PrintErr($"Impossible: {CharsDimension} index: {cindex}");
 
 			cindex++;
 		}
@@ -272,17 +272,17 @@ public class BitmapFont {
 
 		if (imageTexture == null || imageTexture.GetData() == null) return;
 
-		GD.Print($"{GetType().Name}: Loading bitmap-font with: {this} from image: {imageTexture.ResourceName} having {imageTexture.GetData().GetSize()} px.");
+		//GD.Print($"{GetType().Name}: Loading bitmap-font with: {this} from image: {imageTexture.ResourceName} having {imageTexture.GetData().GetSize()} px.");
 
 		DetectCharsDimension();
 
 		if (!ProcessImage()) {
-			GD.PrintErr($"{GetType().Name}: Error loading bitmap-font with current config: {Dump(this)}");
+			//GD.PrintErr($"{GetType().Name}: Error loading bitmap-font with current config: {Dump(this)}");
 			return;
 		}
 
 
-		GD.Print($"{GetType().Name}: Create bitmap-font: {this}");
+		//GD.Print($"{GetType().Name}: Create bitmap-font: {this}");
 		IsLoaded = true;
 	}
 
