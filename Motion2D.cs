@@ -79,6 +79,14 @@ namespace Renoir {
 			velocity.y = 0;
 		}
 
+		/// <summary>
+		/// 	Return vector information as string
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString() {
+			return $"Vector2({velocity.x}, {velocity.y})";
+		}
+
 
 		/// <summary>
 		///     Converts a Vector2 -> Motion2D
