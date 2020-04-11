@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 ///     Opening animation and sound
 /// </summary>
-public class Opening : Node2D {
+public class Opening : Godot.Node2D {
 
 	[GNode("AnimationPlayer")]
 	private AnimationPlayer _animationPlayer;
