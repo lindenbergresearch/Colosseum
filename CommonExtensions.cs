@@ -97,6 +97,35 @@ namespace Renoir {
 		/// <returns></returns>
 		public static bool InsideRange(this float @this, float epsilon, bool boundary = true, float origin = 0.0f)
 			=> @this.InsideRange(-(epsilon + origin), epsilon + origin, boundary);
+
+
+		/// <summary>
+		/// Round to integer
+		/// </summary>
+		/// <param name="x"></param>
+		/// <returns></returns>
+		public static int Round(this float x)
+			=> Mathf.RoundToInt(x);
+
+
+		public static int Round(this double x)
+			=> Mathf.RoundToInt((float) x);
+
+
+		/// <summary>
+		/// Returns the vectors direction as unicode arrow
+		/// </summary>
+		/// <param name="vector2"></param>
+		/// <returns></returns>
+		public static string ToDirectionArrow(this Vector2 vector2) {
+			var direction = "<odd>";
+			if (vector2 == Vector2.Down) direction = "↑";
+			if (vector2 == Vector2.Up) direction = "↓";
+			if (vector2 == Vector2.Left) direction = "→";
+			if (vector2 == Vector2.Right) direction = "←";
+
+			return direction;
+		}
 	}
 
 
