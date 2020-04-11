@@ -94,21 +94,21 @@ public class Mario2D : Player2D, ICoinCollector {
 	///     Check collisions and pass event to all collider
 	/// </summary>
 	protected override void UpdateCollisions(float delta) {
-		foreach (var coll in GetCollider()) {
+		foreach (var collision2D in this.GetCollider()) {
 			var direction = "?";
-			if (coll.Normal == Vector2.Down) direction = "↑";
-			if (coll.Normal == Vector2.Up) direction = "↓";
-			if (coll.Normal == Vector2.Left) direction = "→";
-			if (coll.Normal == Vector2.Right) direction = "←";
+			if (collision2D.Normal == Vector2.Down) direction = "↑";
+			if (collision2D.Normal == Vector2.Up) direction = "↓";
+			if (collision2D.Normal == Vector2.Left) direction = "→";
+			if (collision2D.Normal == Vector2.Right) direction = "←";
 
 			/* match collider type **/
-			switch (coll.Collider) {
-				case TileMap _ when coll.Normal.y == 1:
+			switch (collision2D.Collider) {
+				case TileMap _ when collision2D.Normal.y == 1:
 					_bumpSound.Play();
 					continue;
 				case ICollidable collider:
-					trace($"position={coll.Position} velocity={coll.ColliderVelocity} collider={coll.Collider} vector={coll.Normal} {direction}");
-					collider.onCollide(coll);
+					trace($"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {direction}");
+					collider.onCollide(collision2D);
 					break;
 			}
 		}

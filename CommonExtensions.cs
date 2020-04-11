@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Godot;
 using Newtonsoft.Json;
 using File = System.IO.File;
@@ -139,5 +140,27 @@ namespace Renoir {
 			=> Util.Dump(obj);
 	}
 
+
+	/// <summary>
+	/// Godot classes extensions
+	/// </summary>
+	public static class RGodot {
+
+
+		/// <summary>
+		/// 	Return all collider since last movement.
+		/// </summary>
+		/// <returns></returns>
+		public static IEnumerable<KinematicCollision2D> GetCollider(this KinematicBody2D kinematicBody2D) {
+			var collider = new List<KinematicCollision2D>();
+
+			for (var i = 0; i < kinematicBody2D.GetSlideCount(); i++) {
+				var coll = kinematicBody2D.GetSlideCollision(i);
+				collider.Add(coll);
+			}
+
+			return collider;
+		}
+	}
 
 }
