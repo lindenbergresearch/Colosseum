@@ -110,22 +110,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 	Return all collider since last move.
-		/// </summary>
-		/// <returns></returns>
-		protected IEnumerable<KinematicCollision2D> GetCollider() {
-			var collider = new List<KinematicCollision2D>();
-
-			for (var i = 0; i < GetSlideCount(); i++) {
-				var coll = GetSlideCollision(i);
-				collider.Add(coll);
-			}
-
-			return collider;
-		}
-
-
-		/// <summary>
 		///     Map action keys
 		/// </summary>
 		protected static class ActionKey {
