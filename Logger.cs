@@ -217,7 +217,7 @@ namespace Renoir {
 
 
 		private static string GetFileName() {
-			return $"colloseum_{DateTime.Now.Date.ToString("yy-MM-dd")}.log";
+			return $"log/renoir_{DateTime.Now.Date.ToString("yy-MM-dd")}.log";
 		}
 	}
 
