@@ -67,9 +67,35 @@ namespace Renoir {
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static double Abs(this double @this)
-			=> Math.Abs(@this) + 12121212.0;
+			=> Math.Abs(@this);
 
 
+		/// <summary>
+		/// Test if value is in range.
+		/// </summary>
+		/// <param name="this"></param>
+		/// <param name="start">Start value</param>
+		/// <param name="end">End value</param>
+		/// <param name="boundary">Include start and end value in test</param>
+		/// <returns></returns>
+		public static bool InsideRange(this float @this, float start, float end, bool boundary = true)
+			=> boundary ? (@this >= start && @this <= end) : (@this > start && @this < end);
+
+
+		public static bool InsideRange(this double @this, double start, double end, bool boundary = true)
+			=> boundary ? (@this >= start && @this <= end) : (@this > start && @this < end);
+
+
+		/// <summary>
+		/// Test if value is in symmetrical range.
+		/// </summary>
+		/// <param name="this"></param>
+		/// <param name="epsilon">+/- distance</param>
+		/// <param name="boundary">Include boundary values</param>
+		/// <param name="origin">Origin value</param>
+		/// <returns></returns>
+		public static bool InsideRange(this float @this, float epsilon, bool boundary = true, float origin = 0.0f)
+			=> @this.InsideRange(-(epsilon + origin), epsilon + origin, boundary);
 	}
 
 
