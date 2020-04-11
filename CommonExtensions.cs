@@ -190,6 +190,29 @@ namespace Renoir {
 
 			return collider;
 		}
+
+
+		/// <summary>
+		/// 	Collision position check
+		/// </summary>
+		/// <param name="kinematicCollision2D"></param>
+		/// <returns></returns>
+		public static bool Bottom(this KinematicCollision2D kinematicCollision2D)
+			=> kinematicCollision2D.Normal.y.Round() == 1;
+
+
+		public static bool Top(this KinematicCollision2D kinematicCollision2D)
+			=> kinematicCollision2D.Normal.y.Round() == -1;
+
+
+		public static bool Left(this KinematicCollision2D kinematicCollision2D)
+			=> kinematicCollision2D.Normal.x.Round() == -1;
+
+
+		public static bool Right(this KinematicCollision2D kinematicCollision2D)
+			=> kinematicCollision2D.Normal.x.Round() == 1;
+
+
 	}
 
 }
