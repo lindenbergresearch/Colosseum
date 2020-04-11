@@ -1,103 +1,107 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{C1174F1F-FE44-4555-B4ED-6995BB1935E3}</ProjectGuid>
-        <OutputType>Exe</OutputType>
-        <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
-        <RootNamespace>Renoir</RootNamespace>
-        <AssemblyName>Renoir</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <GodotProjectGeneratorVersion>1.0.7374.18850</GodotProjectGeneratorVersion>
-        <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
-        <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(Configuration)</IntermediateOutputPath>
-        <ApiConfiguration Condition=" '$(Configuration)' != 'Release' ">Debug</ApiConfiguration>
-        <ApiConfiguration Condition=" '$(Configuration)' == 'Release' ">Release</ApiConfiguration>
-        <LangVersion>8</LangVersion>
-        <Nullable>disable</Nullable>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>portable</DebugType>
-        <Optimize>false</Optimize>
-        <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <ConsolePause>false</ConsolePause>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DebugType>portable</DebugType>
-        <Optimize>true</Optimize>
-        <DefineConstants>$(GodotDefineConstants);GODOT;</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <ConsolePause>false</ConsolePause>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Tools|AnyCPU' ">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>portable</DebugType>
-        <Optimize>false</Optimize>
-        <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;TOOLS;</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <ConsolePause>false</ConsolePause>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="GodotSharp">
-            <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharp.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
-            <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="System" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="AnimatedSprite.cs" />
-        <Compile Include="BasicParameter.cs" />
-        <Compile Include="BitmapFont.cs" />
-        <Compile Include="BitmapFont2D.cs" />
-        <Compile Include="Brick.cs" />
-        <Compile Include="Coin.cs" />
-        <Compile Include="CollisionShape2D.cs" />
-        <Compile Include="DebugMessageBox.cs" />
-        <Compile Include="DynamicBindings.cs" />
-        <Compile Include="ICollidable.cs" />
-        <Compile Include="Level.cs" />
-        <Compile Include="Logger.cs" />
-        <Compile Include="Main.cs" />
-        <Compile Include="Mario2D.cs" />
-        <Compile Include="Motion2D.cs" />
-        <Compile Include="Node2D.cs" />
-        <Compile Include="Opening.cs" />
-        <Compile Include="Player2D.cs" />
-        <Compile Include="PlayerInfoText.cs" />
-        <Compile Include="PlayerUtil.cs" />
-        <Compile Include="PolyStateCombiner.cs" />
-        <Compile Include="Property.cs" />
-        <Compile Include="PropertyAttribute.cs" />
-        <Compile Include="QuestionBox.cs" />
-        <Compile Include="CommonExtensions.cs" />
-        <Compile Include="Util.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
-        <PackageReference Include="Newtonsoft.Json" />
-        <PackageReference Include="System.Buffers" />
-        <PackageReference Include="System.Memory" />
-        <PackageReference Include="System.Numerics.Vectors" />
-        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" />
-        <PackageReference Include="System.Text.Encodings.Web" />
-        <PackageReference Include="System.Text.Json" />
-        <PackageReference Include="System.Threading.Tasks.Extensions" />
-        <PackageReference Include="System.ValueTuple" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="PlayerParameter.json" />
-    </ItemGroup>
-    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1174F1F-FE44-4555-B4ED-6995BB1935E3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <OutputPath>.mono/temp/bin/$(Configuration)</OutputPath>
+    <RootNamespace>Renoir</RootNamespace>
+    <AssemblyName>Renoir</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <GodotProjectGeneratorVersion>1.0.7374.18850</GodotProjectGeneratorVersion>
+    <BaseIntermediateOutputPath>.mono/temp/obj</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)/$(Configuration)</IntermediateOutputPath>
+    <ApiConfiguration Condition=" '$(Configuration)' != 'Release' ">Debug</ApiConfiguration>
+    <ApiConfiguration Condition=" '$(Configuration)' == 'Release' ">Release</ApiConfiguration>
+    <LangVersion>8</LangVersion>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>$(GodotDefineConstants);GODOT;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Tools|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>$(GodotDefineConstants);GODOT;DEBUG;TOOLS;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GodotSharp">
+      <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GodotSharp, Version=1.0.7374.18840, Culture=neutral, PublicKeyToken=null">
+      <HintPath>.mono\assemblies\Debug\GodotSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GodotSharpEditor" Condition=" '$(Configuration)' == 'Tools' ">
+      <HintPath>$(ProjectDir)/.mono/assemblies/$(ApiConfiguration)/GodotSharpEditor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GodotSharpEditor, Version=1.0.7374.18842, Culture=neutral, PublicKeyToken=null">
+      <HintPath>.mono\assemblies\Debug\GodotSharpEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp"/>
+    <Reference Include="System"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnimatedSprite.cs"/>
+    <Compile Include="BasicParameter.cs"/>
+    <Compile Include="BitmapFont.cs"/>
+    <Compile Include="BitmapFont2D.cs"/>
+    <Compile Include="Brick.cs"/>
+    <Compile Include="Coin.cs"/>
+    <Compile Include="CollisionShape2D.cs"/>
+    <Compile Include="DebugMessageBox.cs"/>
+    <Compile Include="DynamicBindings.cs"/>
+    <Compile Include="ICollidable.cs"/>
+    <Compile Include="Level.cs"/>
+    <Compile Include="Logger.cs"/>
+    <Compile Include="Main.cs"/>
+    <Compile Include="Mario2D.cs"/>
+    <Compile Include="Motion2D.cs"/>
+    <Compile Include="Node2D.cs"/>
+    <Compile Include="Opening.cs"/>
+    <Compile Include="Player2D.cs"/>
+    <Compile Include="PlayerInfoText.cs"/>
+    <Compile Include="PlayerUtil.cs"/>
+    <Compile Include="PolyStateCombiner.cs"/>
+    <Compile Include="Property.cs"/>
+    <Compile Include="PropertyAttribute.cs"/>
+    <Compile Include="QuestionBox.cs"/>
+    <Compile Include="CommonExtensions.cs"/>
+    <Compile Include="Util.cs"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces"/>
+    <PackageReference Include="Newtonsoft.Json"/>
+    <PackageReference Include="System.Buffers"/>
+    <PackageReference Include="System.Memory"/>
+    <PackageReference Include="System.Numerics.Vectors"/>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe"/>
+    <PackageReference Include="System.Text.Encodings.Web"/>
+    <PackageReference Include="System.Text.Json"/>
+    <PackageReference Include="System.Threading.Tasks.Extensions"/>
+    <PackageReference Include="System.ValueTuple"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PlayerParameter.json"/>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
 </Project>
