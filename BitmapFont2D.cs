@@ -265,10 +265,10 @@ public class BitmapFont2D : Godot.Node2D {
 				CharsDimension = BitmapFont.CharsDimension;
 				Update();
 			} else {
-				//GD.PrintErr($"{GetType().Name}: Unable to use bitmap-font with that configuration: {Dump(BitmapFont)}");
+				GD.PrintErr($"{GetType().Name}: Unable to use bitmap-font with that configuration: {Dump(BitmapFont)}");
 			}
 		} catch (Exception e) {
-			//GD.PrintErr(e);
+			GD.PrintErr(e);
 			trace("Exception: " + e);
 		}
 
@@ -296,7 +296,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 			SerializeObject(_config, jsonFile);
 		} catch (Exception e) {
-			//GD.PrintErr($"Unable to save bitmap-file config data to json file: {jsonFile}");
+			GD.PrintErr($"Unable to save bitmap-file config data to json file: {jsonFile}");
 		}
 	}
 
@@ -320,7 +320,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 			//GD.Print("Bitmap-font successfully configured by json file.");
 		} catch (Exception e) {
-			//GD.PrintErr($"Unable to load bitmap-font config data from json file: {filename}");
+			GD.PrintErr($"Unable to load bitmap-font config data from json file: {filename}");
 		} finally {
 			lockRefresh = false;
 		}
