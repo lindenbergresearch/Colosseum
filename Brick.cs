@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 ///     Simple brick which could be damaged
 /// </summary>
-public class Brick : StaticBody2D, ICollidable {
+public class Brick : StaticBody2D, ICollider {
 
 	[GNode("AudioStreamPlayer")]
 	private AudioStreamPlayer _audioStreamPlayer;
@@ -21,7 +21,7 @@ public class Brick : StaticBody2D, ICollidable {
 	///     Handle collision
 	/// </summary>
 	/// <param name="collision"></param>
-	public void onCollide(KinematicCollision2D collision) {
+	public void OnCollide(object sender, KinematicCollision2D collision) {
 		if (collision.Normal != Vector2.Down) return;
 
 		_particles2D.Emitting = true;
