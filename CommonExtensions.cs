@@ -227,7 +227,7 @@ namespace Renoir {
 		/// <param name="sep"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static string MkString<T>(this IEnumerable<T> list, string sep) where T : IComparable<T>
+		public static string MkString<T>(this IEnumerable<T> list, string sep = ", ") where T : IComparable<T>
 			=> list.Aggregate("", (current, elem)
 				=> current + (elem + (elem.Equals(list.Last()) ? "" : sep)));
 
