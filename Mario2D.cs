@@ -95,19 +95,13 @@ public class Mario2D : Player2D, ICoinCollector {
 	/// </summary>
 	protected override void UpdateCollisions(float delta) {
 		foreach (var collision2D in this.GetCollider()) {
-			var direction = "?";
-			if (collision2D.Normal == Vector2.Down) direction = "↑";
-			if (collision2D.Normal == Vector2.Up) direction = "↓";
-			if (collision2D.Normal == Vector2.Left) direction = "→";
-			if (collision2D.Normal == Vector2.Right) direction = "←";
-
 			/* match collider type **/
 			switch (collision2D.Collider) {
-				case TileMap _ when collision2D.Normal.y == 1:
+				case TileMap _ when collision2D.Bottom():
 					_bumpSound.Play();
 					continue;
 				case ICollidable collider:
-					trace($"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {direction}");
+					trace($"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
 					collider.onCollide(collision2D);
 					break;
 			}
@@ -133,6 +127,16 @@ public class Mario2D : Player2D, ICoinCollector {
 			if (TurnRight) v = 1;
 
 			v *= ActionKey.Run ? player.MaxRunningSpeed : player.MaxWalkingSpeed;
+			Motion.X = Mathf.Lerp(Motion.X, v, player.BodyWeightFactor);
+		}
+
+		if (Jumping || Falling) {
+			var v = 0.0f;
+
+			if (TurnLeft) v = -1;
+			if (TurnRight) v = 1;
+
+			v *= player.MaxWalkingSpeed;
 			Motion.X = Mathf.Lerp(Motion.X, v, player.BodyWeightFactor);
 		}
 
