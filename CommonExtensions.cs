@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Newtonsoft.Json;
 using File = System.IO.File;
@@ -211,6 +212,24 @@ namespace Renoir {
 
 		public static bool Right(this KinematicCollision2D kinematicCollision2D)
 			=> kinematicCollision2D.Normal.x.Round() == 1;
+	}
+
+
+	/// <summary>
+	/// C# collection extensions
+	/// </summary>
+	public static class RCollections {
+
+		/// <summary>
+		/// Convert all elements of an Enumerable to a string separated by a separator
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="sep"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static string MkString<T>(this IEnumerable<T> list, string sep) where T : IComparable<T>
+			=> list.Aggregate("", (current, elem)
+				=> current + (elem + (elem.Equals(list.Last()) ? "" : sep)));
 
 
 	}
