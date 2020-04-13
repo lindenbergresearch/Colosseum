@@ -57,36 +57,37 @@
     <Reference Include="GodotSharpEditor, Version=1.0.7374.18842, Culture=neutral, PublicKeyToken=null">
       <HintPath>.mono\assemblies\Debug\GodotSharpEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp"/>
-    <Reference Include="System"/>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimatedSprite.cs"/>
-    <Compile Include="BasicParameter.cs"/>
-    <Compile Include="BitmapFont.cs"/>
-    <Compile Include="BitmapFont2D.cs"/>
-    <Compile Include="Brick.cs"/>
-    <Compile Include="Coin.cs"/>
-    <Compile Include="CollisionShape2D.cs"/>
-    <Compile Include="DebugMessageBox.cs"/>
-    <Compile Include="DynamicBindings.cs"/>
-    <Compile Include="ICollidable.cs"/>
-    <Compile Include="Level.cs"/>
-    <Compile Include="Logger.cs"/>
-    <Compile Include="Main.cs"/>
-    <Compile Include="Mario2D.cs"/>
-    <Compile Include="Motion2D.cs"/>
-    <Compile Include="Node2D.cs"/>
-    <Compile Include="Opening.cs"/>
-    <Compile Include="Player2D.cs"/>
-    <Compile Include="PlayerInfoText.cs"/>
-    <Compile Include="PlayerUtil.cs"/>
-    <Compile Include="PolyStateCombiner.cs"/>
-    <Compile Include="Property.cs"/>
-    <Compile Include="PropertyAttribute.cs"/>
-    <Compile Include="QuestionBox.cs"/>
-    <Compile Include="CommonExtensions.cs"/>
-    <Compile Include="Util.cs"/>
+    <Compile Include="AgileItem2D.cs" />
+    <Compile Include="AnimatedSprite.cs" />
+    <Compile Include="BasicParameter.cs" />
+    <Compile Include="BitmapFont.cs" />
+    <Compile Include="BitmapFont2D.cs" />
+    <Compile Include="Brick.cs" />
+    <Compile Include="Coin.cs" />
+    <Compile Include="CollisionShape2D.cs" />
+    <Compile Include="DebugMessageBox.cs" />
+    <Compile Include="DynamicBindings.cs" />
+    <Compile Include="ICollider.cs" />
+    <Compile Include="IConsumer.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Mario2D.cs" />
+    <Compile Include="Motion2D.cs" />
+    <Compile Include="Node2D.cs" />
+    <Compile Include="Opening.cs" />
+    <Compile Include="Player2D.cs" />
+    <Compile Include="PlayerInfoText.cs" />
+    <Compile Include="PlayerUtil.cs" />
+    <Compile Include="Property.cs" />
+    <Compile Include="PropertyAttribute.cs" />
+    <Compile Include="QuestionBox.cs" />
+    <Compile Include="CommonExtensions.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces"/>
@@ -101,7 +102,7 @@
     <PackageReference Include="System.ValueTuple"/>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PlayerParameter.json"/>
+    <Content Include="PlayerParameter.json" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
