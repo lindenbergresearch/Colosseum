@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using System.Collections.Generic;
 using Renoir;
 
 
@@ -18,6 +16,7 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 
 	[GNode("Label")] private Label _label;
 
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -25,8 +24,11 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 	/// <param name="collision"></param>
 	public void OnCollide(object sender, KinematicCollision2D collision) {
 		Logger.debug($"coll: {sender.GetType().FullName}");
-		if (sender is IConsumer consumer)
+		if (sender is IConsumer consumer) {
 			consumer.OnConsume(this);
+			Hide();
+			QueueFree();
+		}
 	}
 
 
@@ -41,7 +43,9 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 		foreach (var collision2D in this.GetCollider()) {
 			if (collision2D.Collider is IConsumer consumer) {
 				consumer.OnConsume(this);
-				continue;
+				Hide();
+				QueueFree();
+				return;
 			}
 
 			if (collision2D.Top()) continue;
@@ -60,13 +64,24 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 
 
 	/// <summary>
-	/// 
+	/// Activate item
 	/// </summary>
 	public void Activate(QuestionBox.ContentType type) {
 		_label.Visible = Logger.Level == Logger.LogLevel.TRACE;
 
+		Show();
 		Active = true;
 		Motion += INITIAL_IMPULSE;
+	}
+
+
+	/// <summary>
+	/// Deactivate item
+	/// </summary>
+	public void Deactivate() {
+		Active = false;
+		Hide();
+		QueueFree();
 	}
 
 
@@ -75,6 +90,7 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 	/// </summary>
 	public override void _Ready() {
 		this.SetupNodeBindings();
+		Hide();
 		_label.Visible = false;
 	}
 
