@@ -7,7 +7,7 @@ using static Renoir.Logger;
 /// <summary>
 ///     Main Player character
 /// </summary>
-public class Mario2D : Player2D, ICoinCollector {
+public class Mario2D : Player2D, ICoinCollector, IConsumer {
 
 	/// <summary>
 	/// 
@@ -89,6 +89,14 @@ public class Mario2D : Player2D, ICoinCollector {
 		pLives += delta;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="item"></param>
+	public void OnConsume(object item) {
+		debug($"consuming {item}");
+	}
+
 
 	/// <summary>
 	///     Check collisions and pass event to all collider
@@ -100,9 +108,9 @@ public class Mario2D : Player2D, ICoinCollector {
 				case TileMap _ when collision2D.Bottom():
 					_bumpSound.Play();
 					continue;
-				case ICollidable collider:
-					trace($"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
-					collider.onCollide(collision2D);
+				case ICollider collider:
+					debug($"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
+					collider.OnCollide(this, collision2D);
 					break;
 			}
 		}
