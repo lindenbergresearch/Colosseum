@@ -71,7 +71,7 @@ namespace Renoir {
 
 		/// <summary>
 		/// </summary>
-		public override void _Draw() {
+		public sealed override void _Draw() {
 			Draw();
 		}
 
@@ -79,7 +79,7 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="delta"></param>
-		public override void _PhysicsProcess(float delta) {
+		public sealed override void _PhysicsProcess(float delta) {
 			/* call standard update handler */
 			UpdateMotion(delta);
 			UpdateAnimation(delta);
@@ -94,14 +94,14 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="delta"></param>
-		public override void _Process(float delta) {
+		public sealed override void _Process(float delta) {
 			Process(delta);
 		}
 
 
 		/// <summary>
 		/// </summary>
-		public override void _Ready() {
+		public sealed override void _Ready() {
 			this.SetupGlobalProperties();
 			this.SetupNodeBindings();
 
