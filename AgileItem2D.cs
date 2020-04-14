@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Renoir;
 
@@ -5,14 +6,12 @@ using Renoir;
 /// <summary>
 /// Basic consumable item
 /// </summary>
-public class AgileItem2D : KinematicBody2D, ICollider {
+public class AgileItem2D : ConsumableItem2D {
 	private static readonly Vector2 GRAVITY = new Vector2(0, 900);
 	private static readonly Vector2 INITIAL_IMPULSE = new Vector2(50, -250);
 
 	private Motion2D Motion { get; set; } = (0, 0);
 	private Motion2D Save { get; set; } = (0, 0);
-
-	public bool Active { get; set; }
 
 	[GNode("Label")] private Label _label;
 
@@ -20,38 +19,19 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="collision"></param>
-	public void OnCollide(object sender, KinematicCollision2D collision) {
-		Logger.debug($"coll: {sender.GetType().FullName}");
-		if (sender is IConsumer consumer) {
-			consumer.OnConsume(this);
-			Hide();
-			QueueFree();
-		}
-	}
-
-
-	/// <summary>
-	/// 
-	/// </summary>
 	/// <param name="delta"></param>
-	public override void _PhysicsProcess(float delta) {
-		if (!Active) return;
-		if (!Visible) Visible = true;
+	public override void PhysicsProcess(float delta) {
+		var collider = this.GetCollider();
 
-		foreach (var collision2D in this.GetCollider()) {
-			if (collision2D.Collider is IConsumer consumer) {
-				consumer.OnConsume(this);
-				Hide();
-				QueueFree();
-				return;
-			}
+		// if (!collider.Empty()) {
+		// 	var collision2D = collider.First();
+		// 	Motion = Save * -collision2D.Normal.Abs();
+		// }
 
-			if (collision2D.Top()) continue;
 
-			Logger.debug($"position={collision2D.Position} motion={Save} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal}");
-			Motion = Save * -collision2D.Normal.Abs();
+		foreach (var collision2D in collider) {
+			if (!collision2D.Top())
+				Motion = Save * -collision2D.Normal.Abs();
 		}
 
 		Save = Motion.Velocity;
@@ -66,31 +46,20 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 	/// <summary>
 	/// Activate item
 	/// </summary>
-	public void Activate(QuestionBox.ContentType type) {
+	public override void Activate() {
+		base.Activate();
+
 		_label.Visible = Logger.Level == Logger.LogLevel.TRACE;
-
-		Show();
-		Active = true;
 		Motion += INITIAL_IMPULSE;
-	}
 
-
-	/// <summary>
-	/// Deactivate item
-	/// </summary>
-	public void Deactivate() {
-		Active = false;
-		Hide();
-		QueueFree();
+		Logger.debug($"Mo: {Motion}");
 	}
 
 
 	/// <summary>
 	/// 
 	/// </summary>
-	public override void _Ready() {
-		this.SetupNodeBindings();
-		Hide();
+	public override void Ready() {
 		_label.Visible = false;
 	}
 
