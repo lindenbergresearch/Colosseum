@@ -21,7 +21,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 
 	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
 	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
-	[GNode("Camera2D")] private Camera2D _camera;
+	[GNode("Camera2D")] private Camera2D camera;
 	[GNode("InfoBox")] private RichTextLabel _info;
 	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
 	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
@@ -89,6 +89,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 		pLives += delta;
 	}
 
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -109,7 +110,8 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 					_bumpSound.Play();
 					continue;
 				case ICollider collider:
-					debug($"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
+					trace(
+						$"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
 					collider.OnCollide(this, collision2D);
 					break;
 			}
@@ -194,9 +196,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 	/// Update sound fx
 	/// </summary>
 	override protected void UpdateAudio(float delta) {
-		if (Skidding && !_skiddingAudio.Playing && Running) _skiddingAudio.Play();
-		else if (_skiddingAudio.Playing) _skiddingAudio.Stop();
-
+		if (Skidding && !_skiddingAudio.Playing && Motion.X > player.MaxWalkingSpeed * 0.8) _skiddingAudio.Play();
 		if (AboutToJump) _jumpAudio.Play();
 	}
 
@@ -214,12 +214,12 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 
 		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
 			CameraTime = 0;
-			_camera.LimitBottom = 1000000;
+			camera.LimitBottom = 1000000;
 		} else {
-			if (CameraTime >= 2 && _camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
-				if (_camera.LimitBottom == 1000000) _camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
+			if (CameraTime >= 2 && camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
+				if (camera.LimitBottom == 1000000) camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
 
-				_camera.LimitBottom = (int) Mathf.Lerp(_camera.LimitBottom, Game.VIEWPORT_RESOLUTION.y, 0.01f);
+				camera.LimitBottom = (int) Mathf.Lerp(camera.LimitBottom, Game.VIEWPORT_RESOLUTION.y, 0.01f);
 			}
 		}
 	}
@@ -259,14 +259,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 
 		ResetPlayer();
 
-		//Parameter.SaveJson("PlayerParameter.json");
 		player = BasicParameter.LoadFromJson<PlayerParameter>("PlayerParameter.json");
 
-
-		_info.Text = "!";
-
-		_camera.LimitLeft = 0;
-		_camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
+		camera.LimitLeft = 0;
+		camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
 
 		StartPosition = GlobalPosition;
 	}
