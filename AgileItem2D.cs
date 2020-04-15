@@ -10,6 +10,7 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 	/// Determines of the item is active
 	/// </summary>
 	public bool Active { get; set; }
+	public Node Item { get; set; }
 
 
 	/// <summary>
@@ -49,7 +50,7 @@ public class AgileItem2D : KinematicBody2D, ICollider {
 	public virtual void Activate() {
 		Show();
 		Active = true;
-		AddChild(new VerticalMovingItem());
+		if (Item != null) AddChild(Item);
 	}
 
 

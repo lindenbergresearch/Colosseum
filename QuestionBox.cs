@@ -13,8 +13,9 @@ public class QuestionBox : StaticBody2D, ICollider {
 		NOTHING,
 		COIN,
 		ONEUP,
-		POWERUP
-
+		MUSHROOM,
+		FLOWER,
+		STAR
 	}
 
 
@@ -28,6 +29,7 @@ public class QuestionBox : StaticBody2D, ICollider {
 	[GNode("AnimationPlayer")] private AnimationPlayer _animationPlayer;
 	[GNode("BumpSound")] private AudioStreamPlayer _audioStreamPlayer;
 	[GNode("AgileItem2D")] private AgileItem2D _agileItem2D;
+	[GNode("AgileItem2D/AnimatedSprite")] private Godot.AnimatedSprite _animatedSpriteItem;
 
 
 	/// <summary>
@@ -44,14 +46,13 @@ public class QuestionBox : StaticBody2D, ICollider {
 	public void OnCollide(object sender, KinematicCollision2D collision) {
 		if (!collision.Bottom()) return;
 
-		if (!Active) {
-			_audioStreamPlayer.Play();
-			return;
-		}
+		_audioStreamPlayer.Play();
+
+		if (!Active) return;
+
+		SetContent();
 
 		Active = false;
-
-		_audioStreamPlayer.Play();
 
 		_animationPlayer.CurrentAnimation = "Bounce";
 		_animationPlayer.Play();
@@ -59,7 +60,29 @@ public class QuestionBox : StaticBody2D, ICollider {
 		_animatedSprite.Animation = "Deactive";
 		_animatedSprite.Play();
 
-		_agileItem2D.Activate();
+		if (Content != ContentType.NOTHING)
+			_agileItem2D.Activate();
+	}
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	private void SetContent() {
+		switch (Content) {
+			case ContentType.MUSHROOM:
+				_agileItem2D.Item = new HorizontalMovingItem();
+				_animatedSpriteItem.Play("Mushroom");
+				break;
+			case ContentType.FLOWER:
+				_agileItem2D.Item = new VerticalMovingItem();
+				_animatedSpriteItem.Play("Flower");
+				break;
+			default:
+				_agileItem2D.Item = new HorizontalMovingItem();
+				_animatedSpriteItem.Play("Mushroom");
+				break;
+		}
 	}
 
 
