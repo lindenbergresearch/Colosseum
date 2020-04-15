@@ -25,10 +25,10 @@ stream = ExtResource( 2 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
 emitting = false
-amount = 22
+amount = 30
 lifetime = 2.0
 one_shot = true
 speed_scale = 1.43
-explosiveness = 0.94
-randomness = 0.19
+explosiveness = 1.0
+randomness = 0.47
 process_material = ExtResource( 4 )

@@ -17,6 +17,7 @@ _global_script_class_icons={
 
 config/name="Renoir"
 run/main_scene="res://Node2D.tscn"
+boot_splash/image="res://images/mario_splash_new.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://icon.png"
