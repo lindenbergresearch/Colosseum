@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -231,6 +232,15 @@ namespace Renoir {
 			=> list.Aggregate("", (current, elem)
 				=> current + (elem + (elem.Equals(list.Last()) ? "" : sep)));
 
+		
+		/// <summary>
+		/// Test of collewction is empty
+		/// </summary>
+		/// <param name="list"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static bool Empty<T>(this IEnumerable<T> list)
+			=> list.Count() > 0;
 
 	}
 
