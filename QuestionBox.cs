@@ -1,15 +1,15 @@
 using Godot;
+using Renoir;
 
 
 /// <summary>
 /// </summary>
-public class QuestionBox : StaticBody2D, ICollidable {
+public class QuestionBox : StaticBody2D, ICollider {
 
 	/// <summary>
-	///     The questionbox's hidden content
+	///     The question-box hidden content
 	/// </summary>
 	public enum ContentType {
-
 		NOTHING,
 		COIN,
 		ONEUP,
@@ -22,14 +22,12 @@ public class QuestionBox : StaticBody2D, ICollidable {
 	///     The questionbox's current state
 	/// </summary>
 	[Export]
-	public bool active = true;
+	public bool Active { get; set; } = true;
 
-	[GNode("AnimatedSprite")]
-	private Godot.AnimatedSprite anim;
-	[GNode("AnimationPlayer")]
-	private AnimationPlayer bounce;
-	[GNode("BumpSound")]
-	private AudioStreamPlayer bumpSound;
+	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
+	[GNode("AnimationPlayer")] private AnimationPlayer _animationPlayer;
+	[GNode("BumpSound")] private AudioStreamPlayer _audioStreamPlayer;
+	[GNode("AgileItem2D")] private AgileItem2D _agileItem2D;
 
 
 	/// <summary>
@@ -37,29 +35,31 @@ public class QuestionBox : StaticBody2D, ICollidable {
 	/// </summary>
 	/// <returns></returns>
 	[Export]
-	public ContentType content = ContentType.NOTHING;
+	public ContentType Content { get; set; } = ContentType.NOTHING;
 
 
 	/// <summary>
+	/// 	Handle collisions
 	/// </summary>
-	public void onCollide(KinematicCollision2D collision) {
-		if (collision.Normal != Vector2.Down) return;
+	public void OnCollide(object sender, KinematicCollision2D collision) {
+		if (!collision.Bottom()) return;
 
-
-		if (!active) {
-			bumpSound.Play();
+		if (!Active) {
+			_audioStreamPlayer.Play();
 			return;
 		}
 
-		active = false;
+		Active = false;
 
-		bumpSound.Play();
+		_audioStreamPlayer.Play();
 
-		bounce.CurrentAnimation = "Bounce";
-		bounce.Play();
+		_animationPlayer.CurrentAnimation = "Bounce";
+		_animationPlayer.Play();
 
-		anim.Animation = "Deactive";
-		anim.Play();
+		_animatedSprite.Animation = "Deactive";
+		_animatedSprite.Play();
+
+		_agileItem2D.Activate();
 	}
 
 
@@ -69,18 +69,19 @@ public class QuestionBox : StaticBody2D, ICollidable {
 	public override void _Ready() {
 		this.SetupNodeBindings();
 
-		if (active) anim.Animation = "Active";
-		else anim.Animation = "Deactive";
+		if (Active) _animatedSprite.Animation = "Active";
+		else _animatedSprite.Animation = "Deactive";
 
-		anim.Play();
+		_animatedSprite.Play();
+		_agileItem2D.Visible = false;
 	}
 
 
 	/// <summary>
 	/// </summary>
 	/// <returns></returns>
-	public override string ToString() {
-		return $"QuesionBox: {content}";
-	}
+	public override string ToString()
+		=> $"QuestionBox({Content})";
+
 
 }
