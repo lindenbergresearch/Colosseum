@@ -24,7 +24,7 @@ namespace Renoir {
 		public static T LoadFromJson<T>(string fileName) where T : BasicParameter {
 			var json = System.IO.File.ReadAllText(fileName);
 
-			Logger.debug($"Try to load parameter from Json file: ${fileName}");
+			Logger.debug($"Try to load parameter from Json file: '{fileName}'");
 
 			return JsonConvert.DeserializeObject<T>(json);
 		}
