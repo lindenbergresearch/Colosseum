@@ -119,7 +119,7 @@ namespace Renoir {
 			public static bool Right => IsActionPressed("ui_right");
 			public static bool Run => IsActionPressed("ui_accept");
 			public static bool Jump => IsActionJustPressed("ui_cancel"); //IsActionPressed("ui_cancel");
-			public static bool Select => IsActionPressed("ui_select");
+			public static bool Select => IsActionJustPressed("ui_select");
 		}
 	}
 
