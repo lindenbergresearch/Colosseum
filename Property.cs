@@ -90,6 +90,12 @@ namespace Renoir {
 			return s;
 		}
 
+		/// <summary>
+		/// Clear peroperty pool
+		/// </summary>
+		public static void Clear() {
+			pool.Clear();
+		}
 
 		/// <summary>
 		///     Check of property already registered
@@ -180,6 +186,7 @@ namespace Renoir {
 		/// <param name="args">Change data.</param>
 		public delegate void ChangeEventHandler(Property<T> sender, PropertyEventArgs<T> args);
 
+
 		/// <summary>
 		/// generic typed property value
 		/// </summary>
@@ -231,7 +238,9 @@ namespace Renoir {
 				ExecuteTransformTrigger(newVal);
 
 				// raise event on changing values!
-				OnPropertyChange(new PropertyEventArgs<T>(_value, newVal));
+
+				if (_value != null && newVal != null)
+					OnPropertyChange(new PropertyEventArgs<T>(_value, newVal));
 
 				_value = newVal;
 			}
@@ -259,7 +268,21 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="handler"></param>
 		public void Subscribe(IPropertyChangeListener handler) {
+			RaiseChangeEvent -= handler.OnPropertyChange;
 			RaiseChangeEvent += handler.OnPropertyChange;
+
+			// foreach (var @delegate in RaiseChangeEvent.GetInvocationList()) {
+			// 	if(@delegate.)		
+			// }
+		}
+
+
+		private bool DelegateSubscribed(Delegate @delegate) {
+			foreach (var evdel in RaiseChangeEvent.GetInvocationList()) {
+				if (evdel == @delegate) return true;
+			}
+
+			return false;
 		}
 
 
@@ -303,7 +326,7 @@ namespace Renoir {
 			Modcount++;
 
 			// raise event
-			if (handler != null) handler(this, e);
+			handler?.Invoke(this, e);
 		}
 
 
