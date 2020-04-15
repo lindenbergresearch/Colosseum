@@ -5,7 +5,7 @@ using Renoir;
 /// <summary>
 /// An abstract item which can be consumed by a consumer
 /// </summary>
-public abstract class AgileItem2D : KinematicBody2D, ICollider {
+public class AgileItem2D : KinematicBody2D, ICollider {
 	/// <summary>
 	/// Determines of the item is active
 	/// </summary>
@@ -13,7 +13,7 @@ public abstract class AgileItem2D : KinematicBody2D, ICollider {
 
 
 	/// <summary>
-	/// 
+	/// Handle external collisions
 	/// </summary>
 	/// <param name="sender"></param>
 	/// <param name="collision"></param>
@@ -26,7 +26,7 @@ public abstract class AgileItem2D : KinematicBody2D, ICollider {
 
 
 	/// <summary>
-	/// 
+	/// Handle internal collisions
 	/// </summary>
 	/// <param name="delta"></param>
 	public sealed override void _PhysicsProcess(float delta) {
@@ -172,58 +172,3 @@ public class HorizontalMovingItem : Node {
 
 
 }
-
-
-/// <summary>
-/// Basic consumable item
-/// </summary>
-/*public class AgileItem2D : ConsumableItem2D {
-	private static readonly Vector2 GRAVITY = new Vector2(0, 900);
-	private static readonly Vector2 INITIAL_IMPULSE = new Vector2(50, -250);
-
-	private Motion2D Motion { get; set; } = (0, 0);
-	private Motion2D Save { get; set; } = (0, 0);
-
-	[GNode("Label")] private Label _label;
-
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="delta"></param>
-	public override void PhysicsProcess(float delta) {
-		foreach (var collision2D in this.GetCollider()) {
-			if (!collision2D.Top()) Motion = Save * -collision2D.Normal.Abs();
-		}
-
-		Save = Motion.Velocity;
-
-		_label.Text = $"Motion={Motion}";
-
-		Motion += delta * GRAVITY;
-		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
-	}
-
-
-	/// <summary>
-	/// Activate item
-	/// </summary>
-	public override void Activate() {
-		base.Activate();
-
-		_label.Visible = Logger.Level == Logger.LogLevel.TRACE;
-		Motion += INITIAL_IMPULSE;
-
-		Logger.debug($"Mo: {Motion}");
-	}
-
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public override void Ready() {
-		_label.Visible = false;
-	}
-
-
-}*/
