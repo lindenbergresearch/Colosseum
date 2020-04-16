@@ -20,8 +20,8 @@ namespace Renoir {
 				if (propertyInfo.PropertyType.Name.StartsWith("Property"))
 					foreach (var customAttribute in propertyInfo.GetCustomAttributes())
 						if (customAttribute is RegisterAttribute sa) {
-							if (PropertyPool.Exists(sa.Name)) {
-								propertyInfo.SetValue(obj, PropertyPool.Get(sa.Name));
+							if (PropertyPool.Exists(sa.Alias)) {
+								propertyInfo.SetValue(obj, PropertyPool.Get(sa.Alias));
 								continue;
 							}
 
@@ -35,13 +35,12 @@ namespace Renoir {
 								var genericType = pBasicType.MakeGenericType(types);
 								var property = (BaseProperty) Activator.CreateInstance(genericType);
 
-								property.Name = sa.Name;
-								property.Group = sa.Group;
+								property.Alias = sa.Alias;
 								property.Format = sa.Format;
 
-								PropertyPool.Register(sa.Name, property);
+								PropertyPool.Register(sa.Alias, property);
 
-								propertyInfo.SetValue(obj, PropertyPool.Get(sa.Name));
+								propertyInfo.SetValue(obj, PropertyPool.Get(sa.Alias));
 							} catch (Exception e) {
 								throw new RuntimeTypeException($"Unable to create property '{propertyInfo.Name}' : {e.Message}");
 							}
@@ -60,18 +59,15 @@ namespace Renoir {
 		/// <summary>
 		///     Attribute constructor.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="alias"></param>
 		/// <param name="format"></param>
-		/// <param name="group"></param>
-		public RegisterAttribute(string name, string group = "", string format = "") {
-			Name = name;
+		public RegisterAttribute(string alias,  string format = "") {
+			Alias = alias;
 			Format = format;
-			Group = group;
 		}
 
 
-		public string Name { get; set; }
-		public string Group { get; set; }
+		public string Alias { get; set; }
 		public string Format { get; set; }
 	}
 

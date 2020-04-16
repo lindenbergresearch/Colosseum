@@ -41,8 +41,8 @@ namespace Renoir {
 		/// <param name="property">The property to update</param>
 		public static void Register<T>(Property<T> property) {
 			Logger.trace($"Registering property: {property}");
-			if (pool.ContainsKey(property.Name)) pool[property.Name] = property;
-			else pool.Add(property.Name, property);
+			if (pool.ContainsKey(property.Alias)) pool[property.Alias] = property;
+			else pool.Add(property.Alias, property);
 		}
 
 
@@ -75,7 +75,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="property">The property to update</param>
 		public static void Unregister<T>(Property<T> property) {
-			pool.Remove(property.Name);
+			pool.Remove(property.Alias);
 		}
 
 
@@ -90,12 +90,14 @@ namespace Renoir {
 			return s;
 		}
 
+
 		/// <summary>
 		/// Clear peroperty pool
 		/// </summary>
 		public static void Clear() {
 			pool.Clear();
 		}
+
 
 		/// <summary>
 		///     Check of property already registered
@@ -203,12 +205,12 @@ namespace Renoir {
 		/// <summary>
 		///     Constructs a property.
 		/// </summary>
-		/// <param name="name">The name of the property</param>
+		/// <param name="alias">The name of the property</param>
 		/// <param name="value">The properties value</param>
 		/// <param name="group">The properties group membership</param>
 		/// <param name="locked">Write-lock (default is false)</param>
-		public Property(string name, T value, string group = "", bool locked = false) {
-			Name = name;
+		public Property(string @alias, T value, string group = "", bool locked = false) {
+			Alias = alias;
 			Group = group;
 			_value = value;
 			Locked = locked;
@@ -219,10 +221,10 @@ namespace Renoir {
 		/// <summary>
 		///     Constructs a property with a default value.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="alias"></param>
 		/// <param name="locked"></param>
-		public Property(string name, string group = "", bool locked = false) {
-			Name = name;
+		public Property(string @alias, string group = "", bool locked = false) {
+			Alias = alias;
 			Group = group;
 			Locked = locked;
 			ID = PropertyPool.CurrentId++;
@@ -268,12 +270,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="handler"></param>
 		public void Subscribe(IPropertyChangeListener handler) {
-			RaiseChangeEvent -= handler.OnPropertyChange;
 			RaiseChangeEvent += handler.OnPropertyChange;
-
-			// foreach (var @delegate in RaiseChangeEvent.GetInvocationList()) {
-			// 	if(@delegate.)		
-			// }
 		}
 
 
@@ -341,7 +338,7 @@ namespace Renoir {
 
 			if (Format.Length > 0 && Value != null) valStr = Formatted();
 
-			return $"[Name='{Name}' Group='{groupStr}' ID={ID} value={typeStr[typeStr.Length - 1]}({valStr})" + (Locked ? " locked=true" : "") +
+			return $"[Name='{Alias}' Group='{groupStr}' ID={ID} value={typeStr[typeStr.Length - 1]}({valStr})" + (Locked ? " locked=true" : "") +
 			       $" handler={RaiseChangeEvent?.GetInvocationList()?.Length}" +
 			       $" trigger={Triggers.Count} transforms={TransformTriggers.Count}" + "]";
 		}
@@ -549,7 +546,7 @@ namespace Renoir {
 	public abstract class BaseProperty {
 		public long Modcount { get; set; }
 
-		public string Name { get; set; }
+		public string Alias { get; set; }
 		public string Group { get; set; }
 		public string Format { get; set; } = "";
 		public long ID { get; set; }
