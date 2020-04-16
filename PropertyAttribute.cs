@@ -16,7 +16,7 @@ namespace Renoir {
 
 			Logger.trace($"Setup global properties for type: {type.Name}");
 
-			foreach (var propertyInfo in type.GetProperties())
+			foreach (var propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy))
 				if (propertyInfo.PropertyType.Name.StartsWith("Property"))
 					foreach (var customAttribute in propertyInfo.GetCustomAttributes())
 						if (customAttribute is RegisterAttribute sa) {

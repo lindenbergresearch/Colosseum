@@ -20,18 +20,20 @@ public static class Game {
 /// ROOT node 
 /// </summary>
 public class Node2D : Godot.Node2D {
+	private float time, fps;
 
+	[Register("main.debug.fps", "$main.debug")]
+	public static Property<float> FPS { get; set; }
 
-	private float time;
-
+	[Export]
 	[Register("main.level.name", "$main.playerinfo")]
-	public Property<string> pLevelName { get; set; }
+	public static Property<string> LevelName { get; set; }
 
 	[Register("main.level.time", "$main.playerinfo", "{0:D3}")]
-	public Property<int> pTime { get; set; }
+	public static Property<int> LevelTime { get; set; }
 
-	[Export] public bool EnableDebug { get; set; }
-	[Export] public string LevelName { get; set; }
+	[Export]
+	public bool EnableDebug { get; set; }
 
 
 	/// <summary>
@@ -53,28 +55,49 @@ public class Node2D : Godot.Node2D {
 	 *
 	 */
 	public override void _Ready() {
+		debug($"Loading: {GetType().FullName}");
+
 		this.SetupGlobalProperties();
 
 		PrintDebug = EnableDebug;
 		setupViewport();
 
 		time = 300;
-		pTime.Value = 0;
-
-		pLevelName.Value = LevelName;
+		LevelTime.Value = 0;
+		LevelName.Value = LevelName;
 
 		Input.SetCustomMouseCursor(ResourceLoader.Load("mouse_pointer.png"));
 	}
 
 
 	public override void _Process(float delta) {
-		if (Input.IsActionJustPressed("Reload")) GetTree().ReloadCurrentScene();
+		if (Input.IsActionJustPressed("Reload")) {
+			PropertyPool.Clear();
+			GetTree().ReloadCurrentScene();
+			return;
+		}
 
 		time -= delta;
 
 		var rounded = (int) Math.Round(time);
 
-		if (pTime.Value != rounded)
-			pTime.Value = rounded;
+		if (LevelTime.Value != rounded)
+			LevelTime.Value = rounded;
+
+		if (fps > 0) fps = Mathf.Lerp(fps, 1 / delta, 0.1f);
+		else fps = 1 / delta;
+
+		FPS.Value = fps;
+	}
+
+
+	/// <summary>
+	/// TODO: Embed in common mouse handler or so... ;P 
+	/// </summary>
+	/// <param name="event"></param>
+	public override void _Input(InputEvent @event) {
+		if (!(@event is InputEventMouseButton eventMouseButton)) return;
+		debug($"Mouse Click/Unclick at: {eventMouseButton.Position}");
+		debug($"Viewport Resolution is: {GetViewportRect().Size}");
 	}
 }

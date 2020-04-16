@@ -28,13 +28,13 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
 
 	[Register("main.player.coins", "$main.playerinfo", "{0:D3}")]
-	public Property<int> pCoins { get; set; }
+	public static Property<int> CollectedCoins { get; set; }
 
 	[Register("main.player.lives", "$main.playerinfo", "{0:D2}")]
-	public Property<int> pLives { get; set; }
+	public static Property<int> LivesLeft { get; set; }
 
 	[Register("main.player.score", "$main.playerinfo", "{0:D7}")]
-	public Property<int> pScore { get; set; }
+	public static Property<int> TotalScore { get; set; }
 
 
 	private bool Grounded => IsOnFloor();
@@ -67,12 +67,12 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 	public bool onCoinCollect(Coin coin) {
 		debug($"Collecting coin: {coin}");
 
-		pCoins += 1;
-		pScore += 250;
+		CollectedCoins += 1;
+		TotalScore += 250;
 
-		if (pCoins.Value == 100) {
+		if (CollectedCoins.Value == 100) {
 			SetLives();
-			pCoins.Value = 0;
+			CollectedCoins.Value = 0;
 		}
 
 		return true;
@@ -86,7 +86,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 	public void SetLives(int delta = 1) {
 		if (delta > 0) _oneLiveUp.Play();
 
-		pLives += delta;
+		LivesLeft += delta;
 	}
 
 
@@ -246,8 +246,8 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 	/// </summary>
 	public void ResetPlayer() {
 		debug("Reset player...");
-		pLives.Value = 3;
-		pCoins.Value = 0;
+		LivesLeft.Value = 3;
+		CollectedCoins.Value = 0;
 	}
 
 

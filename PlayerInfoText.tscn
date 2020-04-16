@@ -1,5 +1,7 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
+[ext_resource path="res://Xolonium.tres" type="DynamicFontData" id=1]
+[ext_resource path="res://sounds/SMB3/Card Match Success SFX.wav" type="AudioStream" id=2]
 [ext_resource path="res://PlayerInfoText.cs" type="Script" id=3]
 [ext_resource path="res://sprites/mario.png" type="Texture" id=5]
 [ext_resource path="res://PlayerInfoTextFont.tres" type="DynamicFont" id=6]
@@ -7,22 +9,30 @@
 [ext_resource path="res://ConsoleMonoFont.tres" type="DynamicFont" id=8]
 [ext_resource path="res://sounds/effects/menu.ogg" type="AudioStream" id=9]
 
-[sub_resource type="DynamicFontData" id=1]
+[sub_resource type="DynamicFont" id=1]
+size = 128
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+use_filter = true
+extra_spacing_char = 5
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFontData" id=2]
 hinting = 0
 font_path = "res://fonts/architect-s-daughter/ArchitectsDaughter.ttf"
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 size = 110
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 use_mipmaps = true
 use_filter = true
-font_data = SubResource( 1 )
+font_data = SubResource( 2 )
 
 [node name="PlayerInfoText" type="ParallaxBackground"]
 script = ExtResource( 3 )
 __meta__ = {
-"_edit_horizontal_guides_": [ 20.0, 9.0, 13.0, 5.0 ]
+"_edit_horizontal_guides_": [ -44.0 ]
 }
 
 [node name="TextTimer" type="Timer" parent="."]
@@ -84,6 +94,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="FPSLabel" type="Label" parent="."]
+margin_left = 376.0
+margin_top = 32.0
+margin_right = 1224.0
+margin_bottom = 182.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.984314, 0.741176, 0.258824, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 5
+custom_constants/shadow_offset_y = 6
+custom_constants/shadow_as_outline = 0
+text = "60.12 fps"
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TimeLabel" type="Label" parent="."]
 margin_left = 412.0
 margin_top = 5.0
@@ -121,12 +150,11 @@ margin_top = 1.0
 margin_right = 1095.0
 margin_bottom = 208.0
 rect_scale = Vector2( 0.1, 0.1 )
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 7
-custom_constants/shadow_offset_y = 8
-custom_constants/shadow_as_outline = 0
+custom_constants/shadow_offset_x = 3
+custom_constants/shadow_offset_y = 2
 text = "Green Hill Valley"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -153,22 +181,20 @@ visible = false
 anchor_top = 0.0125
 anchor_right = 1.0
 anchor_bottom = 0.20625
-margin_top = -12.0
+margin_top = -4.0
 margin_bottom = 254.0
-color = Color( 0.0392157, 0.0862745, 0.145098, 0.890196 )
+color = Color( 0.0901961, 0.223529, 0.396078, 0.929412 )
 __meta__ = {
-"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
-[node name="DebugMessageBox" type="RichTextLabel" parent="."]
-visible = false
+[node name="DebugMessageBox" type="RichTextLabel" parent="ColorRectDebug"]
 anchor_top = 0.0125
 anchor_bottom = 0.0125
 margin_left = 4.0
-margin_top = 24.0
+margin_top = 28.0
 margin_right = 2364.0
-margin_bottom = 1444.0
+margin_bottom = 1468.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_scale = Vector2( 0.2, 0.2 )
@@ -192,8 +218,31 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="LogfileLabel" type="Label" parent="ColorRectDebug"]
+margin_left = 5.0
+margin_top = -1.0
+margin_right = 3179.0
+margin_bottom = 302.0
+rect_scale = Vector2( 0.1, 0.1 )
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 7
+custom_constants/shadow_offset_y = 8
+text = "renoir core engine I // Logbook"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="MessageSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )
 volume_db = 3.782
 pitch_scale = 1.43
-[connection signal="timeout" from="TextTimer" to="DebugMessageBox" method="_on_Timer_timeout"]
+
+[node name="MessageSound2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+volume_db = -8.194
+pitch_scale = 1.73
+[connection signal="timeout" from="TextTimer" to="ColorRectDebug/DebugMessageBox" method="_on_Timer_timeout"]
