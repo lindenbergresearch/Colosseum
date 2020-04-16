@@ -12,10 +12,14 @@ namespace Renoir {
 	public class PropertyPool {
 
 		/// <summary>
-		/// holds all global properties
+		/// Holds all global properties
 		/// </summary>
 		private static readonly Dictionary<string, object> pool = new Dictionary<string, object>();
 
+		/// <summary>
+		/// Holds all subscriptions
+		/// </summary>
+		private static readonly Dictionary<string, IPropertyChangeListener> subscriptions = new Dictionary<string, IPropertyChangeListener>();
 
 		/// <summary>
 		/// Current property id counter
@@ -92,7 +96,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Clear peroperty pool
+		/// 	Clear property pool
 		/// </summary>
 		public static void Clear() {
 			pool.Clear();
@@ -112,11 +116,12 @@ namespace Renoir {
 		/// <summary>
 		///     Add a subscription to one or more properties defined by a matching string.
 		/// </summary>
+		/// <param name="alias"></param>
 		/// <param name="subscriber"></param>
-		/// <param name="match"></param>
-		public static void AddSubscription(IPropertyChangeListener subscriber, string match) {
-			var isGroup = match.Trim().StartsWith("$");
-			var r = @"^" + match.Trim().Replace(".", @"\.").Replace("$", @"\$").Replace("*", @".*") + "$";
+		public static void AddSubscription(string alias, IPropertyChangeListener subscriber) {
+			subscriptions.Add(alias, subscriber);
+			/*var isGroup = alias.Trim().StartsWith("$");
+			var r = @"^" + alias.Trim().Replace(".", @"\.").Replace("$", @"\$").Replace("*", @".*") + "$";
 
 			foreach (var pair in pool) {
 				var id = pair.Key;
@@ -133,7 +138,7 @@ namespace Renoir {
 
 				if (matches.Count > 0)
 					Util.InvokeMethodByName("Subscribe", new[] {subscriber}, property);
-			}
+			}*/
 		}
 	}
 
@@ -207,11 +212,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="alias">The name of the property</param>
 		/// <param name="value">The properties value</param>
-		/// <param name="group">The properties group membership</param>
 		/// <param name="locked">Write-lock (default is false)</param>
-		public Property(string @alias, T value, string group = "", bool locked = false) {
+		public Property(string @alias, T value, bool locked = false) {
 			Alias = alias;
-			Group = group;
 			_value = value;
 			Locked = locked;
 			ID = PropertyPool.CurrentId++;
@@ -223,9 +226,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="locked"></param>
-		public Property(string @alias, string group = "", bool locked = false) {
+		public Property(string @alias, bool locked = false) {
 			Alias = alias;
-			Group = group;
 			Locked = locked;
 			ID = PropertyPool.CurrentId++;
 		}
@@ -274,12 +276,13 @@ namespace Renoir {
 		}
 
 
+		/// <summary>
+		/// 	Check for delegate
+		/// </summary>
+		/// <param name="delegate"></param>
+		/// <returns></returns>
 		private bool DelegateSubscribed(Delegate @delegate) {
-			foreach (var evdel in RaiseChangeEvent.GetInvocationList()) {
-				if (evdel == @delegate) return true;
-			}
-
-			return false;
+			return RaiseChangeEvent.GetInvocationList().Any(evdel => evdel == @delegate);
 		}
 
 
@@ -334,11 +337,10 @@ namespace Renoir {
 		public override string ToString() {
 			var typeStr = typeof(T).ToString().Split('.');
 			var valStr = Value != null ? Value.ToString() : "null";
-			var groupStr = Group.Length > 1 ? $"{Group}" : "<none>";
 
 			if (Format.Length > 0 && Value != null) valStr = Formatted();
 
-			return $"[Name='{Alias}' Group='{groupStr}' ID={ID} value={typeStr[typeStr.Length - 1]}({valStr})" + (Locked ? " locked=true" : "") +
+			return $"[Alias='{Alias}' ID={ID} value={typeStr[typeStr.Length - 1]}({valStr})" + (Locked ? " locked=true" : "") +
 			       $" handler={RaiseChangeEvent?.GetInvocationList()?.Length}" +
 			       $" trigger={Triggers.Count} transforms={TransformTriggers.Count}" + "]";
 		}
@@ -547,7 +549,6 @@ namespace Renoir {
 		public long Modcount { get; set; }
 
 		public string Alias { get; set; }
-		public string Group { get; set; }
 		public string Format { get; set; } = "";
 		public long ID { get; set; }
 		public bool Locked { get; set; }
