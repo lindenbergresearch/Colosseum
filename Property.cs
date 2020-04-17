@@ -142,8 +142,7 @@ namespace Renoir {
 			subscriptions.Add(alias, subscriber);
 			/* update property event handler */
 			foreach (var o in pool) {
-				var mi = o.GetType().GetMethod("UpdateSubscriptions");
-				mi?.Invoke(o.Value, new object[] { });
+				if (o.Value is BaseProperty bp) bp.UpdateSubscriber();
 			}
 		}
 
@@ -230,7 +229,6 @@ namespace Renoir {
 			_value = value;
 			Locked = locked;
 			ID = PropertyPool.CurrentId++;
-			UpdateSubscriber();
 		}
 
 
@@ -243,24 +241,18 @@ namespace Renoir {
 			Alias = alias;
 			Locked = locked;
 			ID = PropertyPool.CurrentId++;
-			UpdateSubscriber();
 		}
 
 
 		public T Value {
 			get => _value;
 			set {
-				var newVal = value;
+				if (_value == null || value == null || _value.Equals(value)) return;
 
-				ExecuteTrigger(newVal);
-				ExecuteTransformTrigger(newVal);
-
-				//UpdateSubscriber();
-
-				if (_value != null && newVal != null)
-					OnPropertyChange(new PropertyEventArgs<T>(_value, newVal));
-
-				_value = newVal;
+				// ExecuteTrigger(newVal);
+				// ExecuteTransformTrigger(newVal);
+				OnPropertyChange(new PropertyEventArgs<T>(_value, value));
+				_value = value;
 			}
 		}
 
@@ -268,7 +260,8 @@ namespace Renoir {
 		/// <summary>
 		/// 	Check for new subscriber
 		/// </summary>
-		public void UpdateSubscriber() {
+		public override void UpdateSubscriber() {
+			Logger.debug($"update sub");
 			foreach (var _propertyChangeListener in PropertyPool.MatchSubscriptions(Alias)) {
 				Subscribe(_propertyChangeListener);
 			}
@@ -579,6 +572,8 @@ namespace Renoir {
 		public string Format { get; set; } = "";
 		public long ID { get; set; }
 		public bool Locked { get; set; }
+
+		public abstract void UpdateSubscriber();
 
 	}
 
