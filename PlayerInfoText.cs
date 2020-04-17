@@ -4,12 +4,19 @@ using static Renoir.PropertyPool;
 
 
 public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
-	[GNode("CoinsLabel")] private Label CoinsLabel;
-	[GNode("LevelNameLabel")] private Label LevelNameLabel;
-	[GNode("LivesLabel")] private Label LivesLabel;
-	[GNode("ScoreLabel")] private Label ScoreLabel;
-	[GNode("TimeLabel")] private Label TimeLabel;
-	[GNode("FPSLabel")] private Label FPSLabel;
+
+	[GNode("CoinsLabel")]
+	private Label CoinsLabel;
+	[GNode("LevelNameLabel")]
+	private Label LevelNameLabel;
+	[GNode("LivesLabel")]
+	private Label LivesLabel;
+	[GNode("ScoreLabel")]
+	private Label ScoreLabel;
+	[GNode("TimeLabel")]
+	private Label TimeLabel;
+	[GNode("FPSLabel")]
+	private Label FPSLabel;
 
 
 	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
@@ -25,7 +32,8 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 	public override void _Ready() {
 		this.SetupGlobalProperties();
 		this.SetupNodeBindings();
-		
+
 		AddSubscription("main.*", this);
 	}
+
 }
