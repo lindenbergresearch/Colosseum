@@ -10,30 +10,46 @@ using static Renoir.Logger;
 public class Mario2D : Player2D, ICoinCollector, IConsumer {
 
 	/// <summary>
-	/// 
+	/// Power states
 	/// </summary>
-	private enum PowerStateEnum {
+	public enum PowerStateEnum {
+
 		SMALL,
 		BIG,
 		FIRE
+
 	}
 
 
-	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
-	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
-	[GNode("Camera2D")] private Camera2D camera;
-	[GNode("InfoBox")] private RichTextLabel _info;
-	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
-	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
-	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
+	[GNode("AnimatedSprite")]
+	private Godot.AnimatedSprite _animate;
 
-	[Register("main.player.coins", "$main.playerinfo", "{0:D3}")]
+	[GNode("BumpSound")]
+	private AudioStreamPlayer _bumpSound;
+
+	[GNode("Camera2D")]
+	private Camera2D camera;
+
+	[GNode("InfoBox")]
+	private RichTextLabel _info;
+
+	[GNode("JumpSound")]
+	private AudioStreamPlayer2D _jumpAudio;
+
+	[GNode("OneLiveUp")]
+	private AudioStreamPlayer _oneLiveUp;
+
+	[GNode("SkiddingSound")]
+	private AudioStreamPlayer2D _skiddingAudio;
+
+
+	[Register("main.player.coins", "{0:D3}")]
 	public static Property<int> CollectedCoins { get; set; }
 
-	[Register("main.player.lives", "$main.playerinfo", "{0:D2}")]
+	[Register("main.player.lives", "{0:D2}")]
 	public static Property<int> LivesLeft { get; set; }
 
-	[Register("main.player.score", "$main.playerinfo", "{0:D7}")]
+	[Register("main.player.score", "{0:D7}")]
 	public static Property<int> TotalScore { get; set; }
 
 
@@ -55,7 +71,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 	private Vector2 StartPosition { get; set; }
 	private float CameraTime { get; set; }
 
-	private PowerStateEnum PowerState { get; set; } = PowerStateEnum.SMALL;
+
+	[Register("main.powerstate")]
+	public static PowerStateEnum PowerState { get; set; } = PowerStateEnum.SMALL;
+
 	private PlayerParameter player = new PlayerParameter();
 
 
@@ -215,7 +234,8 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
 			CameraTime = 0;
 			camera.LimitBottom = 1000000;
-		} else {
+		}
+		else {
 			if (CameraTime >= 2 && camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
 				if (camera.LimitBottom == 1000000) camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
 
@@ -297,5 +317,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 		public float MoveOverSpeed { get; set; }
 		public float BodyWeightFactor { get; set; }
 		public float EpsilonVelocity { get; set; }
+
 	}
+
 }
