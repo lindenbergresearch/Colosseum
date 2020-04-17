@@ -23,6 +23,7 @@ namespace Renoir {
 						if (customAttribute is RegisterAttribute sa) {
 							if (PropertyPool.Exists(sa.Alias)) {
 								var p = PropertyPool.Get(sa.Alias);
+
 								propertyInfo.SetValue(obj, p);
 								if (p is BaseProperty bp) bp.UpdateSubscriber();
 								continue;
@@ -40,6 +41,7 @@ namespace Renoir {
 
 								property.Alias = sa.Alias;
 								property.Format = sa.Format;
+								property.ID = PropertyPool.CurrentId++;
 								property.UpdateSubscriber();
 
 								PropertyPool.Register(sa.Alias, property);

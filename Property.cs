@@ -336,14 +336,8 @@ namespace Renoir {
 		///     Event handler. Propagate event to all subscriber.
 		/// </summary>
 		/// <param name="e"></param>
-		protected virtual void OnPropertyChange(PropertyEventArgs<T> e) {
-			var handler = RaiseChangeEvent;
-
-			Modcount++;
-
-			// raise event
-			handler?.Invoke(this, e);
-		}
+		protected virtual void OnPropertyChange(PropertyEventArgs<T> e)
+			=> RaiseChangeEvent?.Invoke(this, e);
 
 
 		/// <summary>
@@ -443,8 +437,6 @@ namespace Renoir {
 			if (p._value == null) return "<null>";
 			return p.Format.Length > 1 ? p.Formatted() : p.Value.ToString();
 		}
-
-
 		/*===== IMPLICIT CONVERSATIONS =================================================================================*/
 
 
@@ -564,8 +556,6 @@ namespace Renoir {
 	///     Basic property properties
 	/// </summary>
 	public abstract class BaseProperty {
-
-		public long Modcount { get; set; }
 
 		public string Alias { get; set; }
 		public string Format { get; set; } = "";
