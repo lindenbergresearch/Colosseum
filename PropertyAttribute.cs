@@ -8,6 +8,7 @@ namespace Renoir {
 	///     Property Extensions
 	/// </summary>
 	public static class PropertyExtensions {
+
 		/// <summary>
 		/// </summary>
 		/// <param name="obj"></param>
@@ -21,7 +22,9 @@ namespace Renoir {
 					foreach (var customAttribute in propertyInfo.GetCustomAttributes())
 						if (customAttribute is RegisterAttribute sa) {
 							if (PropertyPool.Exists(sa.Alias)) {
-								propertyInfo.SetValue(obj, PropertyPool.Get(sa.Alias));
+								var p = PropertyPool.Get(sa.Alias);
+								propertyInfo.SetValue(obj, p);
+								if (p is BaseProperty bp) bp.UpdateSubscriber();
 								continue;
 							}
 
@@ -37,15 +40,17 @@ namespace Renoir {
 
 								property.Alias = sa.Alias;
 								property.Format = sa.Format;
+								property.UpdateSubscriber();
 
 								PropertyPool.Register(sa.Alias, property);
-
 								propertyInfo.SetValue(obj, PropertyPool.Get(sa.Alias));
-							} catch (Exception e) {
+							}
+							catch (Exception e) {
 								throw new RuntimeTypeException($"Unable to create property '{propertyInfo.Name}' : {e.Message}");
 							}
 						}
 		}
+
 	}
 
 
@@ -61,7 +66,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="format"></param>
-		public RegisterAttribute(string alias,  string format = "") {
+		public RegisterAttribute(string alias, string format = "") {
 			Alias = alias;
 			Format = format;
 		}
@@ -69,27 +74,13 @@ namespace Renoir {
 
 		public string Alias { get; set; }
 		public string Format { get; set; }
+
 	}
 
 
 	/// <summary>
 	///     Raised if some runtime type conversion fails.
 	/// </summary>
-	public class RuntimeTypeException : Exception {
-		public RuntimeTypeException() {
-		}
-
-
-		public RuntimeTypeException(string message) : base(message) {
-		}
-
-
-		public RuntimeTypeException(string message, Exception innerException) : base(message, innerException) {
-		}
-
-
-		protected RuntimeTypeException(SerializationInfo info, StreamingContext context) : base(info, context) {
-		}
-	}
+	public class RuntimeTypeException : Exception { }
 
 }
