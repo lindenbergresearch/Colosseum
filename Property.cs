@@ -19,7 +19,7 @@ namespace Renoir {
 		/// <summary>
 		/// Holds all subscriptions
 		/// </summary>
-		private static readonly Dictionary<string, IPropertyChangeListener> subscriptions = new Dictionary<string, IPropertyChangeListener>();
+		private static readonly Dictionary<string, IPropertyChangeHandler> subscriptions = new Dictionary<string, IPropertyChangeHandler>();
 
 		/// <summary>
 		/// Current property id counter
@@ -55,8 +55,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <returns></returns>
-		public static IEnumerable<IPropertyChangeListener> MatchSubscriptions(string alias) {
-			var matched = new List<IPropertyChangeListener>();
+		public static IEnumerable<IPropertyChangeHandler> MatchSubscriptions(string alias) {
+			var matched = new List<IPropertyChangeHandler>();
 
 			foreach (var subscription in subscriptions) {
 				var r = @"^" + subscription.Key.Trim().Replace(".", @"\.").Replace("*", @".*") + "$";
@@ -138,8 +138,14 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="subscriber"></param>
-		public static void AddSubscription(string alias, IPropertyChangeListener subscriber)
-			=> subscriptions.Add(alias, subscriber);
+		public static void AddSubscription(string alias, IPropertyChangeHandler subscriber) {
+			subscriptions.Add(alias, subscriber);
+			/* update property event handler */
+			foreach (var o in pool) {
+				var mi = o.GetType().GetMethod("UpdateSubscriptions");
+				mi?.Invoke(o.Value, new object[] { });
+			}
+		}
 
 	}
 
@@ -147,13 +153,15 @@ namespace Renoir {
 	/// <summary>
 	///     Interface for subscriber classes.
 	/// </summary>
-	public interface IPropertyChangeListener {
+	public interface IPropertyChangeHandler {
+
 		/// <summary>
 		///     Called upon an event has been fired.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
 		void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args);
+
 	}
 
 
@@ -161,6 +169,7 @@ namespace Renoir {
 	///     Property change event data.
 	/// </summary>
 	public class PropertyEventArgs<T> : EventArgs {
+
 		public PropertyEventArgs(T old, T @new) {
 			Old = old;
 			New = @new;
@@ -180,6 +189,7 @@ namespace Renoir {
 			var n = New != null ? New.ToString() : "<empty>";
 			return $"({o} => {n})";
 		}
+
 	}
 
 
@@ -187,6 +197,7 @@ namespace Renoir {
 	///     Encapsulates a property, binds it to a name and provide an event to catch manipulating.
 	/// </summary>
 	public class Property<T> : BaseProperty {
+
 		/// <summary>
 		///     Event handler delegate.
 		/// </summary>
@@ -219,6 +230,7 @@ namespace Renoir {
 			_value = value;
 			Locked = locked;
 			ID = PropertyPool.CurrentId++;
+			UpdateSubscriber();
 		}
 
 
@@ -231,6 +243,7 @@ namespace Renoir {
 			Alias = alias;
 			Locked = locked;
 			ID = PropertyPool.CurrentId++;
+			UpdateSubscriber();
 		}
 
 
@@ -241,7 +254,8 @@ namespace Renoir {
 
 				ExecuteTrigger(newVal);
 				ExecuteTransformTrigger(newVal);
-				UpdateSubscriber();
+
+				//UpdateSubscriber();
 
 				if (_value != null && newVal != null)
 					OnPropertyChange(new PropertyEventArgs<T>(_value, newVal));
@@ -254,7 +268,7 @@ namespace Renoir {
 		/// <summary>
 		/// 	Check for new subscriber
 		/// </summary>
-		private void UpdateSubscriber() {
+		public void UpdateSubscriber() {
 			foreach (var _propertyChangeListener in PropertyPool.MatchSubscriptions(Alias)) {
 				Subscribe(_propertyChangeListener);
 			}
@@ -281,7 +295,7 @@ namespace Renoir {
 		///     Subscribe to a change event.
 		/// </summary>
 		/// <param name="handler"></param>
-		public void Subscribe(IPropertyChangeListener handler) {
+		public void Subscribe(IPropertyChangeHandler handler) {
 			RaiseChangeEvent += handler.OnPropertyChange;
 		}
 
@@ -300,7 +314,7 @@ namespace Renoir {
 		///     UnSubscribe to event.
 		/// </summary>
 		/// <param name="handler"></param>
-		public void Unsubscribe(IPropertyChangeListener handler) {
+		public void Unsubscribe(IPropertyChangeHandler handler) {
 			RaiseChangeEvent -= handler.OnPropertyChange;
 		}
 
@@ -433,7 +447,7 @@ namespace Renoir {
 
 
 		public static implicit operator string(Property<T> p) {
-			if ((object)p == null) return "<NIL>";
+			if ((object) p == null) return "<NIL>";
 			if (p._value == null) return "<null>";
 			return p.Format.Length > 1 ? p.Formatted() : p.Value.ToString();
 		}
@@ -550,6 +564,7 @@ namespace Renoir {
 
 
 		/*===== OPERATOR CONVERSATIONS =================================================================================*/
+
 	}
 
 
@@ -557,12 +572,14 @@ namespace Renoir {
 	///     Basic property properties
 	/// </summary>
 	public abstract class BaseProperty {
+
 		public long Modcount { get; set; }
 
 		public string Alias { get; set; }
 		public string Format { get; set; } = "";
 		public long ID { get; set; }
 		public bool Locked { get; set; }
+
 	}
 
 }
