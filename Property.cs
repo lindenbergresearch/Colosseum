@@ -261,7 +261,6 @@ namespace Renoir {
 		/// 	Check for new subscriber
 		/// </summary>
 		public override void UpdateSubscriber() {
-			Logger.debug($"update sub");
 			foreach (var _propertyChangeListener in PropertyPool.MatchSubscriptions(Alias)) {
 				Subscribe(_propertyChangeListener);
 			}
