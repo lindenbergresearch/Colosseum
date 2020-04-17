@@ -51,9 +51,28 @@ namespace Renoir {
 
 
 		/// <summary>
+		/// 	Matches all subscriptions by the given alias
+		/// </summary>
+		/// <param name="alias"></param>
+		/// <returns></returns>
+		public static IEnumerable<IPropertyChangeListener> MatchSubscriptions(string alias) {
+			var matched = new List<IPropertyChangeListener>();
+
+			foreach (var subscription in subscriptions) {
+				var r = @"^" + subscription.Key.Trim().Replace(".", @"\.").Replace("*", @".*") + "$";
+				var matches = Regex.Matches(alias, r, RegexOptions.Singleline);
+
+				if (matches.Count > 0) matched.Add(subscription.Value);
+			}
+
+			return matched;
+		}
+
+
+		/// <summary>
 		///     Get a property by it's name ID
 		/// </summary>
-		/// <param name="name">The properties name ID</param>
+		/// <param name="id">The properties name ID</param>
 		/// <returns></returns>
 		public static Property<T> GetProperty<T>(string id) {
 			var tmp = pool[id];
@@ -100,6 +119,7 @@ namespace Renoir {
 		/// </summary>
 		public static void Clear() {
 			pool.Clear();
+			subscriptions.Clear();
 		}
 
 
@@ -118,28 +138,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="subscriber"></param>
-		public static void AddSubscription(string alias, IPropertyChangeListener subscriber) {
-			subscriptions.Add(alias, subscriber);
-			/*var isGroup = alias.Trim().StartsWith("$");
-			var r = @"^" + alias.Trim().Replace(".", @"\.").Replace("$", @"\$").Replace("*", @".*") + "$";
+		public static void AddSubscription(string alias, IPropertyChangeListener subscriber)
+			=> subscriptions.Add(alias, subscriber);
 
-			foreach (var pair in pool) {
-				var id = pair.Key;
-				var property = pair.Value;
-
-				MatchCollection matches;
-
-				if (isGroup) {
-					var group = Util.GetPropertyByName("Group", property);
-					matches = Regex.Matches(group, r, RegexOptions.Singleline);
-				} else {
-					matches = Regex.Matches(id, r, RegexOptions.Singleline);
-				}
-
-				if (matches.Count > 0)
-					Util.InvokeMethodByName("Subscribe", new[] {subscriber}, property);
-			}*/
-		}
 	}
 
 
@@ -240,13 +241,22 @@ namespace Renoir {
 
 				ExecuteTrigger(newVal);
 				ExecuteTransformTrigger(newVal);
-
-				// raise event on changing values!
+				UpdateSubscriber();
 
 				if (_value != null && newVal != null)
 					OnPropertyChange(new PropertyEventArgs<T>(_value, newVal));
 
 				_value = newVal;
+			}
+		}
+
+
+		/// <summary>
+		/// 	Check for new subscriber
+		/// </summary>
+		private void UpdateSubscriber() {
+			foreach (var _propertyChangeListener in PropertyPool.MatchSubscriptions(Alias)) {
+				Subscribe(_propertyChangeListener);
 			}
 		}
 
@@ -423,6 +433,7 @@ namespace Renoir {
 
 
 		public static implicit operator string(Property<T> p) {
+			if ((object)p == null) return "<NIL>";
 			if (p._value == null) return "<null>";
 			return p.Format.Length > 1 ? p.Formatted() : p.Value.ToString();
 		}
