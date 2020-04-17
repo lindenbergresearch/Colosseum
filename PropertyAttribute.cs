@@ -81,6 +81,11 @@ namespace Renoir {
 	/// <summary>
 	///     Raised if some runtime type conversion fails.
 	/// </summary>
-	public class RuntimeTypeException : Exception { }
+	public class RuntimeTypeException : Exception {
+
+		public RuntimeTypeException(string message) : base(message) {
+		}
+
+	}
 
 }
