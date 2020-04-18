@@ -7,7 +7,7 @@ using static Renoir.Logger;
 /// <summary>
 ///     Main Player character
 /// </summary>
-public class Mario2D : Player2D, ICoinCollector, IConsumer {
+public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandler {
 
 	/// <summary>
 	/// Power states
@@ -65,6 +65,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 	private bool TurnLeft => ActionKey.Left && Motion.X <= 0.0;
 	private bool TurnRight => ActionKey.Right && Motion.X >= 0.0;
 	private bool AboutToJump => Grounded && ActionKey.Jump;
+	private bool Transforming => _animate.Animation == "Transform" && _animate.IsPlaying();
 
 
 	private bool Debug { get; set; }
@@ -207,7 +208,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 		if (TurnRight) _animate.FlipH = false;
 
 		/* start animation */
-		_animate.Play();
+		if (!Idle && !_animate.IsPlaying()) _animate.Play();
 	}
 
 
@@ -285,6 +286,8 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 		camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
 
 		StartPosition = GlobalPosition;
+
+		PropertyPool.AddSubscription("main.mouse.*", this);
 	}
 
 
@@ -293,6 +296,15 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer {
 
 
 	override protected void Process(float delta) {
+	}
+
+
+	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
+		debug($"D: {Node2D.MouseButton} from: {sender} args: {args}");
+
+		if (Node2D.MouseButton.Value != null && Node2D.MouseButton.Value.Pressed) {
+			camera.Offset = Node2D.MouseButton.Value.Position;
+		}
 	}
 
 
