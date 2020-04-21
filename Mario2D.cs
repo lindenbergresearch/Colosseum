@@ -21,27 +21,26 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	}
 
 
-	[GNode("AnimatedSprite")]
-	private Godot.AnimatedSprite _animate;
+	#region Godot Node Bindings
 
-	[GNode("BumpSound")]
-	private AudioStreamPlayer _bumpSound;
+	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
 
-	[GNode("Camera2D")]
-	private Camera2D camera;
+	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
 
-	[GNode("InfoBox")]
-	private RichTextLabel _info;
+	[GNode("Camera2D")] private Camera2D camera;
 
-	[GNode("JumpSound")]
-	private AudioStreamPlayer2D _jumpAudio;
+	[GNode("InfoBox")] private RichTextLabel _info;
 
-	[GNode("OneLiveUp")]
-	private AudioStreamPlayer _oneLiveUp;
+	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
 
-	[GNode("SkiddingSound")]
-	private AudioStreamPlayer2D _skiddingAudio;
+	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
 
+	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
+
+	#endregion
+
+
+	#region Global Properties
 
 	[Register("main.player.coins", "{0:D3}")]
 	public static Property<int> CollectedCoins { get; set; }
@@ -52,6 +51,13 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	[Register("main.player.score", "{0:D7}")]
 	public static Property<int> TotalScore { get; set; }
 
+	[Register("main.powerstate")]
+	public static PowerStateEnum PowerState { get; set; } = PowerStateEnum.SMALL;
+
+	#endregion
+
+
+	#region Functional State Properties
 
 	private bool Grounded => IsOnFloor();
 	private bool Jumping => !Grounded && Motion.MovingUp;
@@ -67,16 +73,18 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	private bool AboutToJump => Grounded && ActionKey.Jump;
 	private bool Transforming => _animate.Animation == "Transform" && _animate.Frame == _animate.Frames.GetFrameCount("Transform");
 
+	#endregion
+
+	#region Parameter and Variables
 
 	private bool Debug { get; set; }
 	private Vector2 StartPosition { get; set; }
 	private float CameraTime { get; set; }
 
 
-	[Register("main.powerstate")]
-	public static PowerStateEnum PowerState { get; set; } = PowerStateEnum.SMALL;
-
 	private PlayerParameter player = new PlayerParameter();
+
+	#endregion
 
 
 	/// <summary>
@@ -238,8 +246,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
 			CameraTime = 0;
 			camera.LimitBottom = 1000000;
-		}
-		else {
+		} else {
 			if (CameraTime >= 2 && camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
 				if (camera.LimitBottom == 1000000) camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
 
