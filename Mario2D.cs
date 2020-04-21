@@ -65,7 +65,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	private bool TurnLeft => ActionKey.Left && Motion.X <= 0.0;
 	private bool TurnRight => ActionKey.Right && Motion.X >= 0.0;
 	private bool AboutToJump => Grounded && ActionKey.Jump;
-	private bool Transforming => _animate.Animation == "Transform" && _animate.IsPlaying();
+	private bool Transforming => _animate.Animation == "Transform" && _animate.Frame == _animate.Frames.GetFrameCount("Transform");
 
 
 	private bool Debug { get; set; }
@@ -225,7 +225,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 		var vect = string.Format("V = {0,6:000.0}, {1,6:000.0}", Motion.X, Motion.Y);
 		var pos = string.Format("P = {0,6:000.0}, {1,6:000.0}", GlobalPosition.x, GlobalPosition.y);
 		_info.Text =
-			$"Velocity: {vect}\nPosition: {pos}\nSL: {SkiddingLeft} SR: {SkiddingRight}\nGrounded: {Grounded}\nWalk: {Walking} Run: {Running}\nJump: {Jumping} Fall: {Falling}";
+			$"Velocity: {vect}\nPosition: {pos}\nSL: {SkiddingLeft} " +
+			$"SR: {SkiddingRight}\nGrounded: {Grounded}\nWalk: {Walking} " +
+			$"Run: {Running}\nJump: {Jumping} Fall: {Falling}" +
+			$"Animation: {_animate.IsPlaying()}";
 	}
 
 

@@ -8,11 +8,13 @@ using static Renoir.Logger;
 /// Basic configuration
 /// </summary>
 public static class Game {
+
 	public const int TILE_SIZE = 8;
 	public const int SCALE_FACTOR = 3;
 	public static readonly Vector2 VIEWPORT_TILES = new Vector2(60, 40);
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;
+
 }
 
 
@@ -20,20 +22,28 @@ public static class Game {
 /// ROOT node 
 /// </summary>
 public class Node2D : Godot.Node2D {
+
 	private float time, fps;
 
-	[Register("main.debug.fps", "$main.debug")]
+	[Register("debug.fps", "{0:F2} FPS")]
 	public static Property<float> FPS { get; set; }
 
-	[Export]
-	[Register("main.level.name", "$main.playerinfo")]
+	[Register("main.level.name")]
 	public static Property<string> LevelName { get; set; }
 
-	[Register("main.level.time", "$main.playerinfo", "{0:D3}")]
+	[Register("main.level.time", "{0:D3}")]
 	public static Property<int> LevelTime { get; set; }
 
 	[Export]
 	public bool EnableDebug { get; set; }
+
+
+	[Export]
+	private string levelName = "Foo";
+
+
+	[Register("main.mouse.button")]
+	public static Property<InputEventMouseButton> MouseButton { get; set; }
 
 
 	/// <summary>
@@ -49,11 +59,9 @@ public class Node2D : Godot.Node2D {
 	}
 
 
-	/**
-	 * 	 Called when the node is ready.
-	 *	 Setup man game stuff.
-	 *
-	 */
+	/// <summary>
+	/// 
+	/// </summary>
 	public override void _Ready() {
 		debug($"Loading: {GetType().FullName}");
 
@@ -61,6 +69,8 @@ public class Node2D : Godot.Node2D {
 
 		PrintDebug = EnableDebug;
 		setupViewport();
+
+		LevelName.Value = levelName;
 
 		time = 300;
 		LevelTime.Value = 0;
@@ -95,9 +105,13 @@ public class Node2D : Godot.Node2D {
 	/// TODO: Embed in common mouse handler or so... ;P 
 	/// </summary>
 	/// <param name="event"></param>
-	public override void _Input(InputEvent @event) {
+	/*public override void _Input(InputEvent @event) {
 		if (!(@event is InputEventMouseButton eventMouseButton)) return;
-		debug($"Mouse Click/Unclick at: {eventMouseButton.Position}");
-		debug($"Viewport Resolution is: {GetViewportRect().Size}");
-	}
+
+		MouseButton.Value = eventMouseButton;
+
+		// debug($"Mouse Click/Unclick at: {eventMouseButton.Position} {eventMouseButton.GlobalPosition} {eventMouseButton.Pressed}");
+		// debug($"Viewport Resolution is: {GetViewportRect().Size}");
+	}*/
+
 }

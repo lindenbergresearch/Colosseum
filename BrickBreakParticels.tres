@@ -3,11 +3,11 @@
 [resource]
 lifetime_randomness = 0.16
 emission_shape = 1
-emission_sphere_radius = 7.83
+emission_sphere_radius = 20.14
 flag_disable_z = true
 direction = Vector3( 0, 0, 0 )
-spread = 75.0
-gravity = Vector3( 0, 200, 0 )
+spread = 96.92
+gravity = Vector3( 50, 300, 0 )
 initial_velocity = -133.94
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0

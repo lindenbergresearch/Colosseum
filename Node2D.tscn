@@ -11,7 +11,6 @@
 [node name="Node2D" type="Node2D"]
 script = ExtResource( 3 )
 EnableDebug = true
-LevelName = "Green Hill Valley"
 
 [node name="Mario" parent="." instance=ExtResource( 1 )]
 position = Vector2( 24, 288 )
@@ -25,6 +24,10 @@ tile_data = PoolIntArray( -1, 24, 0, 65535, 24, 0, 131071, 24, 0, 196607, 24, 0,
 
 [node name="Questionbox" parent="." instance=ExtResource( 5 )]
 position = Vector2( 152, 248 )
+
+[node name="Questionbox2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 216, 248 )
+Content = 2
 
 [node name="Coins" type="Node" parent="."]
 

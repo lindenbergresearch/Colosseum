@@ -247,7 +247,7 @@ namespace Renoir {
 		public T Value {
 			get => _value;
 			set {
-				if (_value == null || value == null || _value.Equals(value)) return;
+				if (value == null || (_value != null && _value.Equals(value))) return;
 
 				// ExecuteTrigger(newVal);
 				// ExecuteTransformTrigger(newVal);
