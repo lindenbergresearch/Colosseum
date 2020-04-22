@@ -257,7 +257,8 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
 			CameraTime = 0;
 			camera.LimitBottom = 1000000;
-		} else {
+		}
+		else {
 			if (CameraTime >= 2 && camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
 				if (camera.LimitBottom == 1000000) camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
 
@@ -312,12 +313,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	}
 
 
-	override protected void Draw() {
-	}
+	override protected void Draw() { }
 
 
-	override protected void Process(float delta) {
-	}
+	override protected void Process(float delta) { }
 
 
 	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
