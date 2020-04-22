@@ -3,30 +3,32 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Godot;
+using static System.Console;
 using File = System.IO.File;
 
 namespace Renoir {
 
 	/// <summary>
-	///     Interface to output write for log messages.
+	/// I/O Interface for log messages.
 	/// </summary>
 	public interface ILogWriter {
 
 		/// <summary>
-		///     Simple interface method for string output.
+		/// Simple interface method for string output.
 		/// </summary>
+		/// <param name="level"></param>
 		/// <param name="message"></param>
 		void Write(Logger.LogLevel level, string message);
 	}
 
 
 	/// <summary>
-	///     Helper class for qualified log output
+	/// Helper class for qualified log output
 	/// </summary>
 	public static class Logger {
 
 		/// <summary>
-		///     Available log levels.
+		/// Available log levels.
 		/// </summary>
 		public enum LogLevel {
 			TRACE,
@@ -39,29 +41,29 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Holds all pushed messages.
+		/// Holds all pushed messages.
 		/// </summary>
 		public static List<string> messages = new List<string>(4096);
 
 
 		/// <summary>
-		///     Enable/Disable debug messages
+		/// Enable/Disable debug messages
 		/// </summary>
 		public static bool PrintDebug { get; set; } = true;
 
 		/// <summary>
-		///     Current loglevel
+		/// Current loglevel
 		/// </summary>
 		public static LogLevel Level { get; set; } = LogLevel.DEBUG;
 
 		/// <summary>
-		///     Holds all output writers
+		/// Holds all output writers
 		/// </summary>
 		public static List<ILogWriter> LogWriters { get; set; } = new List<ILogWriter>();
 
 
 		/// <summary>
-		///     Remove all messages.
+		/// Remove all messages.
 		/// </summary>
 		public static void ResetMessageBuffer() {
 			messages.Clear();
@@ -69,7 +71,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Print debug log message to GD console
+		/// Print debug log message to GD console
 		/// </summary>
 		/// <param name="msg"></param>
 		private static void log(LogLevel level, string msg) {
@@ -84,13 +86,12 @@ namespace Renoir {
 			var dt = DateTime.Now.ToString("HH:mm:ss.fff");
 			var m = $"[{dt}] {level} <{filename}:{lineno} {method}()> {msg}";
 
-			//GD.Print(m);
 
 			//TODO: find a better solution to add the standard logger
 			if (LogWriters.Count == 0) {
-				LogWriters.Add(new GodotConsoleLogWriter());
+				//LogWriters.Add(new GodotConsoleLogWriter());
 
-				//LogWriters.Add(new SystemConsoleLogWriter());
+				LogWriters.Add(new SystemConsoleLogWriter());
 				LogWriters.Add(new FileLogWriter());
 
 				foreach (var writer in LogWriters) writer.Write(LogLevel.INFO, $"--- INIT LOGGER {DateTime.Now} ---");
@@ -158,12 +159,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	///     Standard Godot console log-writer
+	/// Standard Godot console log-writer
 	/// </summary>
 	public class GodotConsoleLogWriter : ILogWriter {
 
 		/// <summary>
-		///     Write to Godot console.
+		/// Write to Godot console.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
@@ -177,12 +178,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	///     System console log-writer
+	/// System console log-writer
 	/// </summary>
 	public class SystemConsoleLogWriter : ILogWriter {
 
 		/// <summary>
-		///     Write to system console.
+		/// Write to system console.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
@@ -196,29 +197,34 @@ namespace Renoir {
 
 
 	/// <summary>
-	///     File log write
-	///     Quick and diry
+	/// File log write
+	/// Quick and diry
 	/// </summary>
 	public class FileLogWriter : ILogWriter {
 
+		private bool active = true;
+
 
 		/// <summary>
-		///     Write to logfile
+		/// Write to logfile
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
 		public void Write(Logger.LogLevel level, string message) {
+			if (!active) return;
+
 			try {
-				File.AppendAllText(GetFileName(), message + '\n');
+				File.AppendAllText(GetFileName, message + '\n');
 			} catch (Exception e) {
-				GD.PrintErr($"Unable to write log to file: {GetFileName()}");
+				WriteLine($"Unable to write log to file: {GetFileName}");
+				active = false;
 			}
 		}
 
 
-		private static string GetFileName() {
-			return $"log/renoir_{DateTime.Now.Date.ToString("yy-MM-dd")}.log";
-		}
+		private string GetFileName
+			=> $"log/renoir_{DateTime.Now.Date:yy-MM-dd}.log";
+
 	}
 
 }
