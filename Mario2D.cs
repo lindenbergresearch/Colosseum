@@ -13,32 +13,40 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// Power states
 	/// </summary>
 	public enum PowerStateEnum {
-
 		SMALL,
 		BIG,
 		FIRE
-
 	}
 
 
+	// ----------------------------------------------------------------------------------------- \\
+
 	#region Godot Node Bindings
 
-	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animate;
+	[GNode("AnimatedSprite")]
+	private Godot.AnimatedSprite _animate;
 
-	[GNode("BumpSound")] private AudioStreamPlayer _bumpSound;
+	[GNode("BumpSound")]
+	private AudioStreamPlayer _bumpSound;
 
-	[GNode("Camera2D")] private Camera2D camera;
+	[GNode("Camera2D")]
+	private Camera2D camera;
 
-	[GNode("InfoBox")] private RichTextLabel _info;
+	[GNode("InfoBox")]
+	private RichTextLabel _info;
 
-	[GNode("JumpSound")] private AudioStreamPlayer2D _jumpAudio;
+	[GNode("JumpSound")]
+	private AudioStreamPlayer2D _jumpAudio;
 
-	[GNode("OneLiveUp")] private AudioStreamPlayer _oneLiveUp;
+	[GNode("OneLiveUp")]
+	private AudioStreamPlayer _oneLiveUp;
 
-	[GNode("SkiddingSound")] private AudioStreamPlayer2D _skiddingAudio;
+	[GNode("SkiddingSound")]
+	private AudioStreamPlayer2D _skiddingAudio;
 
 	#endregion
 
+	// ----------------------------------------------------------------------------------------- \\
 
 	#region Global Properties
 
@@ -56,6 +64,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 	#endregion
 
+	// ----------------------------------------------------------------------------------------- \\
 
 	#region Functional State Properties
 
@@ -74,6 +83,8 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	private bool Transforming => _animate.Animation == "Transform" && _animate.Frame == _animate.Frames.GetFrameCount("Transform");
 
 	#endregion
+
+	// ----------------------------------------------------------------------------------------- \\
 
 	#region Parameter and Variables
 

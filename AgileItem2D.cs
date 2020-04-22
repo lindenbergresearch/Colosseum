@@ -84,8 +84,10 @@ public class VerticalMovingItem : Node {
 	private AgileItem2D AgileItem { get; set; }
 	private Motion2D Motion { get; set; } = (0, 0);
 
-	[GNode("../Label")] private Label _label;
-	[GNode("../AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
+	[GNode("../Label")]
+	private Label _label;
+	[GNode("../AudioStreamPlayer")]
+	private AudioStreamPlayer _audioStreamPlayer;
 
 
 	/// <summary>
@@ -133,7 +135,8 @@ public class HorizontalMovingItem : Node {
 	private Motion2D Motion { get; set; } = (0, 0);
 	private Motion2D OldMotion2D { get; set; } = (0, 0);
 
-	[GNode("../Label")] private Label _label;
+	[GNode("../Label")]
+	private Label _label;
 
 
 	/// <summary>
