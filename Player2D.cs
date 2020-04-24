@@ -1,3 +1,4 @@
+using Godot;
 using static Godot.Input;
 
 namespace Renoir {
@@ -35,13 +36,38 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="delta"></param>
-		protected override void PhysicsProcess(float delta) {
+		public override void _PhysicsProcess(float delta) {
 			/* call standard update handler */
 			UpdateMotion(delta);
 			UpdateAnimation(delta);
 			UpdateAudio(delta);
 			UpdateCollisions(delta);
+
+			PhysicsProcess(delta);
 		}
+
+
+		#region Overrides of KinematicEntity2D
+
+		/// <inheritdoc />
+		protected override void Draw() { base.Draw(); }
+
+
+		/// <inheritdoc />
+		protected override void Input(InputEvent @event) { base.Input(@event); }
+
+
+		/// <inheritdoc />
+		protected override void Process(float delta) { base.Process(delta); }
+
+
+		/// <inheritdoc />
+		protected override void Ready() {
+			Logger.debug("readyyyyy");
+			base.Ready();
+		}
+
+		#endregion
 
 
 		/// <summary>

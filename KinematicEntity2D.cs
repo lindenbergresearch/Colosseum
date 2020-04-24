@@ -49,7 +49,7 @@ namespace Renoir {
 		/// <summary>
 		///     <para>Overridable function called by the engine (if defined) to draw the canvas item.</para>
 		/// </summary>
-		public sealed override void _Draw() { Draw(); }
+		public  override void _Draw() { Draw(); }
 
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace Renoir {
 		///     <para>To consume the input event and stop it propagating further to other nodes, <see cref="M:Godot.SceneTree.SetInputAsHandled" /> can be called.</para>
 		///     <para>For gameplay input, <see cref="M:Godot.Node._UnhandledInput(Godot.InputEvent)" /> and <see cref="M:Godot.Node._UnhandledKeyInput(Godot.InputEventKey)" /> are usually a better fit as they allow the GUI to intercept the events first.</para>
 		/// </summary>
-		public sealed override void _Input(InputEvent @event) { Input(@event); }
+		public  override void _Input(InputEvent @event) { Input(@event); }
 
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Renoir {
 		///     <para>It is only called if physics processing is enabled, which is done automatically if this method is overridden, and can be toggled with <see cref="M:Godot.Node.SetPhysicsProcess(System.Boolean)" />.</para>
 		///     <para>Corresponds to the  notification in <see cref="M:Godot.Object._Notification(System.Int32)" />.</para>
 		/// </summary>
-		public sealed override void _PhysicsProcess(float delta) { PhysicsProcess(delta); }
+		public  override void _PhysicsProcess(float delta) { PhysicsProcess(delta); }
 
 
 		/// <summary>
@@ -74,7 +74,7 @@ namespace Renoir {
 		///     <para>It is only called if processing is enabled, which is done automatically if this method is overridden, and can be toggled with <see cref="M:Godot.Node.SetProcess(System.Boolean)" />.</para>
 		///     <para>Corresponds to the  notification in <see cref="M:Godot.Object._Notification(System.Int32)" />.</para>
 		/// </summary>
-		public sealed override void _Process(float delta) { Process(delta); }
+		public  override void _Process(float delta) { Process(delta); }
 
 
 		/// <summary>
