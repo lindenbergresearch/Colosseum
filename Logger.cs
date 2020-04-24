@@ -41,6 +41,17 @@ namespace Renoir {
 
 
 		/// <summary>
+		/// Shorthand flags as functional bool properties
+		/// </summary>
+		public static bool IsTrace => Level == LogLevel.TRACE;
+		public static bool IsDebug => Level == LogLevel.DEBUG;
+		public static bool IsInfo => Level == LogLevel.INFO;
+		public static bool IsWarn => Level == LogLevel.WARN;
+		public static bool IsError => Level == LogLevel.ERROR;
+		public static bool IsFatal => Level == LogLevel.FATAL;
+
+
+		/// <summary>
 		/// Holds all pushed messages.
 		/// </summary>
 		public static List<string> messages = new List<string>(4096);
@@ -90,6 +101,7 @@ namespace Renoir {
 			//TODO: find a better solution to add the standard logger
 			if (LogWriters.Count == 0) {
 				LogWriters.Add(new GodotConsoleLogWriter());
+
 				//LogWriters.Add(new SystemConsoleLogWriter());
 				LogWriters.Add(new FileLogWriter());
 
