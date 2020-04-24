@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using System.Runtime.Serialization;
 
 namespace Renoir {
 
 	/// <summary>
-	///     Property Extensions
+	/// Property Extensions
 	/// </summary>
 	public static class PropertyExtensions {
 
@@ -56,14 +55,14 @@ namespace Renoir {
 
 
 	/// <summary>
-	///     Custom attribute to specify a global property
+	/// Custom attribute to specify a global property
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
 	public class RegisterAttribute : Attribute {
 
 
 		/// <summary>
-		///     Attribute constructor.
+		/// Attribute constructor.
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="format"></param>
@@ -80,7 +79,7 @@ namespace Renoir {
 
 
 	/// <summary>
-	///     Raised if some runtime type conversion fails.
+	/// Raised if some runtime type conversion fails.
 	/// </summary>
 	public class RuntimeTypeException : Exception {
 

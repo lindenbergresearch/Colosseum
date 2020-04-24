@@ -2,7 +2,7 @@ using Godot;
 
 
 /// <summary>
-///     Opening animation and sound
+/// Opening animation and sound
 /// </summary>
 public class Opening : Godot.Node2D {
 
@@ -14,7 +14,7 @@ public class Opening : Godot.Node2D {
 
 
 	/// <summary>
-	///     Pre-delay of opening is setup in Godot Timer properties.
+	/// Pre-delay of opening is setup in Godot Timer properties.
 	/// </summary>
 	public void _on_Timer_timeout() {
 		_animationPlayer.CurrentAnimation = "Zoomer";
@@ -25,7 +25,7 @@ public class Opening : Godot.Node2D {
 
 
 	/// <summary>
-	///     Init
+	/// Init
 	/// </summary>
 	public override void _Ready() {
 		this.SetupNodeBindings();

@@ -5,13 +5,13 @@ using File = System.IO.File;
 
 
 /// <summary>
-///     Base class for serializing data classes
+/// Base class for serializing data classes
 /// </summary>
 public abstract class SerializableDataClass {
 
 
 	/// <summary>
-	///     Standard Constructor
+	/// Standard Constructor
 	/// </summary>
 	protected SerializableDataClass() {
 		Timestamp = DateTime.Now;
@@ -24,18 +24,18 @@ public abstract class SerializableDataClass {
 	public abstract int VERSION_PATCH { get; }
 
 	/// <summary>
-	///     Timestamp of serialization
+	/// Timestamp of serialization
 	/// </summary>
 	public DateTimeOffset Timestamp { get; set; }
 
 	/// <summary>
-	///     Type of serialized class
+	/// Type of serialized class
 	/// </summary>
 	public string Type { get; set; }
 
 
 	/// <summary>
-	///     Returns the version as string
+	/// Returns the version as string
 	/// </summary>
 	/// <returns></returns>
 	public string GetVersionStr() {
@@ -46,13 +46,13 @@ public abstract class SerializableDataClass {
 
 
 /// <summary>
-///     Utility method compilation.
+/// Utility method compilation.
 /// </summary>
 public static class Util {
 
 	/// <summary>
-	///     Returns the value of a class property by name.
-	///     Uses reflection in case of dynamic cast problems.
+	/// Returns the value of a class property by name.
+	/// Uses reflection in case of dynamic cast problems.
 	/// </summary>
 	/// <param name="name">The name of the property.</param>
 	/// <param name="clazz">The class instance where the property is bound to.</param>
@@ -63,8 +63,8 @@ public static class Util {
 
 
 	/// <summary>
-	///     Invokes a method of a class by name and reference.
-	///     Uses reflection in case of dynamic cast problems.
+	/// Invokes a method of a class by name and reference.
+	/// Uses reflection in case of dynamic cast problems.
 	/// </summary>
 	/// <param name="name">The methods name.</param>
 	/// <param name="args">List of args to be passed.</param>
@@ -76,7 +76,7 @@ public static class Util {
 
 
 	/// <summary>
-	///     Shortcut for Vector2 creation.
+	/// Shortcut for Vector2 creation.
 	/// </summary>
 	/// <param name="x">The x value.</param>
 	/// <param name="y">The y value.</param>
@@ -87,7 +87,7 @@ public static class Util {
 
 
 	/// <summary>
-	///     Shortcut for Color RGB(A)
+	/// Shortcut for Color RGB(A)
 	/// </summary>
 	/// <param name="r">Red</param>
 	/// <param name="g">Green</param>
@@ -100,7 +100,7 @@ public static class Util {
 
 
 	/// <summary>
-	///     Serializes an object to a json file.
+	/// Serializes an object to a json file.
 	/// </summary>
 	/// <param name="clazz">The class instance to serialize</param>
 	/// <param name="filename">The target filename (including .json)</param>
@@ -116,7 +116,7 @@ public static class Util {
 
 
 	/// <summary>
-	///     Deserialize an object based on a json file.
+	/// Deserialize an object based on a json file.
 	/// </summary>
 	/// <param name="filename">The filename of the json file</param>
 	/// <typeparam name="T">The target type to be deserialized</typeparam>
@@ -128,8 +128,8 @@ public static class Util {
 
 
 	/// <summary>
-	///     Dump all fields from an object and it's references.
-	///     For debugging issues.
+	/// Dump all fields from an object and it's references.
+	/// For debugging issues.
 	/// </summary>
 	/// <param name="clazz">The object reference to dump</param>
 	/// <param name="prefix">Prefix to the output</param>

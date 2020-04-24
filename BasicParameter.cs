@@ -1,6 +1,5 @@
+using System.IO;
 using Newtonsoft.Json;
-using Renoir;
-
 
 namespace Renoir {
 
@@ -23,7 +22,7 @@ namespace Renoir {
 		/// <param name="fileName">Path to JSON file</param>
 		/// <returns></returns>
 		public static T LoadFromJson<T>(string fileName) where T : BasicParameter {
-			var json = System.IO.File.ReadAllText(fileName);
+			var json = File.ReadAllText(fileName);
 
 			Logger.debug($"Try to load parameters from Json file: '{fileName}'");
 

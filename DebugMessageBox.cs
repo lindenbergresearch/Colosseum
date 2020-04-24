@@ -4,8 +4,8 @@ using static Renoir.Logger;
 
 
 /// <summary>
-///     Simple RichText messagebox for showing debug messages on
-///     game screen.
+/// Simple RichText messagebox for showing debug messages on
+/// game screen.
 /// </summary>
 public class DebugMessageBox : RichTextLabel {
 
@@ -23,7 +23,7 @@ public class DebugMessageBox : RichTextLabel {
 	private bool show;
 
 	/// <summary>
-	///     The redraw interval in ms
+	/// The redraw interval in ms
 	/// </summary>
 	[Export]
 	public int RedrawInterval { get; set; } = 100;

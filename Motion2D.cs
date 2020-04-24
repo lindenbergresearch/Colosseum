@@ -1,15 +1,14 @@
-using System;
 using Godot;
 
 namespace Renoir {
 
 	/// <summary>
-	///     Represents a motion as vector containing additional functions
+	/// Represents a motion as vector containing additional functions
 	/// </summary>
 	public class Motion2D {
 
 		/// <summary>
-		///     Normal vector for standard bottom ground
+		/// Normal vector for standard bottom ground
 		/// </summary>
 		public static readonly Vector2 FLOOR_NORMAL = new Vector2(0, -1);
 
@@ -18,7 +17,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Create a new Motion2D by some Vector2
+		/// Create a new Motion2D by some Vector2
 		/// </summary>
 		/// <param name="velocity"></param>
 		public Motion2D(Vector2 velocity) {
@@ -27,7 +26,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Represents the velocity of the 2D motion as Vector2
+		/// Represents the velocity of the 2D motion as Vector2
 		/// </summary>
 		public Vector2 Velocity {
 			get => velocity;
@@ -35,7 +34,7 @@ namespace Renoir {
 		}
 
 		/// <summary>
-		///     Returns the X part of the velocity vector
+		/// Returns the X part of the velocity vector
 		/// </summary>
 		public float X {
 			get => velocity.x;
@@ -43,7 +42,7 @@ namespace Renoir {
 		}
 
 		/// <summary>
-		///     Returns the Y part of the velocity vector
+		/// Returns the Y part of the velocity vector
 		/// </summary>
 		public float Y {
 			get => velocity.y;
@@ -52,7 +51,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 	Returns the absolute values of both vector components
+		/// Returns the absolute values of both vector components
 		/// </summary>
 		/// <returns></returns>
 		public Motion2D Abs() {
@@ -72,7 +71,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Reset velocity vector
+		/// Reset velocity vector
 		/// </summary>
 		public void Reset() {
 			velocity.x = 0;
@@ -81,7 +80,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 	Return vector information as string
+		/// Return vector information as string
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString() {
@@ -90,7 +89,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Converts a Vector2 -> Motion2D
+		/// Converts a Vector2 -> Motion2D
 		/// </summary>
 		/// <param name="vector2"></param>
 		/// <returns></returns>
@@ -100,7 +99,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Converts a Tuple2 -> Motion2D
+		/// Converts a Tuple2 -> Motion2D
 		/// </summary>
 		/// <param name="tuple"></param>
 		/// <returns></returns>
@@ -110,7 +109,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		///     Converts a Motion2D -> Vector2
+		/// Converts a Motion2D -> Vector2
 		/// </summary>
 		/// <param name="motion2D"></param>
 		/// <returns></returns>

@@ -1,7 +1,7 @@
 namespace Colosseum {
 
 	/// <summary>
-	///     Flag with timeout setting
+	/// Flag with timeout setting
 	/// </summary>
 	internal class TimeOutFlag {
 

@@ -7,7 +7,7 @@ using Renoir;
 public class QuestionBox : StaticBody2D, ICollider {
 
 	/// <summary>
-	///     The question-box hidden content
+	/// The question-box hidden content
 	/// </summary>
 	public enum ContentType {
 		NOTHING,
@@ -20,7 +20,7 @@ public class QuestionBox : StaticBody2D, ICollider {
 
 
 	/// <summary>
-	///     The questionbox's current state
+	/// The questionbox's current state
 	/// </summary>
 	[Export]
 	public bool Active { get; set; } = true;
@@ -38,7 +38,7 @@ public class QuestionBox : StaticBody2D, ICollider {
 
 
 	/// <summary>
-	///     External property
+	/// External property
 	/// </summary>
 	/// <returns></returns>
 	[Export]
@@ -46,7 +46,7 @@ public class QuestionBox : StaticBody2D, ICollider {
 
 
 	/// <summary>
-	/// 	Handle collisions
+	/// Handle collisions
 	/// </summary>
 	public void OnCollide(object sender, KinematicCollision2D collision) {
 		if (!collision.Bottom()) return;
@@ -71,7 +71,6 @@ public class QuestionBox : StaticBody2D, ICollider {
 
 
 	/// <summary>
-	/// 
 	/// </summary>
 	private void SetContent() {
 		switch (Content) {
@@ -92,7 +91,7 @@ public class QuestionBox : StaticBody2D, ICollider {
 
 
 	/// <summary>
-	///     Init...
+	/// Init...
 	/// </summary>
 	public override void _Ready() {
 		this.SetupNodeBindings();

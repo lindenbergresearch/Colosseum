@@ -6,7 +6,7 @@ using File = System.IO.File;
 
 
 /// <summary>
-///     Tool node to edit and preview a bitmap font in realtime.
+/// Tool node to edit and preview a bitmap font in realtime.
 /// </summary>
 [Tool]
 public class BitmapFont2D : Godot.Node2D {
@@ -26,7 +26,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/// <summary>
-	///     Setup standard values
+	/// Setup standard values
 	/// </summary>
 	public BitmapFont2D() {
 		_glyphDimension = Vec(8, 16);
@@ -185,7 +185,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/// <summary>
-	///     Transfer local properties to BitmapFont
+	/// Transfer local properties to BitmapFont
 	/// </summary>
 	private void ConfigureBitmapFont() {
 		BitmapFont.imageTexture = _imageTexture;
@@ -196,7 +196,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/// <summary>
-	///     Simulates a put pixel taking scale into account.
+	/// Simulates a put pixel taking scale into account.
 	/// </summary>
 	/// <param name="pos">The position (in normal coordinates)</param>
 	/// <param name="color">The color</param>
@@ -224,7 +224,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/// <summary>
-	///     Draw bitmap-font to canvas.
+	/// Draw bitmap-font to canvas.
 	/// </summary>
 	public override void _Draw() {
 		if (_imageTexture == null || _imageTexture.GetData() == null || BitmapFont == null || BitmapFont.GetGlyphCount() == 0 || !BitmapFont.IsLoaded)
@@ -244,7 +244,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/// <summary>
-	///     Take properties and try to reload the bitmap-font.
+	/// Take properties and try to reload the bitmap-font.
 	/// </summary>
 	private void Refresh() {
 		trace($"Refresh(): {this}");
@@ -300,7 +300,7 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/// <summary>
-	///     Setup bitmap properties from json data.
+	/// Setup bitmap properties from json data.
 	/// </summary>
 	/// <param name="filename"></param>
 	public void ConfigureFromJSON(string filename) {

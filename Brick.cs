@@ -2,7 +2,7 @@ using Godot;
 
 
 /// <summary>
-///     Simple brick which could be damaged
+/// Simple brick which could be damaged
 /// </summary>
 public class Brick : StaticBody2D, ICollider {
 
@@ -18,7 +18,7 @@ public class Brick : StaticBody2D, ICollider {
 
 
 	/// <summary>
-	///     Handle collision
+	/// Handle collision
 	/// </summary>
 	/// <param name="collision"></param>
 	public void OnCollide(object sender, KinematicCollision2D collision) {
@@ -32,7 +32,7 @@ public class Brick : StaticBody2D, ICollider {
 
 
 	/// <summary>
-	///     Init
+	/// Init
 	/// </summary>
 	public override void _Ready() {
 		this.SetupNodeBindings();

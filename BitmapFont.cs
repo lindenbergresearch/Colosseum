@@ -22,7 +22,7 @@ internal class BitmapFontConfig : SerializableDataClass {
 
 
 	/// <summary>
-	///     POCO for holding 2D vector data
+	/// POCO for holding 2D vector data
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class Vector<T> {
@@ -55,7 +55,7 @@ public class BitmapGlyph {
 
 
 	/// <summary>
-	///     Construct a new bitmap glyph with a given dimension.
+	/// Construct a new bitmap glyph with a given dimension.
 	/// </summary>
 	/// <param name="width"></param>
 	/// <param name="height"></param>
@@ -68,7 +68,7 @@ public class BitmapGlyph {
 
 
 	/// <summary>
-	///     Parses the image data and converts it to a 1-bit data array.
+	/// Parses the image data and converts it to a 1-bit data array.
 	/// </summary>
 	/// <param name="image"></param>
 	/// <param name="offset"></param>
@@ -89,7 +89,7 @@ public class BitmapGlyph {
 
 
 	/// <summary>
-	///     Tests for pixel at the given coordinate
+	/// Tests for pixel at the given coordinate
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -101,7 +101,7 @@ public class BitmapGlyph {
 
 
 /// <summary>
-///     Simple class to load and use plain bitmap files as bitmap font in Godot.
+/// Simple class to load and use plain bitmap files as bitmap font in Godot.
 /// </summary>
 public class BitmapFont {
 
@@ -112,7 +112,7 @@ public class BitmapFont {
 
 
 	/// <summary>
-	///     Set default values on creation
+	/// Set default values on creation
 	/// </summary>
 	public BitmapFont() {
 		Offset = 32;
@@ -125,39 +125,39 @@ public class BitmapFont {
 
 
 	/// <summary>
-	///     The color which indicates the transparent background.
+	/// The color which indicates the transparent background.
 	/// </summary>
 	public Color TransparentColor { get; set; }
 
 	/// <summary>
-	///     The the characters count vertical and horizontal.
-	///     Will be autodetect.
+	/// The the characters count vertical and horizontal.
+	/// Will be autodetect.
 	/// </summary>
 	public Vector2 CharsDimension { get; set; }
 
 	/// <summary>
-	///     The dimension of one character in pixels.
+	/// The dimension of one character in pixels.
 	/// </summary>
 	public Vector2 GlyphDimension { get; set; }
 
 	/// <summary>
-	///     The offset of the character index.
+	/// The offset of the character index.
 	/// </summary>
 	public int Offset { get; set; }
 
 	/// <summary>
-	///     The character count.
+	/// The character count.
 	/// </summary>
 	public int Count { get; set; }
 
 
 	/// <summary>
-	///     The source image
+	/// The source image
 	/// </summary>
 	public Texture imageTexture { get; set; }
 
 	/// <summary>
-	///     Holds all parsed BitmapGlyph instances.
+	/// Holds all parsed BitmapGlyph instances.
 	/// </summary>
 
 
@@ -182,7 +182,7 @@ public class BitmapFont {
 
 
 	/// <summary>
-	///     Detects the correct char dimension based on the glyph dimension
+	/// Detects the correct char dimension based on the glyph dimension
 	/// </summary>
 	public void DetectCharsDimension() {
 		trace($"{this}");
@@ -206,8 +206,8 @@ public class BitmapFont {
 
 
 	/// <summary>
-	///     Detect transparent color while retrieving the color of a specific point.
-	///     The default is (0, 0)
+	/// Detect transparent color while retrieving the color of a specific point.
+	/// The default is (0, 0)
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
@@ -226,7 +226,7 @@ public class BitmapFont {
 
 
 	/// <summary>
-	///     Try to process the given image with the given configuration.
+	/// Try to process the given image with the given configuration.
 	/// </summary>
 	/// <returns>True if the image could be processed to a bitmap-font</returns>
 	private bool ProcessImage() {
@@ -297,7 +297,7 @@ public class BitmapFont {
 
 
 /// <summary>
-///     Bitpmap Font Exception
+/// Bitpmap Font Exception
 /// </summary>
 public class BitmapFontException : Exception {
 

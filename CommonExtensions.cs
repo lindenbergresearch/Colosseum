@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -9,12 +8,12 @@ using File = System.IO.File;
 namespace Renoir {
 
 	/// <summary>
-	///     Extension methods for numeric stuff
+	/// Extension methods for numeric stuff
 	/// </summary>
 	public static class RMath {
 
 		/// <summary>
-		///     Test for number exceeding a special value
+		/// Test for number exceeding a special value
 		/// </summary>
 		/// <param name="this"></param>
 		/// <param name="other"></param>
@@ -25,7 +24,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
@@ -36,7 +34,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
@@ -47,7 +44,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
@@ -58,7 +54,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
@@ -69,7 +64,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
@@ -143,12 +137,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	///     String extensions
+	/// String extensions
 	/// </summary>
 	public static class RString {
 
 		/// <summary>
-		///     Directly write a string to a file
+		/// Directly write a string to a file
 		/// </summary>
 		/// <param name="text">The string</param>
 		/// <param name="filePath">The full path of the target filename</param>
@@ -159,12 +153,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	///     Object extentions
+	/// Object extentions
 	/// </summary>
 	public static class RObject {
 
 		/// <summary>
-		///     Converts the current data of an object to a JSON string
+		/// Converts the current data of an object to a JSON string
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -174,7 +168,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Dump the object's content to string 
+		/// Dump the object's content to string
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -191,7 +185,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 	Return all collider since last movement.
+		/// Return all collider since last movement.
 		/// </summary>
 		/// <returns></returns>
 		public static IEnumerable<KinematicCollision2D> GetCollider(this KinematicBody2D kinematicBody2D) {
@@ -207,7 +201,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 	Collision position check
+		/// Collision position check
 		/// </summary>
 		/// <param name="kinematicCollision2D"></param>
 		/// <returns></returns>

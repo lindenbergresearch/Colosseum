@@ -5,19 +5,19 @@ using static Renoir.Logger;
 
 
 /// <summary>
-///     Custom Attribute to bind a local property to a Godot Node in the scene-graph
+/// Custom Attribute to bind a local property to a Godot Node in the scene-graph
 /// </summary>
 [AttributeUsage(AttributeTargets.Field)]
 public class GNodeAttribute : Attribute {
 
 	/// <summary>
-	///     Standard constructor
+	/// Standard constructor
 	/// </summary>
 	public GNodeAttribute() { }
 
 
 	/// <summary>
-	///     Construct NoteBindingAttribute
+	/// Construct NoteBindingAttribute
 	/// </summary>
 	/// <param name="bindTo">Name (and path) of the target note.</param>
 	public GNodeAttribute(string bindTo) {
@@ -26,14 +26,14 @@ public class GNodeAttribute : Attribute {
 
 
 	/// <summary>
-	///     Name (and path) of the target note)
+	/// Name (and path) of the target note)
 	/// </summary>
 	public string BindTo { get; set; } = "";
 }
 
 
 /// <summary>
-///     Contain helper methods for dynamic node bindings.
+/// Contain helper methods for dynamic node bindings.
 /// </summary>
 public static class DynamicBindings {
 
@@ -42,8 +42,8 @@ public static class DynamicBindings {
 
 
 	/// <summary>
-	///     Extension method to be used with nodes.
-	///     Must use with 'this.' to work: this.AutobindNotes()
+	/// Extension method to be used with nodes.
+	/// Must use with 'this.' to work: this.AutobindNotes()
 	/// </summary>
 	/// <param name="node"></param>
 	public static void SetupNodeBindings(this Node node) {
@@ -52,9 +52,9 @@ public static class DynamicBindings {
 
 
 	/// <summary>
-	///     Setup dynamic bindings for a given node instance.
-	///     Please call this in every '_Ready()' method in Godot nodes
-	///     to use automatic bindings.
+	/// Setup dynamic bindings for a given node instance.
+	/// Please call this in every '_Ready()' method in Godot nodes
+	/// to use automatic bindings.
 	/// </summary>
 	/// <param name="node">The node to setup.</param>
 	/// <exception cref="Exception"></exception>

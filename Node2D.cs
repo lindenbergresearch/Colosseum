@@ -21,7 +21,7 @@ public static class Game {
 
 
 /// <summary>
-/// ROOT node 
+/// ROOT node
 /// </summary>
 public class Node2D : Godot.Node2D {
 
@@ -41,7 +41,7 @@ public class Node2D : Godot.Node2D {
 
 
 	[Export]
-	private string levelName = "Foo";
+	private readonly string levelName = "Foo";
 
 
 	[Register("main.mouse.button")]
@@ -49,7 +49,6 @@ public class Node2D : Godot.Node2D {
 
 
 	/// <summary>
-	/// 
 	/// </summary>
 	public void setupViewport() {
 		debug($"Set viewport to resolution: {Game.VIEWPORT_RESOLUTION} Game has resolution: {Game.WINDOW_RESOLUTION}");
@@ -62,7 +61,6 @@ public class Node2D : Godot.Node2D {
 
 
 	/// <summary>
-	/// 
 	/// </summary>
 	public override void _Ready() {
 		debug($"Loading: {GetType().FullName}");
