@@ -136,7 +136,7 @@ public class HorizontalMovingItem : Node {
 		if (GetParent() is AgileItem2D agileItem2D)
 			AgileItem = agileItem2D;
 
-		_label.Visible = Logger.Level == Logger.LogLevel.TRACE;
+		_label.Visible = Logger.IsTrace;
 		AgileItem.Motion += INITIAL_IMPULSE;
 
 		Logger.debug("Ready.");
