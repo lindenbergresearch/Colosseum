@@ -108,8 +108,7 @@ public class VerticalMovingItem : Node {
 	public override void _PhysicsProcess(float delta) {
 		_label.Text = ((Motion2D) AgileItem.Position).ToString();
 
-		if (AgileItem.Position.y > -16)
-			AgileItem.Motion = AgileItem.MoveAndSlide(AgileItem.Motion, Motion2D.FLOOR_NORMAL);
+		if (AgileItem.Position.y > -16) AgileItem.UpdateMotion();
 		else _audioStreamPlayer.Stop();
 	}
 
