@@ -201,6 +201,30 @@ namespace Renoir {
 
 
 		/// <summary>
+		/// Check if the given animation id is currently playing
+		/// </summary>
+		/// <param name="animatedSprite"></param>
+		/// <param name="animationID"></param>
+		/// <returns></returns>
+		public static bool IsPlaying(this AnimatedSprite animatedSprite, string animationID) {
+			var lastFrame = animatedSprite.Frame == animatedSprite.Frames.GetFrameCount(animationID);
+			var matchAnimation = animatedSprite.Animation == animationID;
+
+			return matchAnimation && !lastFrame;
+		}
+
+
+		/// <summary>
+		/// Shorthand check for current animation id
+		/// </summary>
+		/// <param name="animatedSprite"></param>
+		/// <param name="animationID"></param>
+		/// <returns></returns>
+		public static bool Is(this AnimatedSprite animatedSprite, string animationID)
+			=> animatedSprite.Animation == animationID;
+
+
+		/// <summary>
 		/// Collision position check
 		/// </summary>
 		/// <param name="kinematicCollision2D"></param>
