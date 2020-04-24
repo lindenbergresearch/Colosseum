@@ -95,6 +95,13 @@ namespace Renoir {
 		}
 
 
+		/// <summary>
+		/// Shorthand method to update motion based on current state
+		/// </summary>
+		public void UpdateMotion()
+			=> Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
+
+
 	}
 
 }
