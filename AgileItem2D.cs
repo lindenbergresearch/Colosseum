@@ -156,7 +156,7 @@ public class HorizontalMovingItem : Node {
 		_label.Text = $"Motion={AgileItem.Motion}";
 
 		AgileItem.Motion += delta * GRAVITY;
-		AgileItem.Motion = AgileItem.MoveAndSlide(AgileItem.Motion, Motion2D.FLOOR_NORMAL);
+		AgileItem.UpdateMotion();
 	}
 
 
