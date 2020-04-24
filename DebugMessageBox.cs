@@ -9,10 +9,14 @@ using static Renoir.Logger;
 /// </summary>
 public class DebugMessageBox : RichTextLabel {
 
-	[GNode("../../ColorRectDebug")] private ColorRect _colorRect;
-	[GNode("../../MessageSound")] private AudioStreamPlayer _messageSound;
-	[GNode("../../MessageSound2")] private AudioStreamPlayer _messageSound2;
-	[GNode("../../TextTimer")] private Timer _timer;
+	[GNode("../../ColorRectDebug")]
+	private ColorRect _colorRect;
+	[GNode("../../MessageSound")]
+	private AudioStreamPlayer _messageSound;
+	[GNode("../../MessageSound2")]
+	private AudioStreamPlayer _messageSound2;
+	[GNode("../../TextTimer")]
+	private Timer _timer;
 
 	private float current = -1;
 	private int i;
@@ -78,7 +82,7 @@ public class DebugMessageBox : RichTextLabel {
 
 			if (show) _messageSound2.Play();
 
-				Visible = show;
+			Visible = show;
 			_colorRect.Visible = show;
 		}
 

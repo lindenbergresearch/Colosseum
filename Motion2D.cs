@@ -79,6 +79,7 @@ namespace Renoir {
 			velocity.y = 0;
 		}
 
+
 		/// <summary>
 		/// 	Return vector information as string
 		/// </summary>

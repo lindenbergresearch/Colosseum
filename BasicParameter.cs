@@ -12,8 +12,9 @@ namespace Renoir {
 		/// Serialize to JSOn file
 		/// </summary>
 		/// <param name="fileName"></param>
-		public void SaveJson(string fileName)
-			=> this.ToJson().ToTextFile(fileName);
+		public void SaveJson(string fileName) {
+			this.ToJson().ToTextFile(fileName);
+		}
 
 
 		/// <summary>

@@ -64,10 +64,8 @@ public class BitmapFont2D : Godot.Node2D {
 			if (_imageTexture != null && _imageTexture.ResourcePath.Length > 3) {
 				// test of there is a file equal to the image file ending with json
 				var jsonFile = _imageTexture.ResourcePath.Substring(6) + ".json";
-				if (File.Exists(jsonFile)) {
-					//GD.Print($"Found a corresponding json config file for this bitmap-font: {jsonFile}. Try to load it...");
+				if (File.Exists(jsonFile)) //GD.Print($"Found a corresponding json config file for this bitmap-font: {jsonFile}. Try to load it...");
 					ConfigureFromJSON(jsonFile);
-				}
 			}
 
 			ConfigureBitmapFont();
@@ -218,9 +216,9 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 			for (var y = 0; y < GlyphDimension.y; y++)
-			for (var x = 0; x < GlyphDimension.x; x++)
-				if (glyph.PixelAt(x, y))
-					PutPixel(Vec(x + c * GlyphDimension.x, y) + pos, color);
+				for (var x = 0; x < GlyphDimension.x; x++)
+					if (glyph.PixelAt(x, y))
+						PutPixel(Vec(x + c * GlyphDimension.x, y) + pos, color);
 		}
 	}
 
@@ -328,12 +326,12 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	public override string ToString() {
-		return $"GlyphDimension={GlyphDimension} Scale={Scale} Offset={Offset} LineHeight={LineHeight} HasShadow={HasShadow} ShadowOffset={ShadowOffset} CharDimensions={CharsDimension}";
+		return
+			$"GlyphDimension={GlyphDimension} Scale={Scale} Offset={Offset} LineHeight={LineHeight} HasShadow={HasShadow} ShadowOffset={ShadowOffset} CharDimensions={CharsDimension}";
 	}
 
 
 	/// <summary>
 	/// </summary>
-	public override void _Ready() {
-	}
+	public override void _Ready() { }
 }

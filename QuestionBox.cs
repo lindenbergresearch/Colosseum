@@ -25,11 +25,16 @@ public class QuestionBox : StaticBody2D, ICollider {
 	[Export]
 	public bool Active { get; set; } = true;
 
-	[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
-	[GNode("AnimationPlayer")] private AnimationPlayer _animationPlayer;
-	[GNode("BumpSound")] private AudioStreamPlayer _audioStreamPlayer;
-	[GNode("AgileItem2D")] private AgileItem2D _agileItem2D;
-	[GNode("AgileItem2D/AnimatedSprite")] private Godot.AnimatedSprite _animatedSpriteItem;
+	[GNode("AnimatedSprite")]
+	private Godot.AnimatedSprite _animatedSprite;
+	[GNode("AnimationPlayer")]
+	private AnimationPlayer _animationPlayer;
+	[GNode("BumpSound")]
+	private AudioStreamPlayer _audioStreamPlayer;
+	[GNode("AgileItem2D")]
+	private AgileItem2D _agileItem2D;
+	[GNode("AgileItem2D/AnimatedSprite")]
+	private Godot.AnimatedSprite _animatedSpriteItem;
 
 
 	/// <summary>
@@ -103,8 +108,9 @@ public class QuestionBox : StaticBody2D, ICollider {
 	/// <summary>
 	/// </summary>
 	/// <returns></returns>
-	public override string ToString()
-		=> $"QuestionBox({Content})";
+	public override string ToString() {
+		return $"QuestionBox({Content})";
+	}
 
 
 }

@@ -46,8 +46,7 @@ namespace Renoir {
 
 								PropertyPool.Register(sa.Alias, property);
 								propertyInfo.SetValue(obj, PropertyPool.Get(sa.Alias));
-							}
-							catch (Exception e) {
+							} catch (Exception e) {
 								throw new RuntimeTypeException($"Unable to create property '{propertyInfo.Name}' : {e.Message}");
 							}
 						}
@@ -85,8 +84,7 @@ namespace Renoir {
 	/// </summary>
 	public class RuntimeTypeException : Exception {
 
-		public RuntimeTypeException(string message) : base(message) {
-		}
+		public RuntimeTypeException(string message) : base(message) { }
 
 	}
 

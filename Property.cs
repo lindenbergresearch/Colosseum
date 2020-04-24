@@ -141,9 +141,9 @@ namespace Renoir {
 		public static void AddSubscription(string alias, IPropertyChangeHandler subscriber) {
 			subscriptions.Add(alias, subscriber);
 			/* update property event handler */
-			foreach (var o in pool) {
-				if (o.Value is BaseProperty bp) bp.UpdateSubscriber();
-			}
+			foreach (var o in pool)
+				if (o.Value is BaseProperty bp)
+					bp.UpdateSubscriber();
 		}
 
 	}
@@ -214,8 +214,7 @@ namespace Renoir {
 		/// <summary>
 		///     Basic parameterless constructor
 		/// </summary>
-		public Property() {
-		}
+		public Property() { }
 
 
 		/// <summary>
@@ -247,7 +246,7 @@ namespace Renoir {
 		public T Value {
 			get => _value;
 			set {
-				if (value == null || (_value != null && _value.Equals(value))) return;
+				if (value == null || _value != null && _value.Equals(value)) return;
 
 				// ExecuteTrigger(newVal);
 				// ExecuteTransformTrigger(newVal);
@@ -261,9 +260,7 @@ namespace Renoir {
 		/// 	Check for new subscriber
 		/// </summary>
 		public override void UpdateSubscriber() {
-			foreach (var _propertyChangeListener in PropertyPool.MatchSubscriptions(Alias)) {
-				Subscribe(_propertyChangeListener);
-			}
+			foreach (var _propertyChangeListener in PropertyPool.MatchSubscriptions(Alias)) Subscribe(_propertyChangeListener);
 		}
 
 
@@ -336,8 +333,9 @@ namespace Renoir {
 		///     Event handler. Propagate event to all subscriber.
 		/// </summary>
 		/// <param name="e"></param>
-		protected virtual void OnPropertyChange(PropertyEventArgs<T> e)
-			=> RaiseChangeEvent?.Invoke(this, e);
+		protected virtual void OnPropertyChange(PropertyEventArgs<T> e) {
+			RaiseChangeEvent?.Invoke(this, e);
+		}
 
 
 		/// <summary>

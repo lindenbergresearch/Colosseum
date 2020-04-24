@@ -28,8 +28,6 @@ namespace Colosseum {
 	}
 
 
-	public class PlayerUtil {
-
-	}
+	public class PlayerUtil { }
 
 }

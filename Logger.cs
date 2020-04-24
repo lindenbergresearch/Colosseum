@@ -191,7 +191,7 @@ namespace Renoir {
 			if (level == Logger.LogLevel.ERROR || level == Logger.LogLevel.FATAL)
 				Console.Error.WriteLine(message);
 			else
-				Console.Out.WriteLine(message);
+				Out.WriteLine(message);
 		}
 	}
 

@@ -19,8 +19,9 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public static bool Exceeds<T>(this T @this, T other) where T : IComparable<T>
-			=> @this.CompareTo(other) > 0;
+		public static bool Exceeds<T>(this T @this, T other) where T : IComparable<T> {
+			return @this.CompareTo(other) > 0;
+		}
 
 
 		/// <summary>
@@ -29,8 +30,9 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static short Abs(this short @this)
-			=> Math.Abs(@this);
+		public static short Abs(this short @this) {
+			return Math.Abs(@this);
+		}
 
 
 		/// <summary>
@@ -39,8 +41,9 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static int Abs(this int @this)
-			=> Math.Abs(@this);
+		public static int Abs(this int @this) {
+			return Math.Abs(@this);
+		}
 
 
 		/// <summary>
@@ -49,8 +52,9 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static long Abs(this long @this)
-			=> Math.Abs(@this);
+		public static long Abs(this long @this) {
+			return Math.Abs(@this);
+		}
 
 
 		/// <summary>
@@ -59,8 +63,9 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static float Abs(this float @this)
-			=> Math.Abs(@this);
+		public static float Abs(this float @this) {
+			return Math.Abs(@this);
+		}
 
 
 		/// <summary>
@@ -69,8 +74,9 @@ namespace Renoir {
 		/// <param name="this"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static double Abs(this double @this)
-			=> Math.Abs(@this);
+		public static double Abs(this double @this) {
+			return Math.Abs(@this);
+		}
 
 
 		/// <summary>
@@ -81,12 +87,14 @@ namespace Renoir {
 		/// <param name="end">End value</param>
 		/// <param name="boundary">Include start and end value in test</param>
 		/// <returns></returns>
-		public static bool InsideRange(this float @this, float start, float end, bool boundary = true)
-			=> boundary ? (@this >= start && @this <= end) : (@this > start && @this < end);
+		public static bool InsideRange(this float @this, float start, float end, bool boundary = true) {
+			return boundary ? @this >= start && @this <= end : @this > start && @this < end;
+		}
 
 
-		public static bool InsideRange(this double @this, double start, double end, bool boundary = true)
-			=> boundary ? (@this >= start && @this <= end) : (@this > start && @this < end);
+		public static bool InsideRange(this double @this, double start, double end, bool boundary = true) {
+			return boundary ? @this >= start && @this <= end : @this > start && @this < end;
+		}
 
 
 		/// <summary>
@@ -97,8 +105,9 @@ namespace Renoir {
 		/// <param name="boundary">Include boundary values</param>
 		/// <param name="origin">Origin value</param>
 		/// <returns></returns>
-		public static bool InsideRange(this float @this, float epsilon, bool boundary = true, float origin = 0.0f)
-			=> @this.InsideRange(-(epsilon + origin), epsilon + origin, boundary);
+		public static bool InsideRange(this float @this, float epsilon, bool boundary = true, float origin = 0.0f) {
+			return @this.InsideRange(-(epsilon + origin), epsilon + origin, boundary);
+		}
 
 
 		/// <summary>
@@ -106,12 +115,14 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="x"></param>
 		/// <returns></returns>
-		public static int Round(this float x)
-			=> Mathf.RoundToInt(x);
+		public static int Round(this float x) {
+			return Mathf.RoundToInt(x);
+		}
 
 
-		public static int Round(this double x)
-			=> Mathf.RoundToInt((float) x);
+		public static int Round(this double x) {
+			return Mathf.RoundToInt((float) x);
+		}
 
 
 		/// <summary>
@@ -167,8 +178,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static string Dump(this object obj)
-			=> Util.Dump(obj);
+		public static string Dump(this object obj) {
+			return Util.Dump(obj);
+		}
 	}
 
 
@@ -199,20 +211,24 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="kinematicCollision2D"></param>
 		/// <returns></returns>
-		public static bool Bottom(this KinematicCollision2D kinematicCollision2D)
-			=> kinematicCollision2D.Normal.y.Round() == 1;
+		public static bool Bottom(this KinematicCollision2D kinematicCollision2D) {
+			return kinematicCollision2D.Normal.y.Round() == 1;
+		}
 
 
-		public static bool Top(this KinematicCollision2D kinematicCollision2D)
-			=> kinematicCollision2D.Normal.y.Round() == -1;
+		public static bool Top(this KinematicCollision2D kinematicCollision2D) {
+			return kinematicCollision2D.Normal.y.Round() == -1;
+		}
 
 
-		public static bool Left(this KinematicCollision2D kinematicCollision2D)
-			=> kinematicCollision2D.Normal.x.Round() == -1;
+		public static bool Left(this KinematicCollision2D kinematicCollision2D) {
+			return kinematicCollision2D.Normal.x.Round() == -1;
+		}
 
 
-		public static bool Right(this KinematicCollision2D kinematicCollision2D)
-			=> kinematicCollision2D.Normal.x.Round() == 1;
+		public static bool Right(this KinematicCollision2D kinematicCollision2D) {
+			return kinematicCollision2D.Normal.x.Round() == 1;
+		}
 	}
 
 
@@ -228,19 +244,21 @@ namespace Renoir {
 		/// <param name="sep"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static string MkString<T>(this IEnumerable<T> list, string sep = ", ") where T : IComparable<T>
-			=> list.Aggregate("", (current, elem)
+		public static string MkString<T>(this IEnumerable<T> list, string sep = ", ") where T : IComparable<T> {
+			return list.Aggregate("", (current, elem)
 				=> current + (elem + (elem.Equals(list.Last()) ? "" : sep)));
+		}
 
-		
+
 		/// <summary>
 		/// Test of collewction is empty
 		/// </summary>
 		/// <param name="list"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static bool Empty<T>(this IEnumerable<T> list)
-			=> list.Count() > 0;
+		public static bool Empty<T>(this IEnumerable<T> list) {
+			return list.Count() > 0;
+		}
 
 	}
 

@@ -156,12 +156,12 @@ public static class Util {
 			dynamic value = null;
 			try {
 				value = propertyInfo.GetValue(clazz);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				value = "?";
 			}
 
-			if (!type.IsPrimitive && !type.IsValueType && type != typeof(string) && type != typeof(decimal)) info += name + "=" + Dump(value, "*" + prefix) + " ";
+			if (!type.IsPrimitive && !type.IsValueType && type != typeof(string) && type != typeof(decimal))
+				info += name + "=" + Dump(value, "*" + prefix) + " ";
 
 			info += $"{name}={type.Name}({value}) ";
 		}

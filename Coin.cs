@@ -21,9 +21,11 @@ namespace Renoir {
 	/// </summary>
 	public class Coin : Area2D {
 
-		[GNode("AnimatedSprite")] private Godot.AnimatedSprite _animatedSprite;
+		[GNode("AnimatedSprite")]
+		private Godot.AnimatedSprite _animatedSprite;
 
-		[GNode("AudioStreamPlayer")] private AudioStreamPlayer _audioStreamPlayer;
+		[GNode("AudioStreamPlayer")]
+		private AudioStreamPlayer _audioStreamPlayer;
 
 
 		public bool Picked { get; set; }

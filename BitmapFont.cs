@@ -28,8 +28,7 @@ internal class BitmapFontConfig : SerializableDataClass {
 	public class Vector<T> {
 
 
-		public Vector() {
-		}
+		public Vector() { }
 
 
 		public Vector(T x, T y) {
@@ -78,12 +77,12 @@ public class BitmapGlyph {
 		image.Lock();
 
 		for (var j = 0; j < height; j++)
-		for (var i = 0; i < width; i++) {
-			var pixel = image.GetPixel((int) offset.x + i, (int) offset.y + j);
+			for (var i = 0; i < width; i++) {
+				var pixel = image.GetPixel((int) offset.x + i, (int) offset.y + j);
 
-			if (pixel == transparent) data[i, j] = 0;
-			else data[i, j] = 1;
-		}
+				if (pixel == transparent) data[i, j] = 0;
+				else data[i, j] = 1;
+			}
 
 		image.Unlock();
 	}
@@ -248,16 +247,16 @@ public class BitmapFont {
 		_glyphs = new BitmapGlyph[(int) CharsDimension.x * (int) CharsDimension.y];
 
 		for (var y = 0; y < CharsDimension.y; y++)
-		for (var x = 0; x < CharsDimension.x; x++) {
-			var glyph = new BitmapGlyph((int) GlyphDimension.x, (int) GlyphDimension.y);
-			glyph.Parse(image, Vec(x * GlyphDimension.x, y * GlyphDimension.y), transparentColor);
+			for (var x = 0; x < CharsDimension.x; x++) {
+				var glyph = new BitmapGlyph((int) GlyphDimension.x, (int) GlyphDimension.y);
+				glyph.Parse(image, Vec(x * GlyphDimension.x, y * GlyphDimension.y), transparentColor);
 
-			if (cindex < _glyphs.Length)
-				_glyphs[cindex] = glyph;
-			else GD.PrintErr($"Impossible: {CharsDimension} index: {cindex}");
+				if (cindex < _glyphs.Length)
+					_glyphs[cindex] = glyph;
+				else GD.PrintErr($"Impossible: {CharsDimension} index: {cindex}");
 
-			cindex++;
-		}
+				cindex++;
+			}
 
 		return true;
 	}
@@ -291,7 +290,8 @@ public class BitmapFont {
 	/// </summary>
 	/// <returns></returns>
 	public override string ToString() {
-		return $"{GetType().Name}: GlyphDimention={GlyphDimension} CharsDimension={CharsDimension} Offset={Offset} Count={Count} Texture={imageTexture.ResourceName}";
+		return
+			$"{GetType().Name}: GlyphDimention={GlyphDimension} CharsDimension={CharsDimension} Offset={Offset} Count={Count} Texture={imageTexture.ResourceName}";
 	}
 }
 
@@ -301,14 +301,11 @@ public class BitmapFont {
 /// </summary>
 public class BitmapFontException : Exception {
 
-	public BitmapFontException() {
-	}
+	public BitmapFontException() { }
 
 
-	public BitmapFontException(string message) : base(message) {
-	}
+	public BitmapFontException(string message) : base(message) { }
 
 
-	public BitmapFontException(string message, Exception innerException) : base(message, innerException) {
-	}
+	public BitmapFontException(string message, Exception innerException) : base(message, innerException) { }
 }
