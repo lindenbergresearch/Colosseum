@@ -89,9 +89,8 @@ namespace Renoir {
 
 			//TODO: find a better solution to add the standard logger
 			if (LogWriters.Count == 0) {
-				//LogWriters.Add(new GodotConsoleLogWriter());
-
-				LogWriters.Add(new SystemConsoleLogWriter());
+				LogWriters.Add(new GodotConsoleLogWriter());
+				//LogWriters.Add(new SystemConsoleLogWriter());
 				LogWriters.Add(new FileLogWriter());
 
 				foreach (var writer in LogWriters) writer.Write(LogLevel.INFO, $"--- INIT LOGGER {DateTime.Now} ---");
