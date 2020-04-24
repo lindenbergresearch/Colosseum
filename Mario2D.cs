@@ -1,11 +1,10 @@
-using System;
 using Godot;
 using Renoir;
 using static Renoir.Logger;
 
 
 /// <summary>
-///     Main Player character
+/// Main Player character
 /// </summary>
 public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandler {
 
@@ -99,7 +98,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	/// <summary>
-	///     Handle coins
+	/// Handle coins
 	/// </summary>
 	/// <param name="coin"></param>
 	/// <returns></returns>
@@ -119,7 +118,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	/// <summary>
-	///     Set players lives
+	/// Set players lives
 	/// </summary>
 	/// <param name="delta">The lives to add (neg. values will shrink lives)</param>
 	public void SetLives(int delta = 1) {
@@ -130,7 +129,6 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	/// <summary>
-	/// 
 	/// </summary>
 	/// <param name="item"></param>
 	public void OnConsume(object item) {
@@ -139,11 +137,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	/// <summary>
-	///     Check collisions and pass event to all collider
+	/// Check collisions and pass event to all collider
 	/// </summary>
 	protected override void UpdateCollisions(float delta) {
-		foreach (var collision2D in this.GetCollider()) {
-			/* match collider type **/
+		foreach (var collision2D in this.GetCollider()) /* match collider type **/
 			switch (collision2D.Collider) {
 				case TileMap _ when collision2D.Bottom():
 					_bumpSound.Play();
@@ -154,15 +151,14 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 					collider.OnCollide(this, collision2D);
 					break;
 			}
-		}
 	}
 
 
 	/// <summary>
-	///     Apply x motions to the player
+	/// Apply x motions to the player
 	/// </summary>
 	/// <param name="delta"></param>
-	override protected void UpdateMotion(float delta) {
+	protected override void UpdateMotion(float delta) {
 		Motion += delta * player.Gravity;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
@@ -205,16 +201,14 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 			Motion.X = v;
 		}
 
-		if (AboutToJump) {
-			Motion.Y = -(player.JumpSpeed + Motion.X.Abs() * player.JumpPushFactor);
-		}
+		if (AboutToJump) Motion.Y = -(player.JumpSpeed + Motion.X.Abs() * player.JumpPushFactor);
 	}
 
 
 	/// <summary>
 	/// Update player animations
 	/// </summary>
-	override protected void UpdateAnimation(float delta) {
+	protected override void UpdateAnimation(float delta) {
 		/* set animation depending on the current state */
 		if (Idle) _animate.Animation = "Idle";
 		if (Walking) _animate.Animation = "Walk";
@@ -234,7 +228,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// <summary>
 	/// Update sound fx
 	/// </summary>
-	override protected void UpdateAudio(float delta) {
+	protected override void UpdateAudio(float delta) {
 		if (Skidding && !_skiddingAudio.Playing && Motion.X > player.MaxWalkingSpeed * 0.8) _skiddingAudio.Play();
 		if (AboutToJump) _jumpAudio.Play();
 	}
@@ -257,8 +251,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 		if (GlobalPosition.y >= (int) Game.VIEWPORT_RESOLUTION.y) {
 			CameraTime = 0;
 			camera.LimitBottom = 1000000;
-		}
-		else {
+		} else {
 			if (CameraTime >= 2 && camera.LimitBottom != (int) Game.VIEWPORT_RESOLUTION.y) {
 				if (camera.LimitBottom == 1000000) camera.LimitBottom = (int) (GlobalPosition.y * 2.0f);
 
@@ -269,10 +262,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	/// <summary>
-	///     Update Player
+	/// Update Player
 	/// </summary>
 	/// <param name="delta"></param>
-	override protected void PhysicsProcess(float delta) {
+	protected override void PhysicsProcess(float delta) {
 		if (ActionKey.Select) Debug = !Debug;
 
 		//updateCamera(delta);
@@ -285,7 +278,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	/// <summary>
-	///     Resets all player properties to initial values
+	/// Resets all player properties to initial values
 	/// </summary>
 	public void ResetPlayer() {
 		debug("Reset player...");
@@ -295,9 +288,9 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	/// <summary>
-	///     Init method
+	/// Init method
 	/// </summary>
-	override public void Ready() {
+	protected override void Ready() {
 		debug("Initialize Player");
 
 		ResetPlayer();
@@ -313,18 +306,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	}
 
 
-	override protected void Draw() { }
-
-
-	override protected void Process(float delta) { }
-
-
 	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
 		debug($"D: {Node2D.MouseButton} from: {sender} args: {args}");
 
-		if (Node2D.MouseButton.Value != null && Node2D.MouseButton.Value.Pressed) {
-			camera.Offset = Node2D.MouseButton.Value.Position;
-		}
+		if (Node2D.MouseButton.Value != null && Node2D.MouseButton.Value.Pressed) camera.Offset = Node2D.MouseButton.Value.Position;
 	}
 
 

@@ -73,6 +73,7 @@
     <Compile Include="DynamicBindings.cs" />
     <Compile Include="ICollider.cs" />
     <Compile Include="IConsumer.cs" />
+    <Compile Include="KinematicEntity2D.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Main.cs" />

@@ -15,6 +15,8 @@ public static class Game {
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;
 
+	[Register("main.game.active")]
+	public static Property<bool> Active { get; set; }
 }
 
 
