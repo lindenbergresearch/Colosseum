@@ -47,29 +47,6 @@ namespace Renoir {
 		}
 
 
-		#region Overrides of KinematicEntity2D
-
-		/// <inheritdoc />
-		protected override void Draw() { base.Draw(); }
-
-
-		/// <inheritdoc />
-		protected override void Input(InputEvent @event) { base.Input(@event); }
-
-
-		/// <inheritdoc />
-		protected override void Process(float delta) { base.Process(delta); }
-
-
-		/// <inheritdoc />
-		protected override void Ready() {
-			Logger.debug("readyyyyy");
-			base.Ready();
-		}
-
-		#endregion
-
-
 		/// <summary>
 		/// Map action keys
 		/// </summary>
