@@ -9,13 +9,12 @@ namespace Renoir {
 	public static class PropertyExtensions {
 
 		/// <summary>
+		/// Search custom attributed property and process it. 
 		/// </summary>
+		/// <param name="type"></param>
 		/// <param name="obj"></param>
-		public static void SetupGlobalProperties(this object obj) {
-			var type = obj.GetType();
-
-			Logger.trace($"Setup global properties for type: {type.Name}");
-
+		/// <exception cref="RuntimeTypeException"></exception>
+		private static void FindAndRegister(Type type, object obj = null) {
 			foreach (var propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy))
 				if (propertyInfo.PropertyType.Name.StartsWith("Property"))
 					foreach (var customAttribute in propertyInfo.GetCustomAttributes())
@@ -50,6 +49,30 @@ namespace Renoir {
 							}
 						}
 		}
+
+
+		/// <summary>
+		/// Search for global properties marked via custom attribute and create + register them
+		/// in the property pool. 
+		/// </summary>
+		/// <param name="obj"></param>
+		public static void SetupGlobalProperties(this object obj) {
+			Logger.trace($"Setup global properties for type: {obj.GetType().Name}");
+			FindAndRegister(obj.GetType(), obj);
+		}
+
+
+		/// <summary>
+		/// Search for global properties marked via custom attribute and create + register them
+		/// in the property pool.
+		/// Used by static classes only.
+		/// </summary>
+		/// <param name="type"></param>
+		public static void SetupGlobalProperties(Type type) {
+			Logger.trace($"Setup global properties for static type: {type.Name}");
+			FindAndRegister(type);
+		}
+
 
 	}
 
