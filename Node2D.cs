@@ -41,7 +41,7 @@ public class Node2D : Godot.Node2D {
 
 
 	[Export]
-	private readonly string levelName = "Foo";
+	private readonly string levelName;
 
 
 	[Register("main.mouse.button")]
