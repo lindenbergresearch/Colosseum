@@ -159,7 +159,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// </summary>
 	/// <param name="delta"></param>
 	protected override void UpdateMotion(float delta) {
-		Motion += delta * player.Gravity;
+		Motion += delta * Renoir.Level.Gravity;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
 		/* if x velocity is small enough round it to zero to avoid small drifting */
@@ -317,10 +317,6 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// Common player parameter for kinematic handling
 	/// </summary>
 	public class PlayerParameter : BasicParameter {
-
-		//TODO: should be moved to some subclass of level ...
-		public Vector2 Gravity = new Vector2(0, 1200);
-
 		//public   float MAX_JUMP_HEIGHT = 70.0f;
 		public float JumpSpeed { get; set; }
 		public float JumpPushFactor { get; set; }
