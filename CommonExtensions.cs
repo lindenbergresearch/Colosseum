@@ -26,7 +26,6 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="this"></param>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static short Abs(this short @this) {
 			return Math.Abs(@this);
@@ -36,7 +35,6 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="this"></param>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static int Abs(this int @this) {
 			return Math.Abs(@this);
@@ -46,7 +44,6 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="this"></param>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static long Abs(this long @this) {
 			return Math.Abs(@this);
@@ -56,7 +53,6 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="this"></param>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static float Abs(this float @this) {
 			return Math.Abs(@this);
@@ -66,7 +62,6 @@ namespace Renoir {
 		/// <summary>
 		/// </summary>
 		/// <param name="this"></param>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		public static double Abs(this double @this) {
 			return Math.Abs(@this);
