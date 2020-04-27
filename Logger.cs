@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Godot;
 using static System.Console;
+using static Renoir.Logger.LogLevel;
 using File = System.IO.File;
 
 namespace Renoir {
@@ -43,12 +44,12 @@ namespace Renoir {
 		/// <summary>
 		/// Shorthand flags as functional bool properties
 		/// </summary>
-		public static bool IsTrace => Level == LogLevel.TRACE;
-		public static bool IsDebug => Level == LogLevel.DEBUG;
-		public static bool IsInfo => Level == LogLevel.INFO;
-		public static bool IsWarn => Level == LogLevel.WARN;
-		public static bool IsError => Level == LogLevel.ERROR;
-		public static bool IsFatal => Level == LogLevel.FATAL;
+		public static bool IsTrace => Level == TRACE;
+		public static bool IsDebug => Level == DEBUG;
+		public static bool IsInfo => Level == INFO;
+		public static bool IsWarn => Level == WARN;
+		public static bool IsError => Level == ERROR;
+		public static bool IsFatal => Level == FATAL;
 
 
 		/// <summary>
@@ -65,7 +66,7 @@ namespace Renoir {
 		/// <summary>
 		/// Current loglevel
 		/// </summary>
-		public static LogLevel Level { get; set; } = LogLevel.DEBUG;
+		public static LogLevel Level { get; set; } = DEBUG;
 
 		/// <summary>
 		/// Holds all output writers
@@ -105,7 +106,7 @@ namespace Renoir {
 				//LogWriters.Add(new SystemConsoleLogWriter());
 				LogWriters.Add(new FileLogWriter());
 
-				foreach (var writer in LogWriters) writer.Write(LogLevel.INFO, $"--- INIT LOGGER {DateTime.Now} ---");
+				foreach (var writer in LogWriters) writer.Write(INFO, $"--- INIT LOGGER {DateTime.Now} ---");
 			}
 
 			foreach (var writer in LogWriters) writer.Write(level, m);
@@ -118,8 +119,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void trace(string message) {
-			if (Level > LogLevel.TRACE) return;
-			log(LogLevel.TRACE, message);
+			if (Level > TRACE) return;
+			log(TRACE, message);
 		}
 
 
@@ -127,8 +128,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void debug(string message) {
-			if (Level > LogLevel.DEBUG) return;
-			log(LogLevel.DEBUG, message);
+			if (Level > DEBUG) return;
+			log(DEBUG, message);
 		}
 
 
@@ -136,8 +137,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void info(string message) {
-			if (Level > LogLevel.INFO) return;
-			log(LogLevel.INFO, message);
+			if (Level > INFO) return;
+			log(INFO, message);
 		}
 
 
@@ -145,8 +146,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void warn(string message) {
-			if (Level > LogLevel.WARN) return;
-			log(LogLevel.WARN, message);
+			if (Level > WARN) return;
+			log(WARN, message);
 		}
 
 
@@ -154,8 +155,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void error(string message) {
-			if (Level > LogLevel.ERROR) return;
-			log(LogLevel.ERROR, message);
+			if (Level > ERROR) return;
+			log(ERROR, message);
 		}
 
 
@@ -163,8 +164,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void fatal(string message) {
-			if (Level > LogLevel.FATAL) return;
-			log(LogLevel.FATAL, message);
+			if (Level > FATAL) return;
+			log(FATAL, message);
 		}
 	}
 
@@ -180,7 +181,7 @@ namespace Renoir {
 		/// <param name="level"></param>
 		/// <param name="message"></param>
 		public void Write(Logger.LogLevel level, string message) {
-			if (level == Logger.LogLevel.ERROR || level == Logger.LogLevel.FATAL)
+			if (level == ERROR || level == FATAL)
 				GD.PrintErr(message);
 			else
 				GD.Print(message);
@@ -199,7 +200,7 @@ namespace Renoir {
 		/// <param name="level"></param>
 		/// <param name="message"></param>
 		public void Write(Logger.LogLevel level, string message) {
-			if (level == Logger.LogLevel.ERROR || level == Logger.LogLevel.FATAL)
+			if (level == ERROR || level == FATAL)
 				Console.Error.WriteLine(message);
 			else
 				Out.WriteLine(message);
