@@ -402,31 +402,8 @@ namespace Renoir {
 
 
 		/*===== IMPLICIT CONVERSATIONS =================================================================================*/
-		public static implicit operator int(Property<T> p) {
-			if (p.Value is int i) return i;
-
-			return 0;
-		}
-
-
-		public static implicit operator long(Property<T> p) {
-			if (p.Value is long l) return l;
-
-			return 0;
-		}
-
-
-		public static implicit operator float(Property<T> p) {
-			if (p.Value is float f) return f;
-
-			return 0;
-		}
-
-
-		public static implicit operator double(Property<T> p) {
-			if (p.Value is double d) return d;
-
-			return 0;
+		public static explicit operator T(Property<T> p) {
+			return p._value;
 		}
 
 
@@ -543,8 +520,6 @@ namespace Renoir {
 
 			return p;
 		}
-
-
 		/*===== OPERATOR CONVERSATIONS =================================================================================*/
 
 	}
