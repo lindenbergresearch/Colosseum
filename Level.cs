@@ -25,6 +25,12 @@ namespace Renoir {
 		[Register("Main.Level.Gravity")]
 		public static Property<Vector2> Gravity { get; set; }
 
+		/// <summary>
+		/// Current time
+		/// </summary>
+		[Register("main.level.time", "{0:D3}")]
+		public static Property<int> LevelTime { get; set; }
+
 
 		/// <summary>
 		/// Static Init / setup global properties via ca's
@@ -32,6 +38,7 @@ namespace Renoir {
 		static Level() {
 			SetupGlobalProperties(Type);
 		}
+
 
 	}
 
