@@ -72,8 +72,8 @@ public class Node2D : Godot.Node2D {
 
 		LevelName.Value = levelName;
 		
-		Renoir.Level.Name = levelName;
-		Renoir.Level.Gravity = new Vector2(0, 1200);
+		Renoir.Level.Name.Value = levelName;
+		Renoir.Level.Gravity.Value = new Vector2(0, 1200);
 
 		time = 300;
 		LevelTime.Value = 0;

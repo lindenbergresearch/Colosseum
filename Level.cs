@@ -17,20 +17,20 @@ namespace Renoir {
 		/// The full name of the level
 		/// </summary>
 		[Register("Main.Level.Name")]
-		public static string Name { get; set; }
+		public static Property<string> Name { get; set; }
 
 		/// <summary>
 		/// The levels gravity vector
 		/// </summary>
 		[Register("Main.Level.Gravity")]
-		public static Vector2 Gravity { get; set; }
+		public static Property<Vector2> Gravity { get; set; }
 
 
 		/// <summary>
 		/// Static Init / setup global properties via ca's
 		/// </summary>
 		static Level() {
-			SetupGlobalProperties(typeof(Level));
+			SetupGlobalProperties(Type);
 		}
 
 	}
