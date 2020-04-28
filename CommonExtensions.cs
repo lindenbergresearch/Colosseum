@@ -242,6 +242,14 @@ namespace Renoir {
 		public static bool Right(this KinematicCollision2D kinematicCollision2D) {
 			return kinematicCollision2D.Normal.x.Round() == 1;
 		}
+
+		/// <summary>
+		/// Convert a scalar float to a vector2
+		/// </summary>
+		/// <param name="f"></param>
+		/// <returns></returns>
+		public static Vector2 ToVector2(this float f)
+			=> new Vector2(f, f);
 	}
 
 
