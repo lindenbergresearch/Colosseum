@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using Godot;
 using File = System.IO.File;
+using static System.Reflection.BindingFlags;
 
 
 /// <summary>
@@ -168,5 +172,32 @@ public static class Util {
 
 		return info.TrimEnd() + sclose;
 	}
+
+
+	/// <summary>
+	/// List all fields from a given type with optional binding flags.
+	/// </summary>
+	/// <param name="type"></param>
+	/// <param name="flags"></param>
+	/// <returns></returns>
+	public static Dictionary<string, object> ListFields(Type type, BindingFlags flags = GetField | Static | Public)
+		=> type.GetFields(flags).ToDictionary(
+			fieldInfo => fieldInfo.Name,
+			fieldInfo => fieldInfo.GetValue(null)
+		);
+
+
+	/// <summary>
+	/// List all properties from a given type with optional binding flags.
+	/// </summary>
+	/// <param name="type"></param>
+	/// <param name="flags"></param>
+	/// <returns></returns>
+	public static Dictionary<string, object> ListProperties(Type type, BindingFlags flags = GetProperty | Static | Public)
+		=> type.GetProperties(flags).ToDictionary(
+			fieldInfo => fieldInfo.Name,
+			fieldInfo => fieldInfo.GetValue(null)
+		);
+
 
 }
