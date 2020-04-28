@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Godot;
 using static System.Console;
-using static Renoir.Logger.LogLevel;
+using static Renoir.Logger.LoggerLevel;
 using File = System.IO.File;
 
 namespace Renoir {
@@ -19,7 +19,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
-		void Write(Logger.LogLevel level, string message);
+		void Write(Logger.LoggerLevel level, string message);
 	}
 
 
@@ -31,7 +31,7 @@ namespace Renoir {
 		/// <summary>
 		/// Available log levels.
 		/// </summary>
-		public enum LogLevel {
+		public enum LoggerLevel {
 			TRACE,
 			DEBUG,
 			INFO,
@@ -44,12 +44,12 @@ namespace Renoir {
 		/// <summary>
 		/// Shorthand flags as functional bool properties
 		/// </summary>
-		public static bool IsTrace => Level == TRACE;
-		public static bool IsDebug => Level == DEBUG;
-		public static bool IsInfo => Level == INFO;
-		public static bool IsWarn => Level == WARN;
-		public static bool IsError => Level == ERROR;
-		public static bool IsFatal => Level == FATAL;
+		public static bool IsTrace => LogLevel == TRACE;
+		public static bool IsDebug => LogLevel == DEBUG;
+		public static bool IsInfo => LogLevel == INFO;
+		public static bool IsWarn => LogLevel == WARN;
+		public static bool IsError => LogLevel == ERROR;
+		public static bool IsFatal => LogLevel == FATAL;
 
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Renoir {
 		/// <summary>
 		/// Current loglevel
 		/// </summary>
-		public static LogLevel Level { get; set; } = DEBUG;
+		public static LoggerLevel LogLevel { get; set; } = DEBUG;
 
 		/// <summary>
 		/// Holds all output writers
@@ -86,7 +86,7 @@ namespace Renoir {
 		/// Print debug log message to GD console
 		/// </summary>
 		/// <param name="msg"></param>
-		private static void log(LogLevel level, string msg) {
+		private static void log(LoggerLevel level, string msg) {
 			var st = new StackTrace(true);
 			var sf = st.GetFrame(2);
 
@@ -119,7 +119,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void trace(string message) {
-			if (Level > TRACE) return;
+			if (LogLevel > TRACE) return;
 			log(TRACE, message);
 		}
 
@@ -128,7 +128,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void debug(string message) {
-			if (Level > DEBUG) return;
+			if (LogLevel > DEBUG) return;
 			log(DEBUG, message);
 		}
 
@@ -137,7 +137,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void info(string message) {
-			if (Level > INFO) return;
+			if (LogLevel > INFO) return;
 			log(INFO, message);
 		}
 
@@ -146,7 +146,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void warn(string message) {
-			if (Level > WARN) return;
+			if (LogLevel > WARN) return;
 			log(WARN, message);
 		}
 
@@ -155,7 +155,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void error(string message) {
-			if (Level > ERROR) return;
+			if (LogLevel > ERROR) return;
 			log(ERROR, message);
 		}
 
@@ -164,7 +164,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="message"></param>
 		public static void fatal(string message) {
-			if (Level > FATAL) return;
+			if (LogLevel > FATAL) return;
 			log(FATAL, message);
 		}
 	}
@@ -180,7 +180,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
-		public void Write(Logger.LogLevel level, string message) {
+		public void Write(Logger.LoggerLevel level, string message) {
 			if (level == ERROR || level == FATAL)
 				GD.PrintErr(message);
 			else
@@ -199,7 +199,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
-		public void Write(Logger.LogLevel level, string message) {
+		public void Write(Logger.LoggerLevel level, string message) {
 			if (level == ERROR || level == FATAL)
 				Console.Error.WriteLine(message);
 			else
@@ -222,7 +222,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
-		public void Write(Logger.LogLevel level, string message) {
+		public void Write(Logger.LoggerLevel level, string message) {
 			if (!active) return;
 
 			try {
