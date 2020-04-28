@@ -12,13 +12,13 @@ public class MainApp {
 
 
 	private static void Main(string[] args) {
-		var d = Util.ListProperties(typeof(Level));
-
-
-		foreach (var pair in d) {
-			Console.WriteLine($"Key: {pair.Key} Value: {pair.Value}");
-		}
+		var jb = JBuilder.Create();
 		
+		jb.Add(typeof(MainApp));
+		
+		Console.WriteLine(jb.Json);
+		
+
 	}
 
 }
