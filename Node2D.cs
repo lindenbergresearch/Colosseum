@@ -68,7 +68,7 @@ public class Node2D : Godot.Node2D {
 		
 		Level.Name.Value = levelName;
 		Level.Gravity.Value = new Vector2(0, 1200);
-		Level.LevelTime.Value = 0;
+		Level.Time.Value = 0;
 
 		time = 300;
 
@@ -87,7 +87,7 @@ public class Node2D : Godot.Node2D {
 
 		var rounded = (int) Math.Round(time);
 
-		if (Level.LevelTime.Value != rounded) Level.LevelTime.Value = rounded;
+		if (Level.Time.Value != rounded) Level.Time.Value = rounded;
 
 		if (fps > 0) fps = Mathf.Lerp(fps, 1 / delta, 0.1f);
 		else fps = 1 / delta;
