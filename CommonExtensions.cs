@@ -243,6 +243,7 @@ namespace Renoir {
 			return kinematicCollision2D.Normal.x.Round() == 1;
 		}
 
+
 		/// <summary>
 		/// Convert a scalar float to a vector2
 		/// </summary>
@@ -279,6 +280,22 @@ namespace Renoir {
 		/// <returns></returns>
 		public static bool Empty<T>(this IEnumerable<T> list) {
 			return list.Count() > 0;
+		}
+
+
+		/// <summary>
+		/// Iterate over a dictionary via deconstruction
+		/// </summary>
+		/// <param name="tuple"></param>
+		/// <param name="key"></param>
+		/// <param name="value"></param>
+		/// <typeparam name="T1"></typeparam>
+		/// <typeparam name="T2"></typeparam>
+		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple,
+			out T1 key,
+			out T2 value) {
+			key = tuple.Key;
+			value = tuple.Value;
 		}
 
 	}
