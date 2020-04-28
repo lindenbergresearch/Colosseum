@@ -2,6 +2,7 @@ using System;
 using Godot;
 using Renoir;
 using static Renoir.Logger;
+using Level = Renoir.Level;
 
 
 /// <summary>
@@ -29,12 +30,7 @@ public class Node2D : Godot.Node2D {
 
 	[Register("debug.fps", "{0:F2} FPS")]
 	public static Property<float> FPS { get; set; }
-
-	[Register("main.level.name")]
-	public static Property<string> LevelName { get; set; }
-
-	[Register("main.level.time", "{0:D3}")]
-	public static Property<int> LevelTime { get; set; }
+	
 
 	[Export]
 	public bool EnableDebug { get; set; }
@@ -69,15 +65,12 @@ public class Node2D : Godot.Node2D {
 
 		PrintDebug = EnableDebug;
 		setupViewport();
-
-		LevelName.Value = levelName;
 		
-		Renoir.Level.Name.Value = levelName;
-		Renoir.Level.Gravity.Value = new Vector2(0, 1200);
+		Level.Name.Value = levelName;
+		Level.Gravity.Value = new Vector2(0, 1200);
+		Level.LevelTime.Value = 0;
 
 		time = 300;
-		LevelTime.Value = 0;
-		LevelName.Value = LevelName;
 
 		Input.SetCustomMouseCursor(ResourceLoader.Load("mouse_pointer.png"));
 	}
@@ -94,8 +87,7 @@ public class Node2D : Godot.Node2D {
 
 		var rounded = (int) Math.Round(time);
 
-		if (LevelTime.Value != rounded)
-			LevelTime.Value = rounded;
+		if (Level.LevelTime.Value != rounded) Level.LevelTime.Value = rounded;
 
 		if (fps > 0) fps = Mathf.Lerp(fps, 1 / delta, 0.1f);
 		else fps = 1 / delta;
