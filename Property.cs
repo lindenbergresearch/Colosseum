@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Godot;
 
 namespace Renoir {
 
@@ -402,6 +403,15 @@ namespace Renoir {
 
 
 		/*===== IMPLICIT CONVERSATIONS =================================================================================*/
+		public static implicit operator Vector2(Property<T> p)
+			=> p._value switch {
+				Vector2 v => v,
+				float f => new Vector2(f, f),
+				int i => new Vector2(i, i),
+				_ => new Vector2()
+			};
+
+
 		public static explicit operator T(Property<T> p) {
 			return p._value;
 		}
@@ -507,8 +517,6 @@ namespace Renoir {
 
 			throw new InvalidCastException(
 				$"Type: {p.GetType()} can't be casted to int|long|float|double to apply unary (-) operator.");
-
-			return p;
 		}
 
 
