@@ -29,7 +29,7 @@ namespace Renoir {
 		/// Current time
 		/// </summary>
 		[Register("main.level.time", "{0:D3}")]
-		public static Property<int> LevelTime { get; set; }
+		public static Property<int> Time { get; set; }
 
 
 		/// <summary>
