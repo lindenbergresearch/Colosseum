@@ -159,7 +159,9 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// </summary>
 	/// <param name="delta"></param>
 	protected override void UpdateMotion(float delta) {
-		Motion += delta * Renoir.Level.Gravity;
+		Vector2 _gravity = Level.Gravity * delta;
+		
+		Motion += _gravity;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
 		/* if x velocity is small enough round it to zero to avoid small drifting */
