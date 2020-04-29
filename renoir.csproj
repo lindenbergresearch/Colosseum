@@ -84,7 +84,6 @@
     <Compile Include="Opening.cs" />
     <Compile Include="Player2D.cs" />
     <Compile Include="PlayerInfoText.cs" />
-    <Compile Include="PlayerUtil.cs" />
     <Compile Include="Property.cs" />
     <Compile Include="PropertyAttribute.cs" />
     <Compile Include="QuestionBox.cs" />
