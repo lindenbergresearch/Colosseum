@@ -93,6 +93,14 @@ namespace Renoir {
 				jobj[key] = value.ToString();
 			}
 
+			var methods = new JArray();
+			
+			foreach (var methodInfo in type.GetMethods()) {
+				methods.Add(methodInfo.ToString());
+			}
+
+			root["methods"] = methods;
+			
 			root[type.FullName ?? "<null>"] = jobj;
 		}
 
