@@ -174,6 +174,7 @@ namespace Renoir {
 			return Util.Dump(obj);
 		}
 
+
 		/// <summary>
 		/// Tries to save the string representation of an object (ToString)
 		/// to a given text-file.
@@ -277,8 +278,30 @@ namespace Renoir {
 		/// <param name="list"></param>
 		/// <param name="sep"></param>
 		/// <returns></returns>
-		public static string MkString(this IEnumerable<dynamic> list, string sep = ", ")  {
+		public static string MkString(this IEnumerable<dynamic> list, string sep = ", ") {
 			return list.Aggregate((current, elem) => $"{current}{sep} {elem}").ToString();
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="action"></param>
+		public static void Each<T>(this IEnumerable<T> list, Action<dynamic> action) {
+			foreach (var elem in list) action(elem);
+		}
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="dictionary"></param>
+		/// <param name="action"></param>
+		public static void Each<A, B>(this System.Collections.Generic.Dictionary<A, B> dictionary, Action<Tuple<dynamic, dynamic>> action) {
+			foreach (var (key, value) in dictionary) {
+				action(new Tuple<dynamic, dynamic>(key, value));
+			}
 		}
 
 
@@ -288,9 +311,7 @@ namespace Renoir {
 		/// <param name="list"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static bool Empty<T>(this IEnumerable<T> list) {
-			return list.Count() > 0;
-		}
+		public static bool Empty<T>(this IEnumerable<T> list) => list.Any();
 
 
 		/// <summary>
