@@ -4,6 +4,7 @@ using System.Linq;
 using Godot;
 using Newtonsoft.Json;
 using File = System.IO.File;
+using Object = System.Object;
 
 namespace Renoir {
 
@@ -170,6 +171,15 @@ namespace Renoir {
 		public static string Dump(this object obj) {
 			return Util.Dump(obj);
 		}
+
+		/// <summary>
+		/// Tries to save the string representation of an object (ToString)
+		/// to a given file.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="fileName"></param>
+		public static void ToTextFile(this object obj, string fileName)
+			=> File.AppendAllText(fileName, obj.ToString());
 	}
 
 
