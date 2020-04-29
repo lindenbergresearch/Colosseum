@@ -174,7 +174,7 @@ namespace Renoir {
 
 		/// <summary>
 		/// Tries to save the string representation of an object (ToString)
-		/// to a given file.
+		/// to a given text-file.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="fileName"></param>
