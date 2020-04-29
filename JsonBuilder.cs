@@ -85,23 +85,24 @@ namespace Renoir {
 		/// <param name="type"></param>
 		/// <param name="obj"></param>
 		private void ExamineType(Type type, object obj = null) {
-			var jobj = new JObject();
+			var jObject = new JObject();
+			var jFields = new JObject();
+			var jProperties = new JObject();
+			var jMethods = new JArray();
+
 			var fields = Util.ListFields(type, obj, BindingFlags);
 			var properties = Util.ListProperties(type, obj, BindingFlags);
 
 			foreach (var (key, value) in fields.Concat(properties)) {
-				jobj[key] = value.ToString();
+				jObject[key] = value.ToString();
 			}
 
-			var methods = new JArray();
 			
-			foreach (var methodInfo in type.GetMethods()) {
-				methods.Add(methodInfo.ToString());
-			}
 
-			root["methods"] = methods;
-			
-			root[type.FullName ?? "<null>"] = jobj;
+
+			jObject["methods"] = jMethods;
+
+			root[type.FullName ?? "<null>"] = jObject;
 		}
 
 
