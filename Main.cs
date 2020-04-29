@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using Renoir;
 
-
+//https://www.codeproject.com/Questions/1256693/How-do-I-detect-a-property-change-in-3rd-party-for
 public class MainApp {
 
 	public static int field1 = 1;
@@ -15,6 +15,7 @@ public class MainApp {
 		var jb = JBuilder.Create();
 		
 		jb.Add(typeof(MainApp));
+		jb.Add(typeof(Level));
 		
 		Console.WriteLine(jb.Json);
 		
