@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using Newtonsoft.Json;
 using File = System.IO.File;
 using Object = System.Object;
@@ -274,11 +276,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="list"></param>
 		/// <param name="sep"></param>
-		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static string MkString<T>(this IEnumerable<T> list, string sep = ", ") where T : IComparable<T> {
-			return list.Aggregate("", (current, elem)
-				=> current + (elem + (elem.Equals(list.Last()) ? "" : sep)));
+		public static string MkString(this IEnumerable<dynamic> list, string sep = ", ")  {
+			return list.Aggregate((current, elem) => $"{current}{sep} {elem}").ToString();
 		}
 
 
