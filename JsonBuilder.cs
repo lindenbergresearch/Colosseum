@@ -14,7 +14,11 @@ namespace Renoir {
 		/// <summary>
 		/// Default bindings
 		/// </summary>
-		public const BindingFlags DefaultBindings = BindingFlags.Public | BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Static;
+		public const BindingFlags DefaultBindings = BindingFlags.Public
+		                                            | BindingFlags.GetField
+		                                            | BindingFlags.GetProperty
+		                                            | BindingFlags.Static
+		                                            | BindingFlags.Instance;
 
 
 		/// <summary>
@@ -48,7 +52,7 @@ namespace Renoir {
 		/// <summary>
 		/// JSON root 
 		/// </summary>
-		private JObject root;
+		private readonly JObject root;
 
 		/// <summary>
 		/// Binding flags to specify which members should be selected
@@ -76,20 +80,42 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
+		/// Examines the given type and optionally an object instance. 
 		/// </summary>
 		/// <param name="type"></param>
-		public void Add(Type type) {
+		/// <param name="obj"></param>
+		private void ExamineType(Type type, object obj = null) {
 			var jobj = new JObject();
-			var fields = Util.ListFields(type, BindingFlags);
-			var properties = Util.ListProperties(type, BindingFlags);
+			var fields = Util.ListFields(type, obj, BindingFlags);
+			var properties = Util.ListProperties(type, obj, BindingFlags);
 
 			foreach (var (key, value) in fields.Concat(properties)) {
 				jobj[key] = value.ToString();
 			}
 
-			root[type.FullName] = jobj;
+			root[type.FullName ?? "<null>"] = jobj;
 		}
+
+
+		/// <summary>
+		/// Add via type
+		/// </summary>
+		/// <param name="type"></param>
+		public void Add(Type type)
+			=> ExamineType(type);
+
+
+		/// <summary>
+		/// Add via object
+		/// </summary>
+		/// <param name="obj"></param>
+		public void Add(object obj)
+			=> ExamineType(obj.GetType(), obj);
+
+
+		/// <summary>Returns a string that represents the current object.</summary>
+		/// <returns>A string that represents the current object.</returns>
+		public override string ToString() => Json;
 
 	}
 
