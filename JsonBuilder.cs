@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
@@ -93,13 +94,12 @@ namespace Renoir {
 			var fields = Util.ListFields(type, obj, BindingFlags);
 			var properties = Util.ListProperties(type, obj, BindingFlags);
 
-			foreach (var (key, value) in fields.Concat(properties)) {
-				jObject[key] = value.ToString();
-			}
+			properties.Each(p => jFields[p.Item1] = p.Item2);
+			fields.Each(p => jFields[p.Item1] = p.Item2);
+			type.GetMethods().Each(m => jMethods.Add(m.ToString()));
 
-			
-
-
+			jObject["fields"] = jFields;
+			jObject["properties"] = jProperties;
 			jObject["methods"] = jMethods;
 
 			root[type.FullName ?? "<null>"] = jObject;
