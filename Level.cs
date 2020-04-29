@@ -16,13 +16,13 @@ namespace Renoir {
 		/// <summary>
 		/// The full name of the level
 		/// </summary>
-		[Register("Main.Level.Name")]
+		[Register("main.level.name")]
 		public static Property<string> Name { get; set; }
 
 		/// <summary>
 		/// The levels gravity vector
 		/// </summary>
-		[Register("Main.Level.Gravity")]
+		[Register("main.level.gravity")]
 		public static Property<Vector2> Gravity { get; set; }
 
 		/// <summary>
