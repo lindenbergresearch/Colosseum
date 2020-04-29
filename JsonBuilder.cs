@@ -92,7 +92,7 @@ namespace Renoir {
 				jobj[key] = value.ToString();
 			}
 
-			root[type.Name] = jobj;
+			root[type.FullName] = jobj;
 		}
 
 	}
