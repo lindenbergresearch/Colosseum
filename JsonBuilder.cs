@@ -14,11 +14,7 @@ namespace Renoir {
 		/// <summary>
 		/// Default bindings
 		/// </summary>
-		public static readonly BindingFlags DefaultBindings =
-			BindingFlags.Public |
-			BindingFlags.GetField |
-			BindingFlags.GetProperty |
-			BindingFlags.Static;
+		public const BindingFlags DefaultBindings = BindingFlags.Public | BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Static;
 
 
 		/// <summary>
