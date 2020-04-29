@@ -161,7 +161,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	protected override void UpdateMotion(float delta) {
 		Vector2 _gravity = Level.Gravity * delta;
 		
-		Motion += _gravity;
+		Motion += Level.Gravity.Value * delta;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
 		/* if x velocity is small enough round it to zero to avoid small drifting */
@@ -299,6 +299,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 		player = BasicParameter.LoadFromJson<PlayerParameter>("PlayerParameter.json");
 
+		var jb = JBuilder.Create();
+		jb.Add(player.GetType());
+		debug($"Player: {jb.Json}");
+		
 		camera.LimitLeft = 0;
 		camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
 
