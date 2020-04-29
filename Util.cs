@@ -178,12 +178,13 @@ public static class Util {
 	/// List all fields from a given type with optional binding flags.
 	/// </summary>
 	/// <param name="type"></param>
+	/// <param name="obj"></param>
 	/// <param name="flags"></param>
 	/// <returns></returns>
-	public static Dictionary<string, object> ListFields(Type type, BindingFlags flags = GetField | Static | Public)
+	public static Dictionary<string, object> ListFields(Type type, object obj, BindingFlags flags = GetField | Static | Public)
 		=> type.GetFields(flags).ToDictionary(
 			fieldInfo => fieldInfo.Name,
-			fieldInfo => fieldInfo.GetValue(null)
+			fieldInfo => fieldInfo.GetValue(obj)
 		);
 
 
@@ -191,12 +192,13 @@ public static class Util {
 	/// List all properties from a given type with optional binding flags.
 	/// </summary>
 	/// <param name="type"></param>
+	/// <param name="obj"></param>
 	/// <param name="flags"></param>
 	/// <returns></returns>
-	public static Dictionary<string, object> ListProperties(Type type, BindingFlags flags = GetProperty | Static | Public)
+	public static Dictionary<string, object> ListProperties(Type type, object obj, BindingFlags flags = GetProperty | Static | Public)
 		=> type.GetProperties(flags).ToDictionary(
 			fieldInfo => fieldInfo.Name,
-			fieldInfo => fieldInfo.GetValue(null)
+			fieldInfo => fieldInfo.GetValue(obj)
 		);
 
 
