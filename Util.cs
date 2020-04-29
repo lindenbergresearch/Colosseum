@@ -182,7 +182,8 @@ public static class Util {
 	/// <param name="flags"></param>
 	/// <returns></returns>
 	public static Dictionary<string, object> ListFields(Type type, object obj, BindingFlags flags = GetField | Static | Public)
-		=> type.GetFields(flags).ToDictionary(
+		// if no object instance is set, remove 'Instance' flag to avoid Exceptions
+		=> type.GetFields(obj == null ? flags ^ Instance : flags).ToDictionary(
 			fieldInfo => fieldInfo.Name,
 			fieldInfo => fieldInfo.GetValue(obj)
 		);
@@ -196,7 +197,8 @@ public static class Util {
 	/// <param name="flags"></param>
 	/// <returns></returns>
 	public static Dictionary<string, object> ListProperties(Type type, object obj, BindingFlags flags = GetProperty | Static | Public)
-		=> type.GetProperties(flags).ToDictionary(
+		// if no object instance is set, remove 'Instance' flag to avoid Exceptions
+		=> type.GetProperties(obj == null ? flags ^ Instance : flags).ToDictionary(
 			fieldInfo => fieldInfo.Name,
 			fieldInfo => fieldInfo.GetValue(obj)
 		);
