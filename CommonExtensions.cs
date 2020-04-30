@@ -306,7 +306,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Test of collewction is empty
+		/// Test if collection is empty
 		/// </summary>
 		/// <param name="list"></param>
 		/// <typeparam name="T"></typeparam>
@@ -322,12 +322,9 @@ namespace Renoir {
 		/// <param name="value"></param>
 		/// <typeparam name="T1"></typeparam>
 		/// <typeparam name="T2"></typeparam>
-		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple,
-			out T1 key,
-			out T2 value) {
-			key = tuple.Key;
-			value = tuple.Value;
-		}
+		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value)
+			=> (key, value) = (tuple.Key, tuple.Value);
+
 
 	}
 
