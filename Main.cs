@@ -1,55 +1,31 @@
 using System;
-using Renoir;
-
-
-/// <summary>
-/// Custom attribute to specify a global property
-/// </summary>
-[AttributeUsage(AttributeTargets.Property)]
-public class TesterAttribute : Attribute {
-
-
-	public TesterAttribute(string hello) {
-		Console.WriteLine("boom" + hello);
-	}
-
-
-}
+using Renoir.Renoir;
 
 
 public class MainApp {
 
-	public static int field1 = 1;
-	public static string field2 = "hello";
-	public static float field3 = 2.3124f;
-	private static int k = 1;
+	public object ToBeExecuted(object param) {
+		Console.WriteLine($"Starting: {param}");
 
-	[Tester("dsdsd")]
-	public string Foo { get; set; } = "bar";
+		var k = 1.0;
 
-	[Tester("dsdsd")]
-	public int Num {
-		get => k;
-		set => k = value;
+		for (var i = 0; i < 231234234; i++) k = k * i + Math.Pow(k, i);
+
+		return k;
 	}
 
 
 	private static void Main(string[] args) {
-		var ma = new MainApp {Foo = "Patrick", Num = 41};
+		var ma = new MainApp();
 
-		ma.Foo = "Muahjah";
+		var pe = new BackgroundExecutor(ma.ToBeExecuted);
 
-		var jb = JBuilder.Create();
-		jb.Add(typeof(MainApp));
+		pe.Run(123);
 
-		ma.Num = 123;
+		pe.WaitFor();
 
-		Console.WriteLine(jb);
-		Console.WriteLine(ma.GetType().GetFields().MkString());
 
-		foreach (var propertyInfo in ma.GetType().GetProperties()) {
-			foreach (var customAttribute in propertyInfo.GetCustomAttributes(true)) Console.WriteLine(customAttribute.ToString());
-		}
+		Console.WriteLine($"Time is: {pe.Time}");
 	}
 
 }

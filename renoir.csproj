@@ -73,6 +73,7 @@
     <Compile Include="CollisionShape2D.cs" />
     <Compile Include="DebugMessageBox.cs" />
     <Compile Include="DynamicBindings.cs" />
+    <Compile Include="Executor.cs" />
     <Compile Include="ICollider.cs" />
     <Compile Include="IConsumer.cs" />
     <Compile Include="JsonBuilder.cs" />
