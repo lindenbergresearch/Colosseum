@@ -64,7 +64,14 @@ namespace Renoir {
 
 			/// <summary>
 			/// </summary>
+			/// <param name="param"></param>
+			public delegate void ExecDelegateVoid(object param);
+
+
+			/// <summary>
+			/// </summary>
 			public ExecDelegate _ExecDelegate { get; set; }
+			public ExecDelegateVoid _ExecDelegateVoid { get; set; }
 
 
 			/// <summary>
@@ -73,6 +80,16 @@ namespace Renoir {
 			/// <param name="execDelegate"></param>
 			public Executor(ExecDelegate execDelegate) {
 				_ExecDelegate = execDelegate;
+				State = ExecState.Ready;
+			}
+
+
+			/// <summary>
+			/// Constructor with the execution delegate.
+			/// </summary>
+			/// <param name="execDelegateVoid"></param>
+			public Executor(ExecDelegateVoid execDelegateVoid) {
+				_ExecDelegateVoid = execDelegateVoid;
 				State = ExecState.Ready;
 			}
 
@@ -104,6 +121,10 @@ namespace Renoir {
 
 
 			/// <inheritdoc />
+			public PlainExecutor(ExecDelegateVoid execDelegateVoid) : base(execDelegateVoid) { }
+
+
+			/// <inheritdoc />
 			public PlainExecutor() { }
 
 
@@ -111,14 +132,17 @@ namespace Renoir {
 
 			/// <inheritdoc />
 			public override void Run(object param = null) {
-				if (_ExecDelegate == null)
+				if (_ExecDelegate == null && _ExecDelegateVoid == null)
 					throw new ExecutorException("Delegate not setup! Nothing to execute.");
 
 				State = ExecState.Running;
 
 				try {
 					sw.Start();
-					Result = _ExecDelegate(param);
+
+					if (_ExecDelegate == null) _ExecDelegateVoid(param);
+					else Result = _ExecDelegate(param);
+
 					sw.Stop();
 				} catch (Exception e) {
 					State = ExecState.Failed;
@@ -144,6 +168,10 @@ namespace Renoir {
 
 
 			/// <inheritdoc />
+			public BackgroundExecutor(ExecDelegateVoid execDelegateVoid) : base(execDelegateVoid) { }
+
+
+			/// <inheritdoc />
 			public BackgroundExecutor() { }
 
 
@@ -158,7 +186,10 @@ namespace Renoir {
 			private void _Run(object param) {
 				try {
 					sw.Start();
-					Result = _ExecDelegate(param);
+
+					if (_ExecDelegate == null) _ExecDelegateVoid(param);
+					else Result = _ExecDelegate(param);
+
 					sw.Stop();
 				} catch (Exception e) {
 					State = ExecState.Failed;
@@ -174,7 +205,7 @@ namespace Renoir {
 
 			/// <inheritdoc />
 			public override void Run(object param = null) {
-				if (_ExecDelegate == null)
+				if (_ExecDelegate == null && _ExecDelegateVoid == null)
 					throw new ExecutorException("Delegate not setup! Nothing to execute.");
 
 				State = ExecState.Running;
