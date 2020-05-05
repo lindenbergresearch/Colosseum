@@ -1,5 +1,29 @@
 using System;
+using Renoir;
 using Renoir.Renoir;
+
+
+namespace Renoir {
+
+	/// <summary>
+	/// 
+	/// </summary>
+	abstract class Initializer {
+
+		/// <summary>
+		/// This flag is set after running the static initialisation.
+		/// </summary>
+		protected bool StaticFinished { get; set; } = false;
+
+		
+		
+		
+		
+		
+	}
+	
+
+}
 
 
 public class MainApp {
@@ -17,15 +41,13 @@ public class MainApp {
 
 	private static void Main(string[] args) {
 		var ma = new MainApp();
+		var pe = new BackgroundExecutor(obj => Console.WriteLine("dsds"));
 
-		var pe = new BackgroundExecutor(ma.ToBeExecuted);
-
-		pe.Run(123);
-
+		pe.Run();
 		pe.WaitFor();
 
-
-		Console.WriteLine($"Time is: {pe.Time}");
+		
+		Console.WriteLine($"Time is: {pe.Time} ");
 	}
 
 }
