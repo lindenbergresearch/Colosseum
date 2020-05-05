@@ -1,11 +1,55 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 
 namespace Renoir {
 
 	namespace Renoir {
+
+
+		/// <summary>
+		/// Helper class for managed Executors.
+		/// </summary>
+		public static class ExecutorPool {
+
+			/// <summary>
+			/// Executor pool
+			/// </summary>
+			private static List<Executor> pool;
+
+			/// <summary>
+			/// Check if all executors succeeded.
+			/// </summary>
+			public static bool AllOk {
+				get => pool.All(e => e.Succeeded);
+			}
+
+			/// <summary>
+			/// 
+			/// </summary>
+			public static bool Running {
+				get => pool.All(e => e.Running);//???
+			}
+
+
+			/// <summary>
+			/// Run all 
+			/// </summary>
+			public static void RunAll()
+				=> pool.Each(e => e.Run());
+
+
+			/// <summary>
+			/// Init
+			/// </summary>
+			static ExecutorPool() {
+				pool = new List<Executor>();
+			}
+
+		}
 
 
 		public class ExecutorException : Exception {
@@ -34,7 +78,7 @@ namespace Renoir {
 
 			/// <summary>
 			/// </summary>
-			public enum ExecState {
+			protected enum ExecState {
 				Ready,
 				Running,
 				Failed,
@@ -54,6 +98,12 @@ namespace Renoir {
 			/// The executors current state
 			/// </summary>
 			protected ExecState State { get; set; }
+
+
+			public bool Ready => State == ExecState.Ready;
+			public bool Running => State == ExecState.Running;
+			public bool Failed => State == ExecState.Failed;
+			public bool Succeeded => State == ExecState.Succeeded;
 
 
 			/// <summary>
