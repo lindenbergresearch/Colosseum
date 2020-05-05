@@ -188,8 +188,11 @@ namespace Renoir {
 			/// <summary>
 			/// Pause the current thread until the execution is done
 			/// </summary>
-			public void WaitFor() {
-				while (State == ExecState.Running) Thread.Sleep(0);
+			public object WaitFor() {
+				while (State == ExecState.Running)
+					Thread.Sleep(0);
+
+				return Result;
 			}
 
 		}
