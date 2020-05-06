@@ -263,6 +263,8 @@ namespace Renoir {
 
 		/// <inheritdoc />
 		public override void Run(object param = null) {
+			if (State != ExecState.Ready) return;
+			
 			OnBefore?.Invoke(this);
 
 			if (_ExecDelegate == null && _ExecDelegateVoid == null)
@@ -319,6 +321,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="param"></param>
 		private void _Run(object param) {
+			if (State != ExecState.Ready) return;
+			
 			OnBefore?.Invoke(this);
 
 			try {
