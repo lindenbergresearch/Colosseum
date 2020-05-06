@@ -1,13 +1,11 @@
-using System;
-using Godot;
+#region
+
 using Renoir;
 
+#endregion
 
 
-
-
-
-class Foo {
+internal class Foo {
 
 	[Register("main.foo.tester")]
 	public static Property<int> Tester { get; set; }
@@ -26,8 +24,8 @@ public class MainApp {
 
 	private static void Main(string[] args) {
 		var foo = new Foo();
-		
-		
+
+
 		Logger.debug("Hello world!");
 	}
 

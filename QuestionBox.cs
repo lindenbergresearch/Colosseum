@@ -1,5 +1,9 @@
+#region
+
 using Godot;
 using Renoir;
+
+#endregion
 
 
 /// <summary>
@@ -94,7 +98,7 @@ public class QuestionBox : StaticBody2D, ICollider {
 	/// Init...
 	/// </summary>
 	public override void _Ready() {
-		this.SetupNodeBindings();
+		this.Init();
 
 		if (Active) _animatedSprite.Animation = "Active";
 		else _animatedSprite.Animation = "Deactive";

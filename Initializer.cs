@@ -1,9 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace Renoir {
 
 	/// <summary>
-	/// 
 	/// </summary>
 	public static class Initializer {
 
@@ -30,10 +33,10 @@ namespace Renoir {
 		/// <param name="obj"></param>
 		public static void Init(this object obj) {
 			Logger.trace($"Init object: {obj}");
-			
-			ExecutorPool.Add("global property bindings", true, PropertyExtensions.InitGlobalProperties);
-			ExecutorPool.Add("dynamic node bindings", true, DynamicBindings.InitNodeBindings);
-			
+
+			ExecutorPool.Add("global property bindings", false, PropertyExtensions.InitGlobalProperties);
+			ExecutorPool.Add("dynamic node bindings", false, DynamicBindings.InitNodeBindings);
+
 			ExecutorPool.RunAll(obj);
 		}
 

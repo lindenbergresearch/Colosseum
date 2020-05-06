@@ -1,8 +1,10 @@
+#region
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+
+#endregion
 
 namespace Renoir {
 
@@ -28,8 +30,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static string ObjectToJson(object obj)
-			=> ((JObject) JToken.FromObject(obj)).ToString();
+		public static string ObjectToJson(object obj) {
+			return ((JObject) JToken.FromObject(obj)).ToString();
+		}
 
 
 		/// <summary>
@@ -38,20 +41,22 @@ namespace Renoir {
 		/// <param name="binding"></param>
 		/// <param name="root"></param>
 		/// <returns></returns>
-		public static JBuilder Create(BindingFlags binding, JObject root = null)
-			=> new JBuilder(binding, root);
+		public static JBuilder Create(BindingFlags binding, JObject root = null) {
+			return new JBuilder(binding, root);
+		}
 
 
 		/// <summary>
 		/// Creates a new JBuilder instance with default bindings
 		/// </summary>
 		/// <returns></returns>
-		public static JBuilder Create()
-			=> new JBuilder(DefaultBindings, null);
+		public static JBuilder Create() {
+			return new JBuilder(DefaultBindings, null);
+		}
 
 
 		/// <summary>
-		/// JSON root 
+		/// JSON root
 		/// </summary>
 		private readonly JObject root;
 
@@ -64,7 +69,7 @@ namespace Renoir {
 		/// <summary>
 		/// Property which returns the current data as JSON string
 		/// </summary>
-		public string Json { get => root.ToString(); }
+		public string Json => root.ToString();
 
 
 		/// <summary>
@@ -81,7 +86,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Examines the given type and optionally an object instance. 
+		/// Examines the given type and optionally an object instance.
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="obj"></param>
@@ -96,7 +101,7 @@ namespace Renoir {
 
 			properties.Each(p => jFields[p.Item1] = p.Item2);
 			fields.Each(p => jFields[p.Item1] = p.Item2);
-			type.GetMethods().Each(m => jMethods.Add(m.ToString()));
+			type.GetMethods().Each(m => jMethods.Add((JToken) m.ToString()));
 
 			jObject["fields"] = jFields;
 			jObject["properties"] = jProperties;
@@ -110,21 +115,25 @@ namespace Renoir {
 		/// Add via type
 		/// </summary>
 		/// <param name="type"></param>
-		public void Add(Type type)
-			=> ExamineType(type);
+		public void Add(Type type) {
+			ExamineType(type);
+		}
 
 
 		/// <summary>
 		/// Add via object
 		/// </summary>
 		/// <param name="obj"></param>
-		public void Add(object obj)
-			=> ExamineType(obj.GetType(), obj);
+		public void Add(object obj) {
+			ExamineType(obj.GetType(), obj);
+		}
 
 
 		/// <summary>Returns a string that represents the current object.</summary>
 		/// <returns>A string that represents the current object.</returns>
-		public override string ToString() => Json;
+		public override string ToString() {
+			return Json;
+		}
 
 	}
 

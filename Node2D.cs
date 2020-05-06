@@ -1,8 +1,11 @@
+#region
+
 using System;
 using Godot;
 using Renoir;
 using static Renoir.Logger;
-using Level = Renoir.Level;
+
+#endregion
 
 
 /// <summary>
@@ -30,7 +33,7 @@ public class Node2D : Godot.Node2D {
 
 	[Register("debug.fps", "{0:F2} FPS")]
 	public static Property<float> FPS { get; set; }
-	
+
 
 	[Export]
 	public bool EnableDebug { get; set; }
@@ -61,11 +64,11 @@ public class Node2D : Godot.Node2D {
 	public override void _Ready() {
 		debug($"Loading: {GetType().FullName}");
 
-		this.SetupGlobalProperties();
+		this.Init();
 
 		PrintDebug = EnableDebug;
 		setupViewport();
-		
+
 		Level.Name.Value = levelName;
 		Level.Gravity.Value = new Vector2(0, 1200);
 		Level.Time.Value = 0;

@@ -1,4 +1,9 @@
+#region
+
 using Godot;
+using Renoir;
+
+#endregion
 
 
 /// <summary>
@@ -28,7 +33,7 @@ public class Opening : Godot.Node2D {
 	/// Init
 	/// </summary>
 	public override void _Ready() {
-		this.SetupNodeBindings();
+		this.Init();
 	}
 
 }

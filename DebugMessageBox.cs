@@ -1,6 +1,11 @@
+#region
+
 using System.Linq;
 using Godot;
+using Renoir;
 using static Renoir.Logger;
+
+#endregion
 
 
 /// <summary>
@@ -36,7 +41,7 @@ public class DebugMessageBox : RichTextLabel {
 
 
 	public override void _Ready() {
-		this.SetupNodeBindings();
+		this.Init();
 
 		Visible = false;
 		_colorRect.Visible = false;

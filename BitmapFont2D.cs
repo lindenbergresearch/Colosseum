@@ -1,8 +1,12 @@
+#region
+
 using System;
 using Godot;
 using static Util;
 using static Renoir.Logger;
 using File = System.IO.File;
+
+#endregion
 
 
 /// <summary>

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Godot.Collections;
 using Newtonsoft.Json;
 using File = System.IO.File;
-using Object = System.Object;
+
+#endregion
 
 namespace Renoir {
 
@@ -181,8 +182,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="fileName"></param>
-		public static void ToTextFile(this object obj, string fileName)
-			=> File.AppendAllText(fileName, obj.ToString());
+		public static void ToTextFile(this object obj, string fileName) {
+			File.AppendAllText(fileName, obj.ToString());
+		}
 	}
 
 
@@ -228,8 +230,9 @@ namespace Renoir {
 		/// <param name="animatedSprite"></param>
 		/// <param name="animationID"></param>
 		/// <returns></returns>
-		public static bool Is(this AnimatedSprite animatedSprite, string animationID)
-			=> animatedSprite.Animation == animationID;
+		public static bool Is(this AnimatedSprite animatedSprite, string animationID) {
+			return animatedSprite.Animation == animationID;
+		}
 
 
 		/// <summary>
@@ -262,8 +265,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="f"></param>
 		/// <returns></returns>
-		public static Vector2 ToVector2(this float f)
-			=> new Vector2(f, f);
+		public static Vector2 ToVector2(this float f) {
+			return new Vector2(f, f);
+		}
 	}
 
 
@@ -284,7 +288,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="list"></param>
 		/// <param name="action"></param>
@@ -294,14 +297,11 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="dictionary"></param>
 		/// <param name="action"></param>
-		public static void Each<A, B>(this System.Collections.Generic.Dictionary<A, B> dictionary, Action<Tuple<dynamic, dynamic>> action) {
-			foreach (var (key, value) in dictionary) {
-				action(new Tuple<dynamic, dynamic>(key, value));
-			}
+		public static void Each<A, B>(this Dictionary<A, B> dictionary, Action<Tuple<dynamic, dynamic>> action) {
+			foreach (var (key, value) in dictionary) action(new Tuple<dynamic, dynamic>(key, value));
 		}
 
 
@@ -311,7 +311,9 @@ namespace Renoir {
 		/// <param name="list"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static bool Empty<T>(this IEnumerable<T> list) => list.Any();
+		public static bool Empty<T>(this IEnumerable<T> list) {
+			return list.Any();
+		}
 
 
 		/// <summary>
@@ -322,8 +324,9 @@ namespace Renoir {
 		/// <param name="value"></param>
 		/// <typeparam name="T1"></typeparam>
 		/// <typeparam name="T2"></typeparam>
-		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value)
-			=> (key, value) = (tuple.Key, tuple.Value);
+		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value) {
+			(key, value) = (tuple.Key, tuple.Value);
+		}
 
 
 	}

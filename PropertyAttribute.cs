@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Reflection;
+
+#endregion
 
 namespace Renoir {
 
@@ -9,7 +13,7 @@ namespace Renoir {
 	public static class PropertyExtensions {
 
 		/// <summary>
-		/// Search custom attributed property and process it. 
+		/// Search custom attributed property and process it.
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="obj"></param>
@@ -53,7 +57,7 @@ namespace Renoir {
 
 		/// <summary>
 		/// Search for global properties marked via custom attribute and create + register them
-		/// in the property pool. 
+		/// in the property pool.
 		/// </summary>
 		/// <param name="obj"></param>
 		public static void SetupGlobalProperties(this object obj) {

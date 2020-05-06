@@ -1,4 +1,9 @@
+#region
+
 using Godot;
+using Renoir;
+
+#endregion
 
 
 /// <summary>
@@ -35,7 +40,7 @@ public class Brick : StaticBody2D, ICollider {
 	/// Init
 	/// </summary>
 	public override void _Ready() {
-		this.SetupNodeBindings();
+		this.Init();
 	}
 
 }

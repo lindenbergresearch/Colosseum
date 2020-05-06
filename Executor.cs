@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
+
+#endregion
 
 namespace Renoir {
 
@@ -16,28 +20,24 @@ namespace Renoir {
 		/// <summary>
 		/// Executor pool
 		/// </summary>
-		private static List<Executor> pool;
+		private static readonly List<Executor> pool;
 
 		/// <summary>
 		/// Check if all executors succeeded.
 		/// </summary>
-		public static bool AllOk {
-			get => pool.All(e => e.Succeeded);
-		}
+		public static bool AllOk => pool.All(e => e.Succeeded);
 
 		/// <summary>
-		/// 
 		/// </summary>
-		public static bool Running {
-			get => pool.All(e => e.Running); //???
-		}
+		public static bool Running => pool.All(e => e.Running); //???
 
 
 		/// <summary>
-		/// Run all 
+		/// Run all
 		/// </summary>
-		public static void RunAll(object obj)
-			=> pool.Each(e => e.Run(obj));
+		public static void RunAll(object obj) {
+			pool.Each(e => e.Run(obj));
+		}
 
 
 		/// <summary>
@@ -49,13 +49,12 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="background"></param>
 		/// <param name="_execDelegate"></param>
 		public static void Add(string name, bool background, Executor.ExecDelegate _execDelegate) {
-			Executor ex; 
+			Executor ex;
 
 			if (background) ex = new BackgroundExecutor(_execDelegate, name);
 			else ex = new PlainExecutor(_execDelegate, name);
@@ -65,13 +64,12 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="background"></param>
 		/// <param name="_execDelegateVoid"></param>
 		public static void Add(string name, bool background, Executor.ExecDelegateVoid _execDelegateVoid) {
-			Executor ex; 
+			Executor ex;
 
 			if (background) ex = new BackgroundExecutor(_execDelegateVoid, name);
 			else ex = new PlainExecutor(_execDelegateVoid, name);
@@ -81,11 +79,11 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="ex"></param>
-		public static void Add(Executor ex)
-			=> pool.Add(ex);
+		public static void Add(Executor ex) {
+			pool.Add(ex);
+		}
 	}
 
 
@@ -124,7 +122,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		private string name = "";
 
@@ -236,8 +233,9 @@ namespace Renoir {
 		#region Overrides of Object
 
 		/// <inheritdoc />
-		public override string ToString()
-			=> $"{this.GetType().Name}: name={Name} state={State} time={Time}";
+		public override string ToString() {
+			return $"{GetType().Name}: name={Name} state={State} time={Time}";
+		}
 
 		#endregion
 

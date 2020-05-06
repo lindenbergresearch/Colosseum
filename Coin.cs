@@ -1,5 +1,9 @@
+#region
+
 using Godot;
 using static Renoir.Logger;
+
+#endregion
 
 namespace Renoir {
 
@@ -35,7 +39,7 @@ namespace Renoir {
 		/// Init...
 		/// </summary>
 		public override void _Ready() {
-			this.SetupNodeBindings();
+			this.Init();
 
 			Picked = false;
 

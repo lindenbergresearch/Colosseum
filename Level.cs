@@ -1,6 +1,10 @@
+#region
+
 using System;
 using Godot;
 using static Renoir.PropertyExtensions;
+
+#endregion
 
 namespace Renoir {
 

@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+
+#endregion
 
 namespace Renoir {
 
@@ -39,7 +43,7 @@ namespace Renoir {
 	[AttributeUsage(AttributeTargets.Property)]
 	public abstract class ConstraintAttribute : Attribute {
 
-		enum Type {
+		private enum Type {
 			Range,
 			Blacklist,
 			Invalid,
@@ -56,7 +60,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="from"></param>
 		/// <param name="to"></param>
@@ -68,7 +71,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="blacklist"></param>
 		public ConstraintAttribute(List<dynamic> blacklist) {
@@ -78,7 +80,6 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="invalid"></param>
 		public ConstraintAttribute(dynamic invalid) {
@@ -88,14 +89,13 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="regex"></param>
 		public ConstraintAttribute(string regex) {
 			RegEx = regex;
 			type = Type.RegEx;
 		}
-		
+
 
 	}
 

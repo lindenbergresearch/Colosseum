@@ -1,5 +1,8 @@
-using Godot;
+#region
+
 using static Godot.Input;
+
+#endregion
 
 namespace Renoir {
 

@@ -1,7 +1,11 @@
+#region
+
 using System;
 using Godot;
 using static Util;
 using static Renoir.Logger;
+
+#endregion
 
 
 /// <summary>

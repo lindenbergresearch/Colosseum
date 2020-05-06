@@ -1,8 +1,12 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Godot;
+
+#endregion
 
 namespace Renoir {
 
@@ -403,13 +407,14 @@ namespace Renoir {
 
 
 		/*===== IMPLICIT CONVERSATIONS =================================================================================*/
-		public static implicit operator Vector2(Property<T> p)
-			=> p._value switch {
+		public static implicit operator Vector2(Property<T> p) {
+			return p._value switch {
 				Vector2 v => v,
 				float f => new Vector2(f, f),
 				int i => new Vector2(i, i),
 				_ => new Vector2()
 			};
+		}
 
 
 		public static explicit operator T(Property<T> p) {

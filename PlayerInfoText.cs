@@ -1,25 +1,29 @@
+#region
+
 using Godot;
 using Renoir;
 using static Renoir.PropertyPool;
+
+#endregion
 
 
 public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 
 	[GNode("CoinsLabel")]
 	private Label CoinsLabel;
-	
+
 	[GNode("LevelNameLabel")]
 	private Label LevelNameLabel;
-	
+
 	[GNode("LivesLabel")]
 	private Label LivesLabel;
-	
+
 	[GNode("ScoreLabel")]
 	private Label ScoreLabel;
-	
+
 	[GNode("TimeLabel")]
 	private Label TimeLabel;
-	
+
 	[GNode("FPSLabel")]
 	private Label FPSLabel;
 
@@ -35,8 +39,7 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 
 
 	public override void _Ready() {
-		this.SetupGlobalProperties();
-		this.SetupNodeBindings();
+		this.Init();
 
 		AddSubscription("main.*", this);
 	}

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,6 +8,8 @@ using Godot;
 using static System.Console;
 using static Renoir.Logger.LoggerLevel;
 using File = System.IO.File;
+
+#endregion
 
 namespace Renoir {
 
@@ -81,19 +85,20 @@ namespace Renoir {
 			messages.Clear();
 		}
 
+
 		/// <summary>
 		/// Init logger
 		/// </summary>
-		public static void Init() {
+		static Logger() {
 			LogLevel = TRACE;
-			
-			//LogWriters.Add(new GodotConsoleLogWriter());
-			LogWriters.Add(new SystemConsoleLogWriter());
+
+			LogWriters.Add(new GodotConsoleLogWriter());
+			//LogWriters.Add(new SystemConsoleLogWriter());
 			LogWriters.Add(new FileLogWriter());
 
 			foreach (var writer in LogWriters) writer.Write(INFO, $"--- INIT LOGGER {DateTime.Now} ---");
 		}
-		
+
 
 		/// <summary>
 		/// Print debug log message to GD console

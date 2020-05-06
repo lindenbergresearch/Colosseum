@@ -1,6 +1,10 @@
+#region
+
 using Godot;
 using Renoir;
 using static Renoir.Logger;
+
+#endregion
 
 
 /// <summary>
@@ -160,7 +164,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// <param name="delta"></param>
 	protected override void UpdateMotion(float delta) {
 		Vector2 _gravity = Level.Gravity * delta;
-		
+
 		Motion += Level.Gravity.Value * delta;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
 
@@ -302,7 +306,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 		var jb = JBuilder.Create();
 		jb.Add(player.GetType());
 		debug($"Player: {jb.Json}");
-		
+
 		camera.LimitLeft = 0;
 		camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
 

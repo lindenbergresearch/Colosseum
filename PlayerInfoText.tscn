@@ -9,17 +9,17 @@
 [ext_resource path="res://ConsoleMonoFont.tres" type="DynamicFont" id=8]
 [ext_resource path="res://sounds/effects/menu.ogg" type="AudioStream" id=9]
 
-[sub_resource type="DynamicFontData" id=2]
+[sub_resource type="DynamicFontData" id=1]
 hinting = 0
 font_path = "res://fonts/architect-s-daughter/ArchitectsDaughter.ttf"
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 110
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 use_mipmaps = true
 use_filter = true
-font_data = SubResource( 2 )
+font_data = SubResource( 1 )
 
 [node name="PlayerInfoText" type="ParallaxBackground"]
 layer = -128
@@ -140,7 +140,7 @@ margin_top = 1.0
 margin_right = 1095.0
 margin_bottom = 208.0
 rect_scale = Vector2( 0.1, 0.1 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 3
