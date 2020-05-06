@@ -76,6 +76,7 @@
     <Compile Include="Executor.cs" />
     <Compile Include="ICollider.cs" />
     <Compile Include="IConsumer.cs" />
+    <Compile Include="Initializer.cs" />
     <Compile Include="JsonBuilder.cs" />
     <Compile Include="KinematicEntity2D.cs" />
     <Compile Include="Level.cs" />
