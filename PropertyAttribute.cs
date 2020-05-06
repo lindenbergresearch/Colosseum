@@ -74,6 +74,14 @@ namespace Renoir {
 		}
 
 
+		/// <summary>
+		/// Init method for objects used in Ibnitializer
+		/// </summary>
+		/// <param name="obj"></param>
+		public static void InitGlobalProperties(object obj) {
+			Logger.trace($"Setup global properties for type: {obj.GetType().FullName}");
+			FindAndRegister(obj.GetType(), obj);
+		}
 	}
 
 
