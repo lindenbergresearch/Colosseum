@@ -36,8 +36,8 @@ namespace Renoir {
 		/// <summary>
 		/// Run all 
 		/// </summary>
-		public static void RunAll()
-			=> pool.Each(e => e.Run());
+		public static void RunAll(object obj)
+			=> pool.Each(e => e.Run(obj));
 
 
 		/// <summary>
