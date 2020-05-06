@@ -55,7 +55,7 @@ namespace Renoir {
 		/// <param name="background"></param>
 		/// <param name="_execDelegate"></param>
 		public static void Add(string name, bool background, Executor.ExecDelegate _execDelegate) {
-			Executor ex; // = background ? new BackgroundExecutor(_execDelegate, name) : new PlainExecutor(_execDelegate, name);
+			Executor ex; 
 
 			if (background) ex = new BackgroundExecutor(_execDelegate, name);
 			else ex = new PlainExecutor(_execDelegate, name);
@@ -69,12 +69,12 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="background"></param>
-		/// <param name="_execDelegate"></param>
-		public static void Add(string name, bool background, Executor.ExecDelegateVoid _execDelegate) {
-			Executor ex; // = background ? new BackgroundExecutor(_execDelegate, name) : new PlainExecutor(_execDelegate, name);
+		/// <param name="_execDelegateVoid"></param>
+		public static void Add(string name, bool background, Executor.ExecDelegateVoid _execDelegateVoid) {
+			Executor ex; 
 
-			if (background) ex = new BackgroundExecutor(_execDelegate, name);
-			else ex = new PlainExecutor(_execDelegate, name);
+			if (background) ex = new BackgroundExecutor(_execDelegateVoid, name);
+			else ex = new PlainExecutor(_execDelegateVoid, name);
 
 			pool.Add(ex);
 		}
