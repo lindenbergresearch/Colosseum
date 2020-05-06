@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Godot;
+using Renoir;
 using static Renoir.Logger;
 
 
@@ -48,6 +49,20 @@ public static class DynamicBindings {
 	/// <param name="node"></param>
 	public static void SetupNodeBindings(this Node node) {
 		SetupBindings(node);
+	}
+
+
+	/// <summary>
+	/// Init node bindings
+	/// </summary>
+	/// <param name="obj"></param>
+	public static void InitNodeBindings(object obj) {
+		if (obj is Node node) {
+			Logger.trace($"Setup dynamic bindings for type: {obj.GetType().FullName}");
+			SetupBindings(node);
+		} else {
+			Logger.warn($"Unable to setup node bindings for type: {obj.GetType().FullName}. Not an instance of type {typeof(Node).FullName}.");
+		}
 	}
 
 
