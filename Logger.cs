@@ -66,7 +66,7 @@ namespace Renoir {
 		/// <summary>
 		/// Current loglevel
 		/// </summary>
-		public static LoggerLevel LogLevel { get; set; } = DEBUG;
+		public static LoggerLevel LogLevel { get; set; }
 
 		/// <summary>
 		/// Holds all output writers
@@ -81,10 +81,24 @@ namespace Renoir {
 			messages.Clear();
 		}
 
+		/// <summary>
+		/// Init logger
+		/// </summary>
+		public static void Init() {
+			LogLevel = TRACE;
+			
+			//LogWriters.Add(new GodotConsoleLogWriter());
+			LogWriters.Add(new SystemConsoleLogWriter());
+			LogWriters.Add(new FileLogWriter());
+
+			foreach (var writer in LogWriters) writer.Write(INFO, $"--- INIT LOGGER {DateTime.Now} ---");
+		}
+		
 
 		/// <summary>
 		/// Print debug log message to GD console
 		/// </summary>
+		/// <param name="level"></param>
 		/// <param name="msg"></param>
 		private static void log(LoggerLevel level, string msg) {
 			var st = new StackTrace(true);
@@ -100,14 +114,6 @@ namespace Renoir {
 
 
 			//TODO: find a better solution to add the standard logger
-			if (LogWriters.Count == 0) {
-				//LogWriters.Add(new GodotConsoleLogWriter());
-
-				LogWriters.Add(new SystemConsoleLogWriter());
-				LogWriters.Add(new FileLogWriter());
-
-				foreach (var writer in LogWriters) writer.Write(INFO, $"--- INIT LOGGER {DateTime.Now} ---");
-			}
 
 			foreach (var writer in LogWriters) writer.Write(level, m);
 
