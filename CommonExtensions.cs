@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Godot;
 using Newtonsoft.Json;
 using File = System.IO.File;
@@ -166,6 +167,10 @@ namespace Renoir {
 		}
 
 
+		public static IEnumerable<FieldInfo> GetFieldsWhere(this Type type, Func<FieldInfo, bool> predicate)
+			=> type.GetFields().Where(predicate);
+
+
 		/// <summary>
 		/// Dump the object's content to string
 		/// </summary>
@@ -291,7 +296,7 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="list"></param>
 		/// <param name="action"></param>
-		public static void Each<T>(this IEnumerable<T> list, Action<dynamic> action) {
+		public static void Each<T>(this IEnumerable<T> list, Action<T> action) {
 			foreach (var elem in list) action(elem);
 		}
 
