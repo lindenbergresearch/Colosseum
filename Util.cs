@@ -213,5 +213,25 @@ public static class Util {
 		);
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="namespace"></param>
+	/// <returns></returns>
+	public static IEnumerable<Type> GetAllTypes(string @namespace = "") {
+		foreach (var type in Assembly.GetExecutingAssembly().GetTypes()) {
+			if (@namespace.Empty()) yield return type;
+			else if (type.Namespace == @namespace) yield return type;
+		}
+	}
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="predicate"></param>
+	/// <returns></returns>
+	public static IEnumerable<Type> GetAllTypes(Func<Type, bool> predicate)
+		=> Assembly.GetExecutingAssembly().GetTypes().Where(predicate);
 
 }
