@@ -12,10 +12,9 @@ namespace Renoir {
 	/// Property class:
 	/// Holds all properties for the current level
 	/// </summary>
-	public static class Level {
-		/// <summary>
-		/// </summary>
-		public static Type Type { get; } = typeof(Level);
+	[DataClass(Json = "sdsdsdsdsd")]
+	public class Level {
+
 
 		/// <summary>
 		/// The full name of the level
@@ -36,12 +35,7 @@ namespace Renoir {
 		public static Property<int> Time { get; set; }
 
 
-		/// <summary>
-		/// Static Init / setup global properties via ca's
-		/// </summary>
-		static Level() {
-			SetupGlobalProperties(Type);
-		}
+		
 
 
 	}
