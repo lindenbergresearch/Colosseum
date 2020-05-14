@@ -287,9 +287,8 @@ namespace Renoir {
 		/// <param name="list"></param>
 		/// <param name="sep"></param>
 		/// <returns></returns>
-		public static string MkString(this IEnumerable<dynamic> list, string sep = ", ") {
-			return list.Aggregate((current, elem) => $"{current}{sep} {elem}").ToString();
-		}
+		public static string MkString(this IEnumerable<dynamic> list, string sep = ", ")
+			=> list.Empty() ? "" : (string) list.Aggregate((current, elem) => $"{current}{sep} {elem}").ToString();
 
 
 		/// <summary>
@@ -316,9 +315,9 @@ namespace Renoir {
 		/// <param name="list"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static bool Empty<T>(this IEnumerable<T> list) {
-			return list.Any();
-		}
+		public static bool Empty<T>(this IEnumerable<T> list) 
+			=> list.Count() == 0;
+		
 
 
 		/// <summary>
