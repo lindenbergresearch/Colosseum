@@ -262,6 +262,21 @@ namespace Renoir {
 
 
 		/// <summary>
+		/// Setter for untyped values.
+		/// Checks the given type for valid casting and assigns it.
+		/// Returns true if value can be casted and assigned.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public bool Set(object value) {
+			if (!(value is T t)) return false;
+			
+			_value = t;
+			return true;
+		}
+
+
+		/// <summary>
 		/// Check for new subscriber
 		/// </summary>
 		public override void UpdateSubscriber() {
