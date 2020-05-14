@@ -59,6 +59,10 @@ namespace Renoir {
 			if (background) ex = new BackgroundExecutor(_execDelegate, name);
 			else ex = new PlainExecutor(_execDelegate, name);
 
+			ex.OnBefore = executor => Logger.debug($"Executing: {executor}");
+			ex.OnAfter = executor => Logger.debug($"Done: {executor}");
+			
+			
 			pool.Add(ex);
 		}
 
@@ -73,6 +77,9 @@ namespace Renoir {
 
 			if (background) ex = new BackgroundExecutor(_execDelegateVoid, name);
 			else ex = new PlainExecutor(_execDelegateVoid, name);
+			
+			ex.OnBefore = executor => Logger.debug($"Executing: {executor}");
+			ex.OnAfter = executor => Logger.debug($"Done: {executor}");
 
 			pool.Add(ex);
 		}
@@ -82,6 +89,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="ex"></param>
 		public static void Add(Executor ex) {
+			ex.OnBefore = executor => Logger.debug($"Executing: {executor}");
+			ex.OnAfter = executor => Logger.debug($"Done: {executor}");
+			
 			pool.Add(ex);
 		}
 	}
@@ -105,7 +115,7 @@ namespace Renoir {
 		public ExecutorException(string message, Exception innerException) : base(message, innerException) { }
 
 	}
-
+	
 
 	/// <summary>
 	/// </summary>
