@@ -92,11 +92,11 @@ namespace Renoir {
 		static Logger() {
 			LogLevel = TRACE;
 
-			LogWriters.Add(new GodotConsoleLogWriter());
-			//LogWriters.Add(new SystemConsoleLogWriter());
+			//LogWriters.Add(new GodotConsoleLogWriter());
+			LogWriters.Add(new SystemConsoleLogWriter());
 			LogWriters.Add(new FileLogWriter());
 
-			foreach (var writer in LogWriters) writer.Write(INFO, $"--- INIT LOGGER {DateTime.Now} ---");
+			log(INFO, $"--- INIT LOGGER {DateTime.Now} ---");
 		}
 
 
@@ -115,12 +115,14 @@ namespace Renoir {
 
 
 			var dt = DateTime.Now.ToString("HH:mm:ss.fff");
-			var m = $"[{dt}] {level} <{filename}:{lineno} {method}()> {msg}";
 
 
-			//TODO: find a better solution to add the standard logger
+			var m = $"[{dt}] {level} ";
 
-			foreach (var writer in LogWriters) writer.Write(level, m);
+			if (lineno > 0) m += $"({filename}:{lineno} {method}) {msg}";
+			else  m += $"({method}) {msg}";
+
+			LogWriters.Each(writer => writer.Write(level, m));
 
 			messages.Add(m);
 		}
