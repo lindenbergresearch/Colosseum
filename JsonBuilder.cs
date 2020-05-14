@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 
@@ -108,6 +109,16 @@ namespace Renoir {
 			jObject["methods"] = jMethods;
 
 			root[type.FullName ?? "<null>"] = jObject;
+		}
+
+
+		public static JObject FromProperties(Type type, object obj = null) {
+			var jRoot = new JObject();
+			
+			type.GetProperties()
+			    .Each(p => jRoot[p.Name] = (JToken) p.GetValue(obj));
+
+			return jRoot;
 		}
 
 
