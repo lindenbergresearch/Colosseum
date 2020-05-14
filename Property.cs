@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Godot;
+using Newtonsoft.Json.Linq;
 
 #endregion
 
@@ -270,7 +271,7 @@ namespace Renoir {
 		/// <returns></returns>
 		public bool Set(object value) {
 			if (!(value is T t)) return false;
-			
+
 			_value = t;
 			return true;
 		}
@@ -432,8 +433,24 @@ namespace Renoir {
 		}
 
 
+		/// <summary>
+		/// Unboxing the inner value.
+		/// </summary>
+		/// <param name="p"></param>
+		/// <returns></returns>
 		public static explicit operator T(Property<T> p) {
 			return p._value;
+		}
+
+
+		/// <summary>
+		/// Implicit conversation to JToken for JSON support.
+		/// </summary>
+		/// <param name="p"></param>
+		/// <returns></returns>
+		public static implicit operator JToken(Property<T> p) {
+			var t = JToken.FromObject(p._value);
+			return t;
 		}
 
 
