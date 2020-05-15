@@ -201,7 +201,7 @@ namespace Renoir {
 	/// <summary>
 	/// Encapsulates a property, binds it to a name and provide an event to catch manipulating.
 	/// </summary>
-	public class Property<T> : BaseProperty {
+	public class Property<T> : BaseProperty, ITokenizeable {
 
 		/// <summary>
 		/// Event handler delegate.
@@ -220,7 +220,12 @@ namespace Renoir {
 		/// <summary>
 		/// Basic parameterless constructor
 		/// </summary>
-		public Property() { }
+		public Property() {
+			if (Default != null) {
+				Set(Default);
+				Logger.debug($"set default value for: {this}");
+			}
+		}
 
 
 		/// <summary>
@@ -370,9 +375,17 @@ namespace Renoir {
 			if (Format.Length > 0 && Value != null) valStr = Formatted();
 
 			return $"[Alias='{Alias}' ID={ID} value={typeStr[typeStr.Length - 1]}({valStr})" + (Locked ? " locked=true" : "") +
-			       $" handler={RaiseChangeEvent?.GetInvocationList()?.Length}" +
-			       $" trigger={Triggers.Count} transforms={TransformTriggers.Count}" + "]";
+				   $" handler={RaiseChangeEvent?.GetInvocationList()?.Length}" +
+				   $" trigger={Triggers.Count} transforms={TransformTriggers.Count}" + "]";
 		}
+
+
+		/// <summary>
+		/// Transform value to JToken
+		/// </summary>
+		/// <returns></returns>
+		public JToken ToToken()
+			=> JToken.FromObject(_value);
 
 
 		/// <summary>
@@ -577,6 +590,7 @@ namespace Renoir {
 
 		public string Alias { get; set; }
 		public string Format { get; set; } = "";
+		public object Default { get; set; }
 		public long ID { get; set; }
 		public bool Locked { get; set; }
 
