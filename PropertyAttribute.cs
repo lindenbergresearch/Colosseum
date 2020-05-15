@@ -19,7 +19,7 @@ namespace Renoir {
 		/// <param name="obj"></param>
 		/// <exception cref="RuntimeTypeException"></exception>
 		private static void FindAndRegister(Type type, object obj = null) {
-			foreach (var propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy))
+			foreach (var propertyInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy))
 				if (propertyInfo.PropertyType.Name.StartsWith("Property"))
 					foreach (var customAttribute in propertyInfo.GetCustomAttributes())
 						if (customAttribute is RegisterAttribute sa) {
