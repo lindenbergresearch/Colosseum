@@ -35,7 +35,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	[GNode("Camera2D")]
 	private Camera2D camera;
 
-	[GNode("InfoBox")]
+	[GNode("PlayerInfoText/InfoBox")]
 	private RichTextLabel _info;
 
 	[GNode("JumpSound")]
@@ -163,7 +163,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// </summary>
 	/// <param name="delta"></param>
 	protected override void UpdateMotion(float delta) {
-		Vector2 _gravity = Level.Gravity * delta;
+		//Vector2 _gravity = Level.Gravity * delta;
 
 		Motion += Level.Gravity.Value * delta;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
@@ -247,7 +247,8 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 			$"Velocity: {vect}\nPosition: {pos}\nSL: {SkiddingLeft} " +
 			$"SR: {SkiddingRight}\nGrounded: {Grounded}\nWalk: {Walking} " +
 			$"Run: {Running}\nJump: {Jumping} Fall: {Falling}" +
-			$"Animation: {_animate.IsPlaying()}";
+			$"Animation: {_animate.IsPlaying()}\n" +
+			$"Gravity: {Level.Gravity.Value}";
 	}
 
 
@@ -272,7 +273,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// </summary>
 	/// <param name="delta"></param>
 	protected override void PhysicsProcess(float delta) {
-		if (ActionKey.Select) Debug = !Debug;
+		if (ActionKey.Select) {
+			Debug = !Debug;
+			debug($"Toggle player debug info: {Debug}");
+		}
 
 		//updateCamera(delta);
 
@@ -303,9 +307,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 		player = BasicParameter.LoadFromJson<PlayerParameter>("PlayerParameter.json");
 
-		var jb = JBuilder.Create();
-		jb.Add(player.GetType());
-		debug($"Player: {jb.Json}");
+		debug($"Player: {player.ToJson()}");
 
 		camera.LimitLeft = 0;
 		camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
@@ -313,6 +315,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 		StartPosition = GlobalPosition;
 
 		PropertyPool.AddSubscription("main.mouse.*", this);
+		Level.Gravity.Value = new Vector2(0, 1200);
 	}
 
 
