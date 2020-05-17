@@ -8,9 +8,14 @@ namespace Renoir {
 
 	public class DataClass {
 
-		public struct MetaData {
+		public class MetaData {
 			public string fileName;
 			public string json;
+
+			public MetaData(string fileName, string json) {
+				this.fileName = fileName;
+				this.json = json;
+			}
 		}
 
 
@@ -56,7 +61,7 @@ namespace Renoir {
 				Logger.trace($"Try to load json from file: {json}");
 				json = File.ReadAllText(jsonFile);
 			} catch (Exception e) {
-				Logger.warn($"Unable to load json: '{json}' Exception is: {e}");
+				Logger.warn($"Unable to load json: '{json}' Exception is: {e.Message}");
 			}
 		}
 
