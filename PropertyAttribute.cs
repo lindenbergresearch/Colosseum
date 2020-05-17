@@ -43,6 +43,7 @@ namespace Renoir {
 
 								property.Alias = sa.Alias;
 								property.Format = sa.Format;
+								property.Default = sa.Default;
 								property.ID = PropertyPool.CurrentId++;
 								property.UpdateSubscriber();
 
@@ -97,6 +98,16 @@ namespace Renoir {
 
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="alias"></param>
+		public RegisterAttribute(string alias) {
+			Alias = alias;
+			Format = "";
+		}
+
+
+		/// <summary>
 		/// Attribute constructor.
 		/// </summary>
 		/// <param name="alias"></param>
@@ -107,8 +118,22 @@ namespace Renoir {
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="alias"></param>
+		/// <param name="default"></param>
+		/// <param name="format"></param>
+		public RegisterAttribute(string alias, object @default = null, string format = "") {
+			Alias = alias;
+			Format = format;
+			Default = @default;
+		}
+
+
 		public string Alias { get; set; }
 		public string Format { get; set; }
+		public object Default { get; set; }
 
 	}
 

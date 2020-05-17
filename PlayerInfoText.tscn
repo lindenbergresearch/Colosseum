@@ -181,10 +181,10 @@ __meta__ = {
 [node name="DebugMessageBox" type="RichTextLabel" parent="ColorRectDebug"]
 anchor_top = 0.0125
 anchor_bottom = 0.0125
-margin_left = 4.0
-margin_top = 28.0
-margin_right = 2364.0
-margin_bottom = 1468.0
+margin_left = 11.0
+margin_top = 27.0
+margin_right = 2339.0
+margin_bottom = 1469.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_scale = Vector2( 0.2, 0.2 )
@@ -220,7 +220,7 @@ custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 0.352941 )
 custom_constants/shadow_offset_x = 4
 custom_constants/shadow_offset_y = 5
-text = "renoir core engine I // Logbook"
+text = "Renoir Core Engine ~ Logbook"
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -235,4 +235,25 @@ pitch_scale = 1.43
 stream = ExtResource( 2 )
 volume_db = -8.194
 pitch_scale = 1.73
+
+[node name="InfoBox" type="RichTextLabel" parent="."]
+margin_left = 10.0
+margin_top = 31.0
+margin_right = 1634.0
+margin_bottom = 351.0
+grow_vertical = 0
+rect_scale = Vector2( 0.2, 0.2 )
+custom_fonts/normal_font = ExtResource( 8 )
+custom_colors/default_color = Color( 1, 0.94902, 0.160784, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 0.615686 )
+custom_constants/table_vseparation = 0
+custom_constants/shadow_offset_x = 2
+custom_constants/shadow_offset_y = 2
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Venenatis tellus in metus vulputate eu scelerisque felis. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis. Enim praesent elementum facilisis leo vel fringilla est ullamcorper. Amet cursus sit amet dictum sit amet justo donec.
+"
+scroll_active = false
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
 [connection signal="timeout" from="TextTimer" to="ColorRectDebug/DebugMessageBox" method="_on_Timer_timeout"]

@@ -2,10 +2,12 @@
 
 [sub_resource type="DynamicFontData" id=1]
 hinting = 0
-font_path = "res://fonts/JetBrainsMono-Regular.ttf"
+font_path = "res://fonts/cmu-typewriter/Typewriter/cmuntb.ttf"
 
 [resource]
-size = 25
+size = 33
 outline_color = Color( 0, 0, 0, 1 )
 use_filter = true
+extra_spacing_top = -3
+extra_spacing_bottom = -3
 font_data = SubResource( 1 )

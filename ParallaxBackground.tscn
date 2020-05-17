@@ -20,7 +20,7 @@ margin_right = 544.0
 margin_bottom = 320.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color( 0.180392, 0.364706, 0.717647, 1 )
+color = Color( 0.45098, 0.529412, 0.956863, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -39,7 +39,6 @@ __meta__ = {
 }
 
 [node name="2" type="Sprite" parent="ParallaxBackground/Bitmap"]
-visible = false
 position = Vector2( 256, 104 )
 texture = ExtResource( 2 )
 __meta__ = {
