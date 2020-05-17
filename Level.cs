@@ -19,7 +19,7 @@ namespace Renoir {
 		/// <summary>
 		/// The full name of the level
 		/// </summary>
-		[Register("main.level.name")]
+		[Register("main.level.name",  "123","")]
 		public static Property<string> Name { get; set; }
 
 		/// <summary>
@@ -31,11 +31,8 @@ namespace Renoir {
 		/// <summary>
 		/// Current time
 		/// </summary>
-		[Register("main.level.time", "{0:D3}")]
+		[Register("main.level.time",123, "{0:D3}")]
 		public static Property<int> Time { get; set; }
-
-
-		
 
 
 	}

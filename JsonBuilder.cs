@@ -11,6 +11,20 @@ namespace Renoir {
 
 
 	/// <summary>
+	/// 
+	/// </summary>
+	public interface ITokenizeable {
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		JToken ToToken();
+
+	}
+
+
+	/// <summary>
 	/// JSON builder utility class for dumping object data
 	/// </summary>
 	public class JBuilder {
@@ -19,10 +33,10 @@ namespace Renoir {
 		/// Default bindings
 		/// </summary>
 		public const BindingFlags DefaultBindings = BindingFlags.Public
-		                                            | BindingFlags.GetField
-		                                            | BindingFlags.GetProperty
-		                                            | BindingFlags.Static
-		                                            | BindingFlags.Instance;
+													| BindingFlags.GetField
+													| BindingFlags.GetProperty
+													| BindingFlags.Static
+													| BindingFlags.Instance;
 
 
 		/// <summary>
@@ -112,11 +126,27 @@ namespace Renoir {
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public static JObject FromProperties(Type type, object obj = null) {
 			var jRoot = new JObject();
-			
-			type.GetProperties()
-			    .Each(p => jRoot[p.Name] = (JToken) p.GetValue(obj));
+			JToken token;
+
+			foreach (var propertyInfo in type.GetProperties()) {
+				if (propertyInfo.GetValue(obj) is ITokenizeable tokenizeable) {
+					token = tokenizeable.ToToken();
+				} else {
+					token = (JToken) propertyInfo.GetValue(obj);
+				}
+
+				if (token == null) token = (JToken) "null";
+ 				jRoot[propertyInfo.Name] = token;
+			}
+
 
 			return jRoot;
 		}

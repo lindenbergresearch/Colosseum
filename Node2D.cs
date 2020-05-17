@@ -2,6 +2,7 @@
 
 using System;
 using Godot;
+using Newtonsoft.Json;
 using Renoir;
 using static Renoir.Logger;
 
@@ -68,7 +69,7 @@ public class Node2D : Godot.Node2D {
 
 		PrintDebug = EnableDebug;
 		setupViewport();
-
+		
 		Level.Name.Value = levelName;
 		Level.Gravity.Value = new Vector2(0, 1200);
 		Level.Time.Value = 0;

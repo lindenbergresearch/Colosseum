@@ -52,6 +52,7 @@ namespace Renoir {
 
 		/// <summary>
 		/// Map action keys
+	
 		/// </summary>
 		protected static class ActionKey {
 			public static bool Up => IsActionPressed("ui_up");

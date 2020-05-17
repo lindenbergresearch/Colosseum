@@ -221,6 +221,8 @@ namespace Renoir {
 		/// Basic parameterless constructor
 		/// </summary>
 		public Property() {
+			// Logging created at: 18:43:22
+			Logger.debug($"default is: {Default}");
 			if (Default != null) {
 				Set(Default);
 				Logger.debug($"set default value for: {this}");
@@ -275,8 +277,12 @@ namespace Renoir {
 		/// <param name="value"></param>
 		/// <returns></returns>
 		public bool Set(object value) {
+			// Logging created at: 18:39:20
+			Logger.debug($"try to set default value: {value} for {this}");
 			if (!(value is T t)) return false;
 
+			Logger.debug("default value has been set.");
+			
 			_value = t;
 			return true;
 		}
@@ -384,8 +390,10 @@ namespace Renoir {
 		/// Transform value to JToken
 		/// </summary>
 		/// <returns></returns>
-		public JToken ToToken()
-			=> JToken.FromObject(_value);
+		public JToken ToToken() {
+			var val = _value ?? (object) "null";
+			return JToken.FromObject(val);
+		}
 
 
 		/// <summary>

@@ -61,7 +61,6 @@ public static class DynamicBindings {
 	/// <param name="obj"></param>
 	public static void InitNodeBindings(object obj) {
 		if (obj is Node node) {
-			trace($"Setup dynamic bindings for type: {obj.GetType().FullName}");
 			SetupBindings(node);
 		} else {
 			warn($"Unable to setup node bindings for type: {obj.GetType().FullName}. Not an instance of type {typeof(Node).FullName}.");

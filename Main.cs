@@ -22,7 +22,7 @@ public class MainApp {
 		Logger.debug($"test: {jo.ToJson()}");
 
 
-		//Initializer.Run();
+		Initializer.Run();
 
 
 		//var json = JBuilder.FromProperties(typeof(Level));
