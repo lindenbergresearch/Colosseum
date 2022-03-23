@@ -8,3 +8,7 @@
 ./fonts
 
 .DS_Store
+/log/
+/.mono/
+/fonts/
+/obj/
