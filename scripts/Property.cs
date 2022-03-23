@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System;
@@ -5,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Godot;
+using Newtonsoft.Json.Linq;
 
 #endregion
 
@@ -12,28 +32,28 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Maintains a registered properties
+	///     Maintains a registered properties
 	/// </summary>
 	public class PropertyPool {
 
 		/// <summary>
-		/// Holds all global properties
+		///     Holds all global properties
 		/// </summary>
-		private static readonly Dictionary<string, object> pool = new Dictionary<string, object>();
+		private static readonly Dictionary<string, object> pool = new();
 
 		/// <summary>
-		/// Holds all subscriptions
+		///     Holds all subscriptions
 		/// </summary>
-		private static readonly Dictionary<string, IPropertyChangeHandler> subscriptions = new Dictionary<string, IPropertyChangeHandler>();
+		private static readonly Dictionary<string, IPropertyChangeHandler> subscriptions = new();
 
 		/// <summary>
-		/// Current property id counter
+		///     Current property id counter
 		/// </summary>
 		public static int CurrentId { get; set; } = 100;
 
 
 		/// <summary>
-		/// Add untyped property to pool
+		///     Add untyped property to pool
 		/// </summary>
 		/// <param name="property"></param>
 		/// <param name="name"></param>
@@ -45,7 +65,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Registers a new property at the property-pool.
+		///     Registers a new property at the property-pool.
 		/// </summary>
 		/// <param name="property">The property to update</param>
 		public static void Register<T>(Property<T> property) {
@@ -56,7 +76,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Matches all subscriptions by the given alias
+		///     Matches all subscriptions by the given alias
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <returns></returns>
@@ -75,7 +95,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Get a property by it's name ID
+		///     Get a property by it's name ID
 		/// </summary>
 		/// <param name="id">The properties name ID</param>
 		/// <returns></returns>
@@ -89,7 +109,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Get with no type-cast
+		///     Get with no type-cast
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
@@ -99,7 +119,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Removes a property from the pool.
+		///     Removes a property from the pool.
 		/// </summary>
 		/// <param name="property">The property to update</param>
 		public static void Unregister<T>(Property<T> property) {
@@ -108,8 +128,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Returns the pool's content as string representation.
-		/// Rather a feature for debug issues to dump the content.
+		///     Returns the pool's content as string representation.
+		///     Rather a feature for debug issues to dump the content.
 		/// </summary>
 		/// <returns></returns>
 		public static string AsString() {
@@ -120,7 +140,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Clear property pool
+		///     Clear property pool
 		/// </summary>
 		public static void Clear() {
 			pool.Clear();
@@ -129,7 +149,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Check of property already registered
+		///     Check of property already registered
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
@@ -139,7 +159,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Add a subscription to one or more properties defined by a matching string.
+		///     Add a subscription to one or more properties defined by a matching string.
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="subscriber"></param>
@@ -150,27 +170,25 @@ namespace Renoir {
 				if (o.Value is BaseProperty bp)
 					bp.UpdateSubscriber();
 		}
-
 	}
 
 
 	/// <summary>
-	/// Interface for subscriber classes.
+	///     Interface for subscriber classes.
 	/// </summary>
 	public interface IPropertyChangeHandler {
 
 		/// <summary>
-		/// Called upon an event has been fired.
+		///     Called upon an event has been fired.
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
 		void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args);
-
 	}
 
 
 	/// <summary>
-	/// Property change event data.
+	///     Property change event data.
 	/// </summary>
 	public class PropertyEventArgs<T> : EventArgs {
 
@@ -185,7 +203,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Pretty print this event.
+		///     Pretty print this event.
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString() {
@@ -193,17 +211,16 @@ namespace Renoir {
 			var n = New != null ? New.ToString() : "<empty>";
 			return $"({o} => {n})";
 		}
-
 	}
 
 
 	/// <summary>
-	/// Encapsulates a property, binds it to a name and provide an event to catch manipulating.
+	///     Encapsulates a property, binds it to a name and provide an event to catch manipulating.
 	/// </summary>
 	public class Property<T> : BaseProperty {
 
 		/// <summary>
-		/// Event handler delegate.
+		///     Event handler delegate.
 		/// </summary>
 		/// <param name="sender">The property where the event is raised.</param>
 		/// <param name="args">Change data.</param>
@@ -211,19 +228,19 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// generic typed property value
+		///     generic typed property value
 		/// </summary>
 		private T _value;
 
 
 		/// <summary>
-		/// Basic parameterless constructor
+		///     Basic parameterless constructor
 		/// </summary>
 		public Property() { }
 
 
 		/// <summary>
-		/// Constructs a property.
+		///     Constructs a property.
 		/// </summary>
 		/// <param name="alias">The name of the property</param>
 		/// <param name="value">The properties value</param>
@@ -237,7 +254,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Constructs a property with a default value.
+		///     Constructs a property with a default value.
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="locked"></param>
@@ -262,31 +279,31 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Check for new subscriber
+		///     Dynamic transformation trigger list. Contains all transformation trigger.
+		/// </summary>
+		public List<(Func<T, bool>, Func<T, T>)> TransformTriggers { get; } = new();
+
+		/// <summary>
+		///     Dynamic trigger list. Contains all constraint trigger.
+		/// </summary>
+		public List<(Func<T, bool>, Action<T>)> Triggers { get; } = new();
+
+
+		/// <summary>
+		///     Check for new subscriber
 		/// </summary>
 		public override void UpdateSubscriber() {
 			foreach (var _propertyChangeListener in PropertyPool.MatchSubscriptions(Alias)) Subscribe(_propertyChangeListener);
 		}
 
-
 		/// <summary>
-		/// Dynamic transformation trigger list. Contains all transformation trigger.
-		/// </summary>
-		public List<(Func<T, bool>, Func<T, T>)> TransformTriggers { get; } = new List<(Func<T, bool>, Func<T, T>)>();
-
-		/// <summary>
-		/// Dynamic trigger list. Contains all constraint trigger.
-		/// </summary>
-		public List<(Func<T, bool>, Action<T>)> Triggers { get; } = new List<(Func<T, bool>, Action<T>)>();
-
-		/// <summary>
-		/// The change event bound to the event handler delegate.
+		///     The change event bound to the event handler delegate.
 		/// </summary>
 		public event ChangeEventHandler RaiseChangeEvent;
 
 
 		/// <summary>
-		/// Subscribe to a change event.
+		///     Subscribe to a change event.
 		/// </summary>
 		/// <param name="handler"></param>
 		public void Subscribe(IPropertyChangeHandler handler) {
@@ -295,7 +312,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Check for delegate
+		///     Check for delegate
 		/// </summary>
 		/// <param name="delegate"></param>
 		/// <returns></returns>
@@ -305,7 +322,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// UnSubscribe to event.
+		///     UnSubscribe to event.
 		/// </summary>
 		/// <param name="handler"></param>
 		public void Unsubscribe(IPropertyChangeHandler handler) {
@@ -314,8 +331,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Return the properties value as formatted string using
-		/// the internal setup Format property.
+		///     Return the properties value as formatted string using
+		///     the internal setup Format property.
 		/// </summary>
 		/// <returns></returns>
 		public string Formatted() {
@@ -324,8 +341,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Return the properties value as formatted string using
-		/// the given format specifier.
+		///     Return the properties value as formatted string using
+		///     the given format specifier.
 		/// </summary>
 		/// <param name="format"></param>
 		/// <returns></returns>
@@ -335,7 +352,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Event handler. Propagate event to all subscriber.
+		///     Event handler. Propagate event to all subscriber.
 		/// </summary>
 		/// <param name="e"></param>
 		protected virtual void OnPropertyChange(PropertyEventArgs<T> e) {
@@ -344,7 +361,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// String representation of the property.
+		///     String representation of the property.
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString() {
@@ -360,8 +377,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Adds a trigger handler which is raised if 'cond' becomes true and transforms
-		/// it's value via 'handler'.
+		///     Adds a trigger handler which is raised if 'cond' becomes true and transforms
+		///     it's value via 'handler'.
 		/// </summary>
 		/// <param name="cond">The condition closure.</param>
 		/// <param name="handler">The handler closure. Should return null on no transformation.</param>
@@ -371,8 +388,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Checks all transform-triggers for match and applies it's
-		/// transformation on success.
+		///     Checks all transform-triggers for match and applies it's
+		///     transformation on success.
 		/// </summary>
 		/// <param name="t">The value to check against all riggers.</param>
 		private void ExecuteTransformTrigger(T t) {
@@ -385,8 +402,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Adds a trigger handler which is raised if 'cond' becomes true.
-		/// Does not transforms anything.
+		///     Adds a trigger handler which is raised if 'cond' becomes true.
+		///     Does not transforms anything.
 		/// </summary>
 		/// <param name="cond">The condition closure.</param>
 		/// <param name="handler">The handler closure. Should return null on no transformation.</param>
@@ -396,7 +413,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Checks all triggers for match and call it's handler on success.
+		///     Checks all triggers for match and call it's handler on success.
 		/// </summary>
 		/// <param name="t">The value to check against all riggers.</param>
 		private void ExecuteTrigger(T t) {
@@ -421,6 +438,11 @@ namespace Renoir {
 			return p._value;
 		}
 
+
+		public static implicit operator JToken(Property<T> p) {
+			var t = JToken.FromObject(p._value);
+			return t;
+		}
 
 		public static implicit operator string(Property<T> p) {
 			if ((object) p == null) return "<NIL>";
@@ -534,12 +556,11 @@ namespace Renoir {
 			return p;
 		}
 		/*===== OPERATOR CONVERSATIONS =================================================================================*/
-
 	}
 
 
 	/// <summary>
-	/// Basic property properties
+	///     Basic property properties
 	/// </summary>
 	public abstract class BaseProperty {
 
@@ -549,7 +570,6 @@ namespace Renoir {
 		public bool Locked { get; set; }
 
 		public abstract void UpdateSubscriber();
-
 	}
 
 }

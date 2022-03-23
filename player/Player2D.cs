@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using static Godot.Input;
@@ -7,7 +26,7 @@ using static Godot.Input;
 namespace Renoir {
 
 	/// <summary>
-	/// Abstract Player blueprint
+	///     Abstract Player blueprint
 	/// </summary>
 	public abstract class Player2D : KinematicEntity2D {
 
@@ -51,7 +70,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Map action keys
+		///     Map action keys
 		/// </summary>
 		protected static class ActionKey {
 			public static bool Up => IsActionPressed("ui_up");

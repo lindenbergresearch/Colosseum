@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using Godot;
@@ -7,7 +26,7 @@ using Renoir;
 
 
 /// <summary>
-/// An abstract item which can be consumed by a consumer
+///     An abstract item which can be consumed by a consumer
 /// </summary>
 public class AgileItem2D : KinematicEntity2D, ICollider {
 
@@ -17,7 +36,7 @@ public class AgileItem2D : KinematicEntity2D, ICollider {
 
 
 	/// <summary>
-	/// Handle external collisions
+	///     Handle external collisions
 	/// </summary>
 	/// <param name="sender"></param>
 	/// <param name="collision"></param>
@@ -30,7 +49,7 @@ public class AgileItem2D : KinematicEntity2D, ICollider {
 
 
 	/// <summary>
-	/// Handle internal collisions
+	///     Handle internal collisions
 	/// </summary>
 	/// <param name="delta"></param>
 	protected override void PhysicsProcess(float delta) {
@@ -47,7 +66,7 @@ public class AgileItem2D : KinematicEntity2D, ICollider {
 
 
 	/// <summary>
-	/// Activate item
+	///     Activate item
 	/// </summary>
 	public void Activate() {
 		Show();
@@ -57,7 +76,7 @@ public class AgileItem2D : KinematicEntity2D, ICollider {
 
 
 	/// <summary>
-	/// Deactivate item
+	///     Deactivate item
 	/// </summary>
 	public void Deactivate() {
 		Active = false;
@@ -71,23 +90,22 @@ public class AgileItem2D : KinematicEntity2D, ICollider {
 	protected override void Ready() {
 		Hide();
 	}
-
 }
 
 
 /// <summary>
 /// </summary>
 public class VerticalMovingItem : Node {
-	private static readonly Vector2 INITIAL_IMPULSE = new Vector2(0, -25);
+	private static readonly Vector2 INITIAL_IMPULSE = new(0, -25);
 
-	private AgileItem2D AgileItem { get; set; }
+	[GNode("../AudioStreamPlayer")]
+	private AudioStreamPlayer _audioStreamPlayer;
 
 
 	[GNode("../Label")]
 	private Label _label;
 
-	[GNode("../AudioStreamPlayer")]
-	private AudioStreamPlayer _audioStreamPlayer;
+	private AgileItem2D AgileItem { get; set; }
 
 
 	/// <summary>
@@ -115,21 +133,20 @@ public class VerticalMovingItem : Node {
 		if (AgileItem.Position.y > -16) AgileItem.UpdateMotion();
 		else _audioStreamPlayer.Stop();
 	}
-
 }
 
 
 /// <summary>
 /// </summary>
 public class HorizontalMovingItem : Node {
-	private static readonly Vector2 GRAVITY = new Vector2(0, 900);
-	private static readonly Vector2 INITIAL_IMPULSE = new Vector2(50, -250);
-
-	private AgileItem2D AgileItem { get; set; }
-	private Motion2D OldMotion2D { get; set; } = (0, 0);
+	private static readonly Vector2 GRAVITY = new(0, 900);
+	private static readonly Vector2 INITIAL_IMPULSE = new(50, -250);
 
 	[GNode("../Label")]
 	private Label _label;
+
+	private AgileItem2D AgileItem { get; set; }
+	private Motion2D OldMotion2D { get; set; } = (0, 0);
 
 
 	/// <summary>
@@ -162,6 +179,4 @@ public class HorizontalMovingItem : Node {
 		AgileItem.Motion += delta * GRAVITY;
 		AgileItem.UpdateMotion();
 	}
-
-
 }

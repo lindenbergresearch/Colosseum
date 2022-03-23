@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using Godot;
@@ -12,6 +31,9 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 	[GNode("CoinsLabel")]
 	private Label CoinsLabel;
 
+	[GNode("FPSLabel")]
+	private Label FPSLabel;
+
 	[GNode("LevelNameLabel")]
 	private Label LevelNameLabel;
 
@@ -23,9 +45,6 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 
 	[GNode("TimeLabel")]
 	private Label TimeLabel;
-
-	[GNode("FPSLabel")]
-	private Label FPSLabel;
 
 
 	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
@@ -43,5 +62,4 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 
 		AddSubscription("main.*", this);
 	}
-
 }

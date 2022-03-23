@@ -1,4 +1,23 @@
-﻿#region
+﻿#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
+#region
 
 using System;
 using System.Reflection;
@@ -8,12 +27,12 @@ using System.Reflection;
 namespace Renoir {
 
 	/// <summary>
-	/// Property Extensions
+	///     Property Extensions
 	/// </summary>
 	public static class PropertyExtensions {
 
 		/// <summary>
-		/// Search custom attributed property and process it.
+		///     Search custom attributed property and process it.
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="obj"></param>
@@ -56,8 +75,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Search for global properties marked via custom attribute and create + register them
-		/// in the property pool.
+		///     Search for global properties marked via custom attribute and create + register them
+		///     in the property pool.
 		/// </summary>
 		/// <param name="obj"></param>
 		public static void SetupGlobalProperties(this object obj) {
@@ -67,9 +86,9 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Search for global properties marked via custom attribute and create + register them
-		/// in the property pool.
-		/// Used by static classes only.
+		///     Search for global properties marked via custom attribute and create + register them
+		///     in the property pool.
+		///     Used by static classes only.
 		/// </summary>
 		/// <param name="type"></param>
 		public static void SetupGlobalProperties(Type type) {
@@ -79,7 +98,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Init method for objects used in Ibnitializer
+		///     Init method for objects used in Ibnitializer
 		/// </summary>
 		/// <param name="obj"></param>
 		public static void InitGlobalProperties(object obj) {
@@ -90,14 +109,14 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Custom attribute to specify a global property
+	///     Custom attribute to specify a global property
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
 	public class RegisterAttribute : Attribute {
 
 
 		/// <summary>
-		/// Attribute constructor.
+		///     Attribute constructor.
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="format"></param>
@@ -109,17 +128,15 @@ namespace Renoir {
 
 		public string Alias { get; set; }
 		public string Format { get; set; }
-
 	}
 
 
 	/// <summary>
-	/// Raised if some runtime type conversion fails.
+	///     Raised if some runtime type conversion fails.
 	/// </summary>
 	public class RuntimeTypeException : Exception {
 
 		public RuntimeTypeException(string message) : base(message) { }
-
 	}
 
 }

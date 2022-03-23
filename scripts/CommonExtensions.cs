@@ -1,4 +1,23 @@
-﻿#region
+﻿#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
+#region
 
 using System;
 using System.Collections.Generic;
@@ -13,12 +32,12 @@ using File = System.IO.File;
 namespace Renoir {
 
 	/// <summary>
-	/// Extension methods for numeric stuff
+	///     Extension methods for numeric stuff
 	/// </summary>
 	public static class RMath {
 
 		/// <summary>
-		/// Test for number exceeding a special value
+		///     Test for number exceeding a special value
 		/// </summary>
 		/// <param name="this"></param>
 		/// <param name="other"></param>
@@ -74,7 +93,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Test if value is in range.
+		///     Test if value is in range.
 		/// </summary>
 		/// <param name="this"></param>
 		/// <param name="start">Start value</param>
@@ -92,7 +111,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Test if value is in symmetrical range.
+		///     Test if value is in symmetrical range.
 		/// </summary>
 		/// <param name="this"></param>
 		/// <param name="epsilon">+/- distance</param>
@@ -105,7 +124,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Round to integer
+		///     Round to integer
 		/// </summary>
 		/// <param name="x"></param>
 		/// <returns></returns>
@@ -120,7 +139,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Returns the vectors direction as unicode arrow
+		///     Returns the vectors direction as unicode arrow
 		/// </summary>
 		/// <param name="vector2"></param>
 		/// <returns></returns>
@@ -137,12 +156,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// String extensions
+	///     String extensions
 	/// </summary>
 	public static class RString {
 
 		/// <summary>
-		/// Directly write a string to a file
+		///     Directly write a string to a file
 		/// </summary>
 		/// <param name="text">The string</param>
 		/// <param name="filePath">The full path of the target filename</param>
@@ -153,12 +172,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Object extentions
+	///     Object extentions
 	/// </summary>
 	public static class RObject {
 
 		/// <summary>
-		/// Converts the current data of an object to a JSON string
+		///     Converts the current data of an object to a JSON string
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -167,12 +186,13 @@ namespace Renoir {
 		}
 
 
-		public static IEnumerable<FieldInfo> GetFieldsWhere(this Type type, Func<FieldInfo, bool> predicate)
-			=> type.GetFields().Where(predicate);
+		public static IEnumerable<FieldInfo> GetFieldsWhere(this Type type, Func<FieldInfo, bool> predicate) {
+			return type.GetFields().Where(predicate);
+		}
 
 
 		/// <summary>
-		/// Dump the object's content to string
+		///     Dump the object's content to string
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -182,8 +202,8 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Tries to save the string representation of an object (ToString)
-		/// to a given text-file.
+		///     Tries to save the string representation of an object (ToString)
+		///     to a given text-file.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="fileName"></param>
@@ -194,13 +214,13 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Godot classes extensions
+	///     Godot classes extensions
 	/// </summary>
 	public static class RGodot {
 
 
 		/// <summary>
-		/// Return all collider since last movement.
+		///     Return all collider since last movement.
 		/// </summary>
 		/// <returns></returns>
 		public static IEnumerable<KinematicCollision2D> GetCollider(this KinematicBody2D kinematicBody2D) {
@@ -216,7 +236,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Check if the given animation id is currently playing
+		///     Check if the given animation id is currently playing
 		/// </summary>
 		/// <param name="animatedSprite"></param>
 		/// <param name="animationID"></param>
@@ -230,7 +250,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Shorthand check for current animation id
+		///     Shorthand check for current animation id
 		/// </summary>
 		/// <param name="animatedSprite"></param>
 		/// <param name="animationID"></param>
@@ -241,7 +261,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Collision position check
+		///     Collision position check
 		/// </summary>
 		/// <param name="kinematicCollision2D"></param>
 		/// <returns></returns>
@@ -266,7 +286,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Convert a scalar float to a vector2
+		///     Convert a scalar float to a vector2
 		/// </summary>
 		/// <param name="f"></param>
 		/// <returns></returns>
@@ -277,12 +297,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// C# collection extensions
+	///     C# collection extensions
 	/// </summary>
 	public static class RCollections {
 
 		/// <summary>
-		/// Convert all elements of an Enumerable to a string separated by a separator
+		///     Convert all elements of an Enumerable to a string separated by a separator
 		/// </summary>
 		/// <param name="list"></param>
 		/// <param name="sep"></param>
@@ -311,7 +331,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Test if collection is empty
+		///     Test if collection is empty
 		/// </summary>
 		/// <param name="list"></param>
 		/// <typeparam name="T"></typeparam>
@@ -322,7 +342,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Iterate over a dictionary via deconstruction
+		///     Iterate over a dictionary via deconstruction
 		/// </summary>
 		/// <param name="tuple"></param>
 		/// <param name="key"></param>
@@ -332,8 +352,6 @@ namespace Renoir {
 		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value) {
 			(key, value) = (tuple.Key, tuple.Value);
 		}
-
-
 	}
 
 }

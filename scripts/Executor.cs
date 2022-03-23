@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System;
@@ -13,17 +32,25 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Helper class for managed Executors.
+	///     Helper class for managed Executors.
 	/// </summary>
 	public static class ExecutorPool {
 
 		/// <summary>
-		/// Executor pool
+		///     Executor pool
 		/// </summary>
 		private static readonly List<Executor> pool;
 
+
 		/// <summary>
-		/// Check if all executors succeeded.
+		///     Init
+		/// </summary>
+		static ExecutorPool() {
+			pool = new List<Executor>();
+		}
+
+		/// <summary>
+		///     Check if all executors succeeded.
 		/// </summary>
 		public static bool AllOk => pool.All(e => e.Succeeded);
 
@@ -33,18 +60,10 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Run all
+		///     Run all
 		/// </summary>
 		public static void RunAll(object obj) {
 			pool.Each(e => e.Run(obj));
-		}
-
-
-		/// <summary>
-		/// Init
-		/// </summary>
-		static ExecutorPool() {
-			pool = new List<Executor>();
 		}
 
 
@@ -58,6 +77,10 @@ namespace Renoir {
 
 			if (background) ex = new BackgroundExecutor(_execDelegate, name);
 			else ex = new PlainExecutor(_execDelegate, name);
+
+			ex.OnBefore = executor => Logger.debug($"Executing: {executor}");
+			ex.OnAfter = executor => Logger.debug($"Done: {executor}");
+
 
 			pool.Add(ex);
 		}
@@ -74,6 +97,9 @@ namespace Renoir {
 			if (background) ex = new BackgroundExecutor(_execDelegateVoid, name);
 			else ex = new PlainExecutor(_execDelegateVoid, name);
 
+			ex.OnBefore = executor => Logger.debug($"Executing: {executor}");
+			ex.OnAfter = executor => Logger.debug($"Done: {executor}");
+
 			pool.Add(ex);
 		}
 
@@ -82,6 +108,9 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="ex"></param>
 		public static void Add(Executor ex) {
+			ex.OnBefore = executor => Logger.debug($"Executing: {executor}");
+			ex.OnAfter = executor => Logger.debug($"Done: {executor}");
+
 			pool.Add(ex);
 		}
 	}
@@ -103,7 +132,6 @@ namespace Renoir {
 
 		/// <inheritdoc />
 		public ExecutorException(string message, Exception innerException) : base(message, innerException) { }
-
 	}
 
 
@@ -111,56 +139,28 @@ namespace Renoir {
 	/// </summary>
 	public abstract class Executor {
 
+
 		/// <summary>
+		///     Action delegate (no parameter, no return value)
 		/// </summary>
-		protected enum ExecState {
-			Ready,
-			Running,
-			Failed,
-			Succeeded
-		}
+		public delegate void EventDelegate(Executor executor);
 
 
 		/// <summary>
+		///     Exception delegate
 		/// </summary>
-		private string name = "";
-
-		/// <summary>
-		/// The name of the executor
-		/// </summary>
-		public string Name {
-			get => name.Length == 0 ? "untitled" : name;
-			set => name = value;
-		}
-
-		/// <summary>
-		/// </summary>
-		public TimeSpan Time;
-
-		protected Stopwatch sw = new Stopwatch();
-
-		public object Result { get; set; }
-
-		/// <summary>
-		/// The executors current state
-		/// </summary>
-		protected ExecState State { get; set; }
-
-
-		public bool Ready => State == ExecState.Ready;
-		public bool Running => State == ExecState.Running;
-		public bool Failed => State == ExecState.Failed;
-		public bool Succeeded => State == ExecState.Succeeded;
+		/// <param name="e"></param>
+		public delegate void ExceptionDelegate(Exception e);
 
 
 		/// <summary>
-		/// Execution delegate with return value
+		///     Execution delegate with return value
 		/// </summary>
 		public delegate object ExecDelegate(object param);
 
 
 		/// <summary>
-		/// Execution delegate without return value
+		///     Execution delegate without return value
 		/// </summary>
 		/// <param name="param"></param>
 		public delegate void ExecDelegateVoid(object param);
@@ -168,30 +168,17 @@ namespace Renoir {
 
 		/// <summary>
 		/// </summary>
-		public ExecDelegate _ExecDelegate { get; set; }
-		public ExecDelegateVoid _ExecDelegateVoid { get; set; }
+		private string name = "";
 
+		protected Stopwatch sw = new();
 
 		/// <summary>
-		/// Action delegate (no parameter, no return value)
 		/// </summary>
-		public delegate void EventDelegate(Executor executor);
+		public TimeSpan Time;
 
 
 		/// <summary>
-		/// Exception delegate
-		/// </summary>
-		/// <param name="e"></param>
-		public delegate void ExceptionDelegate(Exception e);
-
-
-		public EventDelegate OnBefore { get; set; }
-		public EventDelegate OnAfter { get; set; }
-		public ExceptionDelegate OnException { get; set; }
-
-
-		/// <summary>
-		/// Constructor with the execution delegate.
+		///     Constructor with the execution delegate.
 		/// </summary>
 		/// <param name="execDelegate"></param>
 		/// <param name="name"></param>
@@ -203,7 +190,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Constructor with the execution delegate.
+		///     Constructor with the execution delegate.
 		/// </summary>
 		/// <param name="execDelegateVoid"></param>
 		/// <param name="name"></param>
@@ -215,7 +202,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Plain constructor - delegate have to be setup later.
+		///     Plain constructor - delegate have to be setup later.
 		/// </summary>
 		public Executor() {
 			State = ExecState.Ready;
@@ -223,7 +210,41 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Execution method to be implemented
+		///     The name of the executor
+		/// </summary>
+		public string Name {
+			get => name.Length == 0 ? "untitled" : name;
+			set => name = value;
+		}
+
+
+		public object Result { get; set; }
+
+		/// <summary>
+		///     The executors current state
+		/// </summary>
+		protected ExecState State { get; set; }
+
+
+		public bool Ready => State == ExecState.Ready;
+		public bool Running => State == ExecState.Running;
+		public bool Failed => State == ExecState.Failed;
+		public bool Succeeded => State == ExecState.Succeeded;
+
+
+		/// <summary>
+		/// </summary>
+		public ExecDelegate _ExecDelegate { get; set; }
+		public ExecDelegateVoid _ExecDelegateVoid { get; set; }
+
+
+		public EventDelegate OnBefore { get; set; }
+		public EventDelegate OnAfter { get; set; }
+		public ExceptionDelegate OnException { get; set; }
+
+
+		/// <summary>
+		///     Execution method to be implemented
 		/// </summary>
 		/// <param name="param"></param>
 		/// <returns></returns>
@@ -239,6 +260,14 @@ namespace Renoir {
 
 		#endregion
 
+		/// <summary>
+		/// </summary>
+		protected enum ExecState {
+			Ready,
+			Running,
+			Failed,
+			Succeeded
+		}
 	}
 
 
@@ -264,7 +293,7 @@ namespace Renoir {
 		/// <inheritdoc />
 		public override void Run(object param = null) {
 			if (State != ExecState.Ready) return;
-			
+
 			OnBefore?.Invoke(this);
 
 			if (_ExecDelegate == null && _ExecDelegateVoid == null)
@@ -300,6 +329,11 @@ namespace Renoir {
 	public class BackgroundExecutor : Executor {
 
 
+		/// <summary>
+		/// </summary>
+		private Thread ExecutorThread;
+
+
 		/// <inheritdoc />
 		public BackgroundExecutor(ExecDelegate execDelegate, string name = "") : base(execDelegate, name) { }
 
@@ -314,15 +348,10 @@ namespace Renoir {
 
 		/// <summary>
 		/// </summary>
-		private Thread ExecutorThread;
-
-
-		/// <summary>
-		/// </summary>
 		/// <param name="param"></param>
 		private void _Run(object param) {
 			if (State != ExecState.Ready) return;
-			
+
 			OnBefore?.Invoke(this);
 
 			try {
@@ -360,7 +389,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Pause the current thread until the execution is done
+		///     Pause the current thread until the execution is done
 		/// </summary>
 		public object WaitFor() {
 			while (State == ExecState.Running)
@@ -368,7 +397,6 @@ namespace Renoir {
 
 			return Result;
 		}
-
 	}
 
 

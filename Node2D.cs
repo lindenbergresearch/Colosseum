@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System;
@@ -9,13 +28,13 @@ using static Renoir.Logger;
 
 
 /// <summary>
-/// Basic configuration
+///     Basic configuration
 /// </summary>
 public static class Game {
 
 	public const int TILE_SIZE = 8;
 	public const int SCALE_FACTOR = 3;
-	public static readonly Vector2 VIEWPORT_TILES = new Vector2(60, 40);
+	public static readonly Vector2 VIEWPORT_TILES = new(60, 40);
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;
 
@@ -25,9 +44,13 @@ public static class Game {
 
 
 /// <summary>
-/// ROOT node
+///     ROOT node
 /// </summary>
 public class Node2D : Godot.Node2D {
+
+
+	[Export]
+	private readonly string levelName;
 
 	private float time, fps;
 
@@ -37,10 +60,6 @@ public class Node2D : Godot.Node2D {
 
 	[Export]
 	public bool EnableDebug { get; set; }
-
-
-	[Export]
-	private readonly string levelName;
 
 
 	[Register("main.mouse.button")]
@@ -56,6 +75,7 @@ public class Node2D : Godot.Node2D {
 		GetViewport().SizeOverrideStretch = true;
 
 		OS.WindowSize = Game.WINDOW_RESOLUTION;
+		OS.CenterWindow();
 	}
 
 
@@ -111,5 +131,4 @@ public class Node2D : Godot.Node2D {
 		// debug($"Mouse Click/Unclick at: {eventMouseButton.Position} {eventMouseButton.GlobalPosition} {eventMouseButton.Pressed}");
 		// debug($"Viewport Resolution is: {GetViewportRect().Size}");
 	}*/
-
 }

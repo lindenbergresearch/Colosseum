@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System;
@@ -10,11 +29,11 @@ using Newtonsoft.Json;
 namespace Renoir {
 
 	/// <summary>
-	/// provides basic methods for handling persistent parameters
+	///     provides basic methods for handling persistent parameters
 	/// </summary>
 	public abstract class BasicParameter {
 		/// <summary>
-		/// Serialize to Json file
+		///     Serialize to Json file
 		/// </summary>
 		/// <param name="fileName"></param>
 		public void SaveJson(string fileName) {
@@ -23,7 +42,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Deserialize parameters from Json file
+		///     Deserialize parameters from Json file
 		/// </summary>
 		/// <param name="fileName">Path to JSON file</param>
 		/// <returns></returns>
@@ -38,23 +57,10 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Custom attribute to specify a global property
+	///     Custom attribute to specify a global property
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
 	public abstract class ConstraintAttribute : Attribute {
-
-		private enum Type {
-			Range,
-			Blacklist,
-			Invalid,
-			RegEx
-		}
-
-
-		public dynamic From { get; set; }
-		public dynamic To { get; set; }
-		public List<dynamic> Blacklist { get; set; }
-		public string RegEx { get; set; }
 
 		private Type type;
 
@@ -97,6 +103,17 @@ namespace Renoir {
 		}
 
 
+		public dynamic From { get; set; }
+		public dynamic To { get; set; }
+		public List<dynamic> Blacklist { get; set; }
+		public string RegEx { get; set; }
+
+		private enum Type {
+			Range,
+			Blacklist,
+			Invalid,
+			RegEx
+		}
 	}
 
 }

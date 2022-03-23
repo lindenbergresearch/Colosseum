@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System;
@@ -9,19 +28,19 @@ using static Renoir.Logger;
 
 
 /// <summary>
-/// Custom Attribute to bind a local property to a Godot Node in the scene-graph
+///     Custom Attribute to bind a local property to a Godot Node in the scene-graph
 /// </summary>
 [AttributeUsage(AttributeTargets.Field)]
 public class GNodeAttribute : Attribute {
 
 	/// <summary>
-	/// Standard constructor
+	///     Standard constructor
 	/// </summary>
 	public GNodeAttribute() { }
 
 
 	/// <summary>
-	/// Construct NoteBindingAttribute
+	///     Construct NoteBindingAttribute
 	/// </summary>
 	/// <param name="bindTo">Name (and path) of the target note.</param>
 	public GNodeAttribute(string bindTo) {
@@ -30,14 +49,14 @@ public class GNodeAttribute : Attribute {
 
 
 	/// <summary>
-	/// Name (and path) of the target note)
+	///     Name (and path) of the target note)
 	/// </summary>
 	public string BindTo { get; set; } = "";
 }
 
 
 /// <summary>
-/// Contain helper methods for dynamic node bindings.
+///     Contain helper methods for dynamic node bindings.
 /// </summary>
 public static class DynamicBindings {
 
@@ -46,8 +65,8 @@ public static class DynamicBindings {
 
 
 	/// <summary>
-	/// Extension method to be used with nodes.
-	/// Must use with 'this.' to work: this.AutobindNotes()
+	///     Extension method to be used with nodes.
+	///     Must use with 'this.' to work: this.AutobindNotes()
 	/// </summary>
 	/// <param name="node"></param>
 	public static void SetupNodeBindings(this Node node) {
@@ -56,7 +75,7 @@ public static class DynamicBindings {
 
 
 	/// <summary>
-	/// Init node bindings
+	///     Init node bindings
 	/// </summary>
 	/// <param name="obj"></param>
 	public static void InitNodeBindings(object obj) {
@@ -70,9 +89,9 @@ public static class DynamicBindings {
 
 
 	/// <summary>
-	/// Setup dynamic bindings for a given node instance.
-	/// Please call this in every '_Ready()' method in Godot nodes
-	/// to use automatic bindings.
+	///     Setup dynamic bindings for a given node instance.
+	///     Please call this in every '_Ready()' method in Godot nodes
+	///     to use automatic bindings.
 	/// </summary>
 	/// <param name="node">The node to setup.</param>
 	/// <exception cref="Exception"></exception>

@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System;
@@ -10,12 +29,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// JSON builder utility class for dumping object data
+	///     JSON builder utility class for dumping object data
 	/// </summary>
 	public class JBuilder {
 
 		/// <summary>
-		/// Default bindings
+		///     Default bindings
 		/// </summary>
 		public const BindingFlags DefaultBindings = BindingFlags.Public
 		                                            | BindingFlags.GetField
@@ -25,55 +44,13 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Convert an object to JSON string.
-		/// Uses JToken method.
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
-		public static string ObjectToJson(object obj) {
-			return ((JObject) JToken.FromObject(obj)).ToString();
-		}
-
-
-		/// <summary>
-		/// Creates a new JBuilder instance
-		/// </summary>
-		/// <param name="binding"></param>
-		/// <param name="root"></param>
-		/// <returns></returns>
-		public static JBuilder Create(BindingFlags binding, JObject root = null) {
-			return new JBuilder(binding, root);
-		}
-
-
-		/// <summary>
-		/// Creates a new JBuilder instance with default bindings
-		/// </summary>
-		/// <returns></returns>
-		public static JBuilder Create() {
-			return new JBuilder(DefaultBindings, null);
-		}
-
-
-		/// <summary>
-		/// JSON root
+		///     JSON root
 		/// </summary>
 		private readonly JObject root;
 
-		/// <summary>
-		/// Binding flags to specify which members should be selected
-		/// </summary>
-		public BindingFlags BindingFlags { get; }
-
 
 		/// <summary>
-		/// Property which returns the current data as JSON string
-		/// </summary>
-		public string Json => root.ToString();
-
-
-		/// <summary>
-		/// Create a new JBuilder instance
+		///     Create a new JBuilder instance
 		/// </summary>
 		/// <param name="binding">Flags</param>
 		/// <param name="root">root object</param>
@@ -84,9 +61,51 @@ namespace Renoir {
 			BindingFlags = binding;
 		}
 
+		/// <summary>
+		///     Binding flags to specify which members should be selected
+		/// </summary>
+		public BindingFlags BindingFlags { get; }
+
 
 		/// <summary>
-		/// Examines the given type and optionally an object instance.
+		///     Property which returns the current data as JSON string
+		/// </summary>
+		public string Json => root.ToString();
+
+
+		/// <summary>
+		///     Convert an object to JSON string.
+		///     Uses JToken method.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static string ObjectToJson(object obj) {
+			return ((JObject) JToken.FromObject(obj)).ToString();
+		}
+
+
+		/// <summary>
+		///     Creates a new JBuilder instance
+		/// </summary>
+		/// <param name="binding"></param>
+		/// <param name="root"></param>
+		/// <returns></returns>
+		public static JBuilder Create(BindingFlags binding, JObject root = null) {
+			return new JBuilder(binding, root);
+		}
+
+
+		/// <summary>
+		///     Creates a new JBuilder instance with default bindings
+		/// </summary>
+		/// <returns></returns>
+		public static JBuilder Create() {
+			return new JBuilder(DefaultBindings, null);
+		}
+
+
+		/// <summary>
+		///     Examines the given type and optionally an object instance.
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="obj"></param>
@@ -111,8 +130,18 @@ namespace Renoir {
 		}
 
 
+		public static JObject FromProperties(Type type, object obj = null) {
+			var jRoot = new JObject();
+
+			type.GetProperties()
+				.Each(p => jRoot[p.Name] = (JToken) p.GetValue(obj));
+
+			return jRoot;
+		}
+
+
 		/// <summary>
-		/// Add via type
+		///     Add via type
 		/// </summary>
 		/// <param name="type"></param>
 		public void Add(Type type) {
@@ -121,7 +150,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Add via object
+		///     Add via object
 		/// </summary>
 		/// <param name="obj"></param>
 		public void Add(object obj) {
@@ -134,7 +163,6 @@ namespace Renoir {
 		public override string ToString() {
 			return Json;
 		}
-
 	}
 
 }

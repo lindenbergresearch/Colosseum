@@ -1,4 +1,23 @@
-﻿#region
+﻿#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
+#region
 
 using System;
 
@@ -6,29 +25,40 @@ using System;
 
 namespace Renoir {
 
+
 	/// <summary>
 	/// </summary>
 	public static class Initializer {
 
 		/// <summary>
-		/// List of static initializers
+		///     List of static initializers
 		/// </summary>
-		public static Type[] staticInitList = {
+		public static readonly Type[] staticInitList = {
 			typeof(Logger),
-			typeof(MainApp)
+			typeof(MainApp),
+			typeof(Level)
 		};
 
 
 		/// <summary>
-		/// Static initialisation
+		///     Static initialisation
 		/// </summary>
 		static Initializer() {
-			staticInitList.Each(type => RunInit(type));
+			Logger.debug("static init.");
+
+			staticInitList.Each(
+				type =>
+				{
+					RunInit(type);
+					PropertyExtensions.SetupGlobalProperties(type);
+				}
+			);
+
 		}
 
 
 		/// <summary>
-		/// Instance initialisation
+		///     Instance initialisation
 		/// </summary>
 		/// <param name="obj"></param>
 		public static void Init(this object obj) {
@@ -42,7 +72,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Examine type and run all init methods
+		///     Examine type and run all init methods
 		/// </summary>
 		/// <param name="type"></param>
 		/// <param name="methodPrefix"></param>
@@ -53,7 +83,6 @@ namespace Renoir {
 				methodInfo.Invoke(null, new object[] { });
 			}
 		}
-
 	}
 
 

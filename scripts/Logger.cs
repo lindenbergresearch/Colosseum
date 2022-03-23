@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System;
@@ -14,12 +33,12 @@ using File = System.IO.File;
 namespace Renoir {
 
 	/// <summary>
-	/// I/O Interface for log messages.
+	///     I/O Interface for log messages.
 	/// </summary>
 	public interface ILogWriter {
 
 		/// <summary>
-		/// Simple interface method for string output.
+		///     Simple interface method for string output.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
@@ -28,12 +47,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Helper class for qualified log output
+	///     Helper class for qualified log output
 	/// </summary>
 	public static class Logger {
 
 		/// <summary>
-		/// Available log levels.
+		///     Available log levels.
 		/// </summary>
 		public enum LoggerLevel {
 			TRACE,
@@ -46,7 +65,27 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Shorthand flags as functional bool properties
+		///     Holds all pushed messages.
+		/// </summary>
+		public static List<string> messages = new(4096);
+
+
+		/// <summary>
+		///     Init logger
+		/// </summary>
+		static Logger() {
+			LogLevel = INFO;
+
+			LogWriters.Add(new GodotConsoleLogWriter());
+			//LogWriters.Add(new SystemConsoleLogWriter());
+			//LogWriters.Add(new FileLogWriter());
+
+			log(INFO, $"Logger startet on: {DateTime.Now} ---");
+		}
+
+
+		/// <summary>
+		///     Shorthand flags as functional bool properties
 		/// </summary>
 		public static bool IsTrace => LogLevel == TRACE;
 		public static bool IsDebug => LogLevel == DEBUG;
@@ -57,29 +96,23 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Holds all pushed messages.
-		/// </summary>
-		public static List<string> messages = new List<string>(4096);
-
-
-		/// <summary>
-		/// Enable/Disable debug messages
+		///     Enable/Disable debug messages
 		/// </summary>
 		public static bool PrintDebug { get; set; } = true;
 
 		/// <summary>
-		/// Current loglevel
+		///     Current loglevel
 		/// </summary>
 		public static LoggerLevel LogLevel { get; set; }
 
 		/// <summary>
-		/// Holds all output writers
+		///     Holds all output writers
 		/// </summary>
-		public static List<ILogWriter> LogWriters { get; set; } = new List<ILogWriter>();
+		public static List<ILogWriter> LogWriters { get; set; } = new();
 
 
 		/// <summary>
-		/// Remove all messages.
+		///     Remove all messages.
 		/// </summary>
 		public static void ResetMessageBuffer() {
 			messages.Clear();
@@ -87,21 +120,7 @@ namespace Renoir {
 
 
 		/// <summary>
-		/// Init logger
-		/// </summary>
-		static Logger() {
-			LogLevel = TRACE;
-
-			LogWriters.Add(new GodotConsoleLogWriter());
-			//LogWriters.Add(new SystemConsoleLogWriter());
-			LogWriters.Add(new FileLogWriter());
-
-			foreach (var writer in LogWriters) writer.Write(INFO, $"--- INIT LOGGER {DateTime.Now} ---");
-		}
-
-
-		/// <summary>
-		/// Print debug log message to GD console
+		///     Print debug log message to GD console
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="msg"></param>
@@ -115,12 +134,14 @@ namespace Renoir {
 
 
 			var dt = DateTime.Now.ToString("HH:mm:ss.fff");
-			var m = $"[{dt}] {level} <{filename}:{lineno} {method}()> {msg}";
 
 
-			//TODO: find a better solution to add the standard logger
+			var m = $"[{dt}] {level} ";
 
-			foreach (var writer in LogWriters) writer.Write(level, m);
+			if (lineno > 0) m += $"({filename}:{lineno} {method}) {msg}";
+			else m += $"({method}) {msg}";
+
+			LogWriters.Each(writer => writer.Write(level, m));
 
 			messages.Add(m);
 		}
@@ -182,12 +203,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// Standard Godot console log-writer
+	///     Standard Godot console log-writer
 	/// </summary>
 	public class GodotConsoleLogWriter : ILogWriter {
 
 		/// <summary>
-		/// Write to Godot console.
+		///     Write to Godot console.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
@@ -201,12 +222,12 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// System console log-writer
+	///     System console log-writer
 	/// </summary>
 	public class SystemConsoleLogWriter : ILogWriter {
 
 		/// <summary>
-		/// Write to system console.
+		///     Write to system console.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
@@ -220,16 +241,20 @@ namespace Renoir {
 
 
 	/// <summary>
-	/// File log write
-	/// Quick and diry
+	///     File log write
+	///     Quick and diry
 	/// </summary>
 	public class FileLogWriter : ILogWriter {
 
 		private bool active = true;
 
 
+		private string GetFileName
+			=> $"log/renoir_{DateTime.Now.Date:yy-MM-dd}.log";
+
+
 		/// <summary>
-		/// Write to logfile
+		///     Write to logfile
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
@@ -243,11 +268,6 @@ namespace Renoir {
 				active = false;
 			}
 		}
-
-
-		private string GetFileName
-			=> $"log/renoir_{DateTime.Now.Date:yy-MM-dd}.log";
-
 	}
 
 }

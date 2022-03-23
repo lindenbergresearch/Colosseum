@@ -1,3 +1,22 @@
+#region header
+
+// 
+//    _____
+//   (, /   )            ,
+//     /__ /  _ __   ___   __
+//  ) /   \__(/_/ (_(_)_(_/ (_  CORE LIBRARY
+// (_/ ______________________________________/
+// 
+// 
+// Renoir Core Library for the Godot Game-Engine.
+// Copyright 2020-2022 by Lindenberg Research.
+// 
+// www.lindenberg-research.com
+// www.godotengine.org
+// 
+
+#endregion
+
 #region
 
 using System.Linq;
@@ -9,17 +28,20 @@ using static Renoir.Logger;
 
 
 /// <summary>
-/// Simple RichText messagebox for showing debug messages on
-/// game screen.
+///     Simple RichText messagebox for showing debug messages on
+///     game screen.
 /// </summary>
 public class DebugMessageBox : RichTextLabel {
 
 	[GNode("../../ColorRectDebug")]
 	private ColorRect _colorRect;
+
 	[GNode("../../MessageSound")]
 	private AudioStreamPlayer _messageSound;
+
 	[GNode("../../MessageSound2")]
 	private AudioStreamPlayer _messageSound2;
+
 	[GNode("../../TextTimer")]
 	private Timer _timer;
 
@@ -28,7 +50,7 @@ public class DebugMessageBox : RichTextLabel {
 	private bool show;
 
 	/// <summary>
-	/// The redraw interval in ms
+	///     The redraw interval in ms
 	/// </summary>
 	[Export]
 	public int RedrawInterval { get; set; } = 100;
