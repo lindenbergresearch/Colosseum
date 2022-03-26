@@ -21,7 +21,6 @@
 
 using System;
 using Godot;
-using Newtonsoft.Json;
 using Renoir;
 using static Renoir.Logger;
 
@@ -32,15 +31,14 @@ using static Renoir.Logger;
 ///     Basic configuration
 /// </summary>
 public static class Game {
-
 	public const int TILE_SIZE = 8;
-	public const int SCALE_FACTOR = 3;
+	public const int SCALE_FACTOR = 1;
 	public static readonly Vector2 VIEWPORT_TILES = new(60, 40);
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;
 
-	[Register("main.game.active")]
-	public static Property<bool> Active { get; set; }
+
+	public static Parameter<bool> Active { get; set; }
 }
 
 
@@ -48,23 +46,17 @@ public static class Game {
 ///     ROOT node
 /// </summary>
 public class Node2D : Godot.Node2D {
-
-
 	[Export]
 	private readonly string levelName;
 
 	private float time, fps;
 
-	[Register("debug.fps", "{0:F2} FPS")]
-	public static Property<float> FPS { get; set; }
+	public static Parameter<float> FPS { get; set; }
+		= new(0, "{0:F2}");
 
 
 	[Export]
 	public bool EnableDebug { get; set; }
-
-
-	[Register("main.mouse.button")]
-	public static Property<InputEventMouseButton> MouseButton { get; set; }
 
 
 	/// <summary>
@@ -89,7 +81,7 @@ public class Node2D : Godot.Node2D {
 
 		PrintDebug = EnableDebug;
 		setupViewport();
-		
+
 		Level.Name.Value = levelName;
 		Level.Gravity.Value = new Vector2(0, 1200);
 		Level.Time.Value = 0;
@@ -102,7 +94,6 @@ public class Node2D : Godot.Node2D {
 
 	public override void _Process(float delta) {
 		if (Input.IsActionJustPressed("Reload")) {
-			PropertyPool.Clear();
 			GetTree().ReloadCurrentScene();
 			return;
 		}
@@ -120,10 +111,10 @@ public class Node2D : Godot.Node2D {
 	}
 
 
-	/// <summary>
-	/// TODO: Embed in common mouse handler or so... ;P 
-	/// </summary>
-	/// <param name="event"></param>
+	// <summary>
+	// TODO: Embed in common mouse handler or so... ;P 
+	// </summary>
+	// <param name="event"></param>
 	/*public override void _Input(InputEvent @event) {
 		if (!(@event is InputEventMouseButton eventMouseButton)) return;
 

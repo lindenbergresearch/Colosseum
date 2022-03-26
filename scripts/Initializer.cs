@@ -25,11 +25,9 @@ using System;
 
 namespace Renoir {
 
-
 	/// <summary>
 	/// </summary>
 	public static class Initializer {
-
 		/// <summary>
 		///     List of static initializers
 		/// </summary>
@@ -44,16 +42,10 @@ namespace Renoir {
 		///     Static initialisation
 		/// </summary>
 		static Initializer() {
-			Logger.debug("static init.");
-
+			Logger.info("performing static module initialisation...");
 			staticInitList.Each(
-				type =>
-				{
-					RunInit(type);
-					PropertyExtensions.SetupGlobalProperties(type);
-				}
+				type => RunInit(type)
 			);
-
 		}
 
 
@@ -62,12 +54,8 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="obj"></param>
 		public static void Init(this object obj) {
-			Logger.trace($"Init object: {obj}");
-
-			ExecutorPool.Add("global property bindings", false, PropertyExtensions.InitGlobalProperties);
-			ExecutorPool.Add("dynamic node bindings", false, DynamicBindings.InitNodeBindings);
-
-			ExecutorPool.RunAll(obj);
+			Logger.info($"init object: {obj}");
+			DynamicBindings.InitNodeBindings(obj);
 		}
 
 
@@ -79,11 +67,10 @@ namespace Renoir {
 		private static void RunInit(Type type, string methodPrefix = "Init") {
 			foreach (var methodInfo in type.GetMethods()) {
 				if (!methodInfo.Name.StartsWith(methodPrefix) || methodInfo.GetParameters().Length != 0) continue;
-				Logger.trace($"Invoking init method: {type.FullName} => {methodInfo.Name}");
+				Logger.info($"[init: {type.FullName} => {methodInfo.Name}]");
 				methodInfo.Invoke(null, new object[] { });
 			}
 		}
 	}
-
 
 }

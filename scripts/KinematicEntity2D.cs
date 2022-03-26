@@ -29,7 +29,6 @@ namespace Renoir {
 	///     Abstract basic class for all kinematic objects.
 	/// </summary>
 	public abstract class KinematicEntity2D : KinematicBody2D {
-
 		/// <summary>
 		///     Motion vector
 		/// </summary>
@@ -68,6 +67,10 @@ namespace Renoir {
 		/// </summary>
 		protected virtual void Ready() { }
 
+
+		/// <summary>
+		/// </summary>
+		public virtual void Reset() { }
 
 		/// <summary>
 		///     <para>Overridable function called by the engine (if defined) to draw the canvas item.</para>

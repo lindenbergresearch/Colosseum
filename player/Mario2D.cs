@@ -29,51 +29,50 @@ using static Renoir.Logger;
 /// <summary>
 ///     Main Player character
 /// </summary>
-public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandler {
-
-	/// <summary>
-	///     Power states
-	/// </summary>
-	public enum PowerStateEnum {
-		SMALL,
-		BIG,
-		FIRE
-	}
-
-
-	/// <summary>
-	///     Handle coins
-	/// </summary>
-	/// <param name="coin"></param>
-	/// <returns></returns>
-	public bool onCoinCollect(Coin coin) {
-		debug($"Collecting coin: {coin}");
-
-		CollectedCoins += 1;
-		TotalScore += 250;
-
-		if (CollectedCoins.Value == 100) {
-			SetLives();
-			CollectedCoins.Value = 0;
-		}
-
-		return true;
-	}
-
-
-	/// <summary>
-	/// </summary>
-	/// <param name="item"></param>
-	public void OnConsume(object item) {
-		debug($"consuming {item}");
-	}
+public class Mario2D : Player2D {
+	// /// <summary>
+	// ///     Power states
+	// /// </summary>
+	// public enum PowerStateEnum {
+	// 	SMALL,
+	// 	BIG,
+	// 	FIRE
+	// }
+	//
+	//
+	// /// <summary>
+	// ///     Handle coins
+	// /// </summary>
+	// /// <param name="coin"></param>
+	// /// <returns></returns>
+	// public bool onCoinCollect(Coin coin) {
+	// 	debug($"Collecting coin: {coin}");
+	//
+	// 	CollectedCoins += 1;
+	// 	TotalScore += 250;
+	//
+	// 	if (CollectedCoins.Value == 100) {
+	// 		SetLives();
+	// 		CollectedCoins.Value = 0;
+	// 	}
+	//
+	// 	return true;
+	// }
 
 
-	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
-		debug($"D: {Node2D.MouseButton} from: {sender} args: {args}");
-
-		if (Node2D.MouseButton.Value != null && Node2D.MouseButton.Value.Pressed) camera.Offset = Node2D.MouseButton.Value.Position;
-	}
+	// /// <summary>
+	// /// </summary>
+	// /// <param name="item"></param>
+	// public void OnConsume(object item) {
+	// 	debug($"consuming {item}");
+	// }
+	//
+	//
+	// public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
+	// 	debug($"D: {Node2D.MouseButton} from: {sender} args: {args}");
+	//
+	// 	if (Node2D.MouseButton.Value != null && Node2D.MouseButton.Value.Pressed) camera.Offset = Node2D.MouseButton.Value.Position;
+	// }
 
 
 	/// <summary>
@@ -97,7 +96,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 					_bumpSound.Play();
 					continue;
 				case ICollider collider:
-					trace(
+					debug(
 						$"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
 
 					collider.OnCollide(this, collision2D);
@@ -111,8 +110,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// </summary>
 	/// <param name="delta"></param>
 	protected override void UpdateMotion(float delta) {
-//		Vector2 _gravity = Level.Gravity * delta;
-		var _gravity = new Vector2(0, 1200) * delta;
+		var _gravity = Level.Gravity.Value * delta;
 
 		Motion += _gravity;
 		Motion = MoveAndSlide(Motion, Motion2D.FLOOR_NORMAL);
@@ -126,7 +124,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 			if (TurnLeft) v = -1;
 			if (TurnRight) v = 1;
 
-			v *= ActionKey.Run ? player.MaxRunningSpeed : player.MaxWalkingSpeed;
+			v *= ActionKey.Run
+				? player.MaxRunningSpeed
+				: player.MaxWalkingSpeed;
+
 			Motion.X = Mathf.Lerp(Motion.X, v, player.BodyWeightFactor);
 		}
 
@@ -190,13 +191,13 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 
 	private void printDebug() {
-		var vect = string.Format("V = {0,6:000.0}, {1,6:000.0}", Motion.X, Motion.Y);
-		var pos = string.Format("P = {0,6:000.0}, {1,6:000.0}", GlobalPosition.x, GlobalPosition.y);
+		var vect = $"V = {Motion.X,6:000.0}, {Motion.Y,6:000.0}";
+		var pos = $"P = {GlobalPosition.x,6:000.0}, {GlobalPosition.y,6:000.0}";
 		_info.Text =
 			$"Velocity: {vect}\nPosition: {pos}\nSL: {SkiddingLeft} " +
 			$"SR: {SkiddingRight}\nGrounded: {Grounded}\nWalk: {Walking} " +
 			$"Run: {Running}\nJump: {Jumping} Fall: {Falling}\n" +
-			$"Animation: {_animate.IsPlaying()}\nPlayer: {Util.Dump(player)}";
+			$"Animation: {_animate.IsPlaying()}";
 	}
 
 
@@ -235,10 +236,10 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	/// <summary>
 	///     Resets all player properties to initial values
 	/// </summary>
-	public void ResetPlayer() {
+	public override void Reset() {
 		debug("Reset player...");
-		LivesLeft.Value = 3;
-		CollectedCoins.Value = 0;
+		LivesLeft.Update(3);
+		CollectedCoins.Update(0);
 	}
 
 
@@ -248,11 +249,7 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	protected override void Ready() {
 		debug("Initialize Player");
 
-		ResetPlayer();
-
-		player = BasicParameter.LoadFromJson<PlayerParameter>("player/PlayerParameter.json");
-		debug($"player:	{Util.Dump(player)} --end--");
-
+		Reset();
 		// var jb = JBuilder.Create();
 		// jb.Add(player.GetType());
 		// debug($"Player: {jb.Json}");
@@ -262,27 +259,26 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 		StartPosition = GlobalPosition;
 
-		PropertyPool.AddSubscription("main.mouse.*", this);
+		// PropertyPool.AddSubscription("main.mouse.*", this);
 	}
 
 
 	/// <summary>
 	///     Common player parameter for kinematic handling
 	/// </summary>
-	public class PlayerParameter : BasicParameter {
-		//public   float MAX_JUMP_HEIGHT = 70.0f;
-		public float JumpSpeed { get; set; }
-		public float JumpPushFactor { get; set; }
-		public float MaxWalkingSpeed { get; set; }
-		public float MaxWallPushSpeed { get; set; }
-		public float MaxRunningSpeed { get; set; }
-		public float XAccelerationFront { get; set; }
-		public float SlowingDeceleration { get; set; }
-		public float CrouchingDeceleration { get; set; }
-		public float SkidDeceleration { get; set; }
-		public float MoveOverSpeed { get; set; }
-		public float BodyWeightFactor { get; set; }
-		public float EpsilonVelocity { get; set; }
+	public class PlayerParameter {
+		public float JumpSpeed { get; set; } = 430.0f;
+		public float JumpPushFactor { get; set; } = 0.2f;
+		public float MaxWalkingSpeed { get; set; } = 110.0f;
+		public float MaxWallPushSpeed { get; set; } = 150.0f;
+		public float MaxRunningSpeed { get; set; } = 180.0f;
+		public float XAccelerationFront { get; set; } = 400.0f;
+		public float SlowingDeceleration { get; set; } = 392.0f;
+		public float CrouchingDeceleration { get; set; } = 288.0f;
+		public float SkidDeceleration { get; set; } = 8.0f;
+		public float MoveOverSpeed { get; set; } = 48.0f;
+		public float BodyWeightFactor { get; set; } = 0.1f;
+		public float EpsilonVelocity { get; set; } = 5.0f;
 	}
 
 
@@ -317,17 +313,14 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 
 	#region Global Properties
 
-	[Register("main.player.coins", "{0:D3}")]
-	public static Property<int> CollectedCoins { get; set; }
+	public static Parameter<int> CollectedCoins { get; set; }
+		= new(0, "{0:D3}");
 
-	[Register("main.player.lives", "{0:D2}")]
-	public static Property<int> LivesLeft { get; set; }
+	public static Parameter<int> LivesLeft { get; set; }
+		= new(0, "{0:D2}");
 
-	[Register("main.player.score", "{0:D7}")]
-	public static Property<int> TotalScore { get; set; }
-
-	[Register("main.powerstate")]
-	public static PowerStateEnum PowerState { get; set; } = PowerStateEnum.SMALL;
+	public static Parameter<int> TotalScore { get; set; }
+		= new(0, "{0:D7}");
 
 	#endregion
 
@@ -363,5 +356,4 @@ public class Mario2D : Player2D, ICoinCollector, IConsumer, IPropertyChangeHandl
 	private PlayerParameter player = new();
 
 	#endregion
-
 }

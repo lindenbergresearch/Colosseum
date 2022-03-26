@@ -21,13 +21,11 @@
 
 using Godot;
 using Renoir;
-using static Renoir.PropertyPool;
 
 #endregion
 
 
-public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
-
+public class PlayerInfoText : ParallaxBackground {
 	[GNode("CoinsLabel")]
 	private Label CoinsLabel;
 
@@ -47,7 +45,7 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 	private Label TimeLabel;
 
 
-	public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
+	public void Update() {
 		FPSLabel.Text = Node2D.FPS;
 		ScoreLabel.Text = Mario2D.TotalScore;
 		TimeLabel.Text = Level.Time;
@@ -60,6 +58,6 @@ public class PlayerInfoText : ParallaxBackground, IPropertyChangeHandler {
 	public override void _Ready() {
 		this.Init();
 
-		AddSubscription("main.*", this);
+		Level.Time.AddAction(Update);
 	}
 }

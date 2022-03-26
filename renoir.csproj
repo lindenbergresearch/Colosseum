@@ -44,19 +44,15 @@
     <Compile Include="player\PlayerInfoText.cs"/>
     <Compile Include="elements\questionbox\QuestionBox.cs"/>
     <Compile Include="scripts\AgileItem2D.cs"/>
-    <Compile Include="scripts\BasicParameter.cs"/>
     <Compile Include="scripts\CommonExtensions.cs"/>
     <Compile Include="scripts\DynamicBindings.cs"/>
-    <Compile Include="scripts\Executor.cs"/>
     <Compile Include="scripts\ICollider.cs"/>
     <Compile Include="scripts\IConsumer.cs"/>
     <Compile Include="scripts\Initializer.cs"/>
-    <Compile Include="scripts\JsonBuilder.cs"/>
     <Compile Include="scripts\KinematicEntity2D.cs"/>
     <Compile Include="scripts\Logger.cs"/>
     <Compile Include="scripts\Motion2D.cs"/>
-    <Compile Include="scripts\Property.cs"/>
-    <Compile Include="scripts\PropertyAttribute.cs"/>
+    <Compile Include="scripts\Parameter.cs"/>
     <Compile Include="scripts\Util.cs"/>
   </ItemGroup>
   <ItemGroup>
@@ -69,8 +65,5 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="4.7.0"/>
     <PackageReference Include="System.Text.Json" Version="4.7.1"/>
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4"/>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="player\PlayerParameter.json"/>
   </ItemGroup>
 </Project>
