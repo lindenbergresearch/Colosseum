@@ -26,6 +26,6 @@ using System;
 
 public class MainApp {
 	private static void Main(string[] args) {
-		Console.Out.WriteLine($"Json:");
+		Console.Out.WriteLine("Json:");
 	}
 }

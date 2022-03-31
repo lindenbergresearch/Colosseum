@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://images/6211.png" type="Texture" id=1]
 [ext_resource path="res://sprites/additional/28546-2.png" type="Texture" id=2]
 [ext_resource path="res://sprites/additional/SMB1_Edits.png" type="Texture" id=3]
+[ext_resource path="res://sprites/additional/SMB1_furnace.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8.0125, 8 )
@@ -1258,6 +1259,18 @@ __meta__ = {
 }
 
 [node name="StaticBody2D" type="StaticBody2D" parent="75"]
+
+[node name="78" type="Sprite" parent="."]
+position = Vector2( 64, 160 )
+texture = ExtResource( 4 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 67, 0, 32, 32 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="78"]
 
 [node name="76" type="Sprite" parent="."]
 position = Vector2( 120, 120 )

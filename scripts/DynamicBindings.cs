@@ -32,7 +32,6 @@ using static Renoir.Logger;
 /// </summary>
 [AttributeUsage(AttributeTargets.Field)]
 public class GNodeAttribute : Attribute {
-
 	/// <summary>
 	///     Standard constructor
 	/// </summary>
@@ -59,7 +58,6 @@ public class GNodeAttribute : Attribute {
 ///     Contain helper methods for dynamic node bindings.
 /// </summary>
 public static class DynamicBindings {
-
 	private static readonly BindingFlags bindingFlags
 		= BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
@@ -79,11 +77,10 @@ public static class DynamicBindings {
 	/// </summary>
 	/// <param name="obj"></param>
 	public static void InitNodeBindings(object obj) {
-		if (obj is Node node) {
+		if (obj is Node node)
 			SetupBindings(node);
-		} else {
+		else
 			warn($"Unable to setup node bindings for type: {obj.GetType().FullName}. Not an instance of type {typeof(Node).FullName}.");
-		}
 	}
 
 

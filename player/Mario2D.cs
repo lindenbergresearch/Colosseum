@@ -29,7 +29,7 @@ using static Renoir.Logger;
 /// <summary>
 ///     Main Player character
 /// </summary>
-public class Mario2D : Player2D {
+public class Mario2D : KinematicEntity2D {
 	// /// <summary>
 	// ///     Power states
 	// /// </summary>
@@ -85,23 +85,21 @@ public class Mario2D : Player2D {
 		LivesLeft += delta;
 	}
 
-
 	/// <summary>
-	///     Check collisions and pass event to all collider
 	/// </summary>
-	protected override void UpdateCollisions(float delta) {
-		foreach (var collision2D in this.GetCollider()) /* match collider type **/
-			switch (collision2D.Collider) {
-				case TileMap _ when collision2D.Bottom():
-					_bumpSound.Play();
-					continue;
-				case ICollider collider:
-					debug(
-						$"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
+	/// <param name="collision2D"></param>
+	public override void HandleCollision(KinematicCollision2D collision2D) {
+		switch (collision2D.Collider) {
+			case TileMap _ when collision2D.Bottom():
+				_bumpSound.Play();
+				break;
+			case ICollider collider:
+				debug(
+					$"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
 
-					collider.OnCollide(this, collision2D);
-					break;
-			}
+				collider.OnCollide(this, collision2D);
+				break;
+		}
 	}
 
 
@@ -250,16 +248,9 @@ public class Mario2D : Player2D {
 		debug("Initialize Player");
 
 		Reset();
-		// var jb = JBuilder.Create();
-		// jb.Add(player.GetType());
-		// debug($"Player: {jb.Json}");
 
 		camera.LimitLeft = 0;
 		camera.LimitBottom = (int) Game.VIEWPORT_RESOLUTION.y;
-
-		StartPosition = GlobalPosition;
-
-		// PropertyPool.AddSubscription("main.mouse.*", this);
 	}
 
 
@@ -313,14 +304,9 @@ public class Mario2D : Player2D {
 
 	#region Global Properties
 
-	public static Parameter<int> CollectedCoins { get; set; }
-		= new(0, "{0:D3}");
-
-	public static Parameter<int> LivesLeft { get; set; }
-		= new(0, "{0:D2}");
-
-	public static Parameter<int> TotalScore { get; set; }
-		= new(0, "{0:D7}");
+	public static Parameter<int> CollectedCoins = new(0, "{0:D3}");
+	public static Parameter<int> LivesLeft = new(0, "{0:D2}");
+	public static Parameter<int> TotalScore = new(0, "{0:D7}");
 
 	#endregion
 
@@ -353,7 +339,7 @@ public class Mario2D : Player2D {
 	private float CameraTime { get; set; }
 
 
-	private PlayerParameter player = new();
+	private readonly PlayerParameter player = new();
 
 	#endregion
 }

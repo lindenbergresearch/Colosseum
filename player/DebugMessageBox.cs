@@ -32,7 +32,6 @@ using static Renoir.Logger;
 ///     game screen.
 /// </summary>
 public class DebugMessageBox : RichTextLabel {
-
 	[GNode("../../ColorRectDebug")]
 	private ColorRect _colorRect;
 
@@ -75,7 +74,7 @@ public class DebugMessageBox : RichTextLabel {
 	private void UpdateMessageBox(float delta) {
 		current += delta * 1000.0f;
 
-		if (current == -1 || current >= RedrawInterval && messages.Count != i) {
+		if (current == -1 || (current >= RedrawInterval && messages.Count != i)) {
 			if (!_messageSound.Playing) _messageSound.Play();
 
 			//_timer.Stop();

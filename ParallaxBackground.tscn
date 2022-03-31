@@ -39,6 +39,7 @@ __meta__ = {
 }
 
 [node name="2" type="Sprite" parent="ParallaxBackground/Bitmap"]
+visible = false
 position = Vector2( 256, 104 )
 texture = ExtResource( 2 )
 __meta__ = {

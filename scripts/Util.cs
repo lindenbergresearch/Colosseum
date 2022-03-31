@@ -35,8 +35,6 @@ using File = System.IO.File;
 ///     Base class for serializing data classes
 /// </summary>
 public abstract class SerializableDataClass {
-
-
 	/// <summary>
 	///     Standard Constructor
 	/// </summary>
@@ -75,7 +73,6 @@ public abstract class SerializableDataClass {
 ///     Utility method compilation.
 /// </summary>
 public static class Util {
-
 	/// <summary>
 	///     Returns the value of a class property by name.
 	///     Uses reflection in case of dynamic cast problems.
@@ -207,7 +204,9 @@ public static class Util {
 
 		// if no object instance is set, remove 'Instance' flag to avoid Exceptions
 	{
-		return type.GetFields(obj == null ? flags ^ Instance : flags).ToDictionary(
+		return type.GetFields(obj == null
+			? flags ^ Instance
+			: flags).ToDictionary(
 			fieldInfo => fieldInfo.Name,
 			fieldInfo => fieldInfo.GetValue(obj)
 		);
@@ -225,7 +224,9 @@ public static class Util {
 
 		// if no object instance is set, remove 'Instance' flag to avoid Exceptions
 	{
-		return type.GetProperties(obj == null ? flags ^ Instance : flags).ToDictionary(
+		return type.GetProperties(obj == null
+			? flags ^ Instance
+			: flags).ToDictionary(
 			fieldInfo => fieldInfo.Name,
 			fieldInfo => fieldInfo.GetValue(obj)
 		);

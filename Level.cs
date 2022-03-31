@@ -23,22 +23,14 @@ using Godot;
 
 #endregion
 
-namespace Renoir {
+namespace Renoir;
 
-	/// <summary>
-	///     Property class:
-	///     Holds all properties for the current level
-	/// </summary>
-	public static class Level {
-		public static Parameter<string> Name { get; set; }
-			= new("");
-
-		public static Parameter<Vector2> Gravity { get; set; }
-			= new(new Vector2(0, 1600));
-
-
-		public static Parameter<int> Time { get; set; }
-			= new(0, "{0:D3}");
-	}
-
+/// <summary>
+///     Property class:
+///     Holds all properties for the current level
+/// </summary>
+public static class Level {
+	public static Parameter<string> Name = new("");
+	public static Parameter<Vector2> Gravity = new(new Vector2(0, 1600));
+	public static Parameter<int> Time = new(0, "{0:D3}");
 }

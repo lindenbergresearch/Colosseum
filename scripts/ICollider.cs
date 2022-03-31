@@ -28,7 +28,6 @@ using Godot;
 ///     Interface to implement collision handling
 /// </summary>
 public interface ICollider {
-
 	/// <summary>
 	///     Triggered by the collider
 	/// </summary>

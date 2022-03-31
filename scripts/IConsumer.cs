@@ -17,16 +17,13 @@
 
 #endregion
 
-namespace Renoir {
+namespace Renoir;
 
+/// <summary>
+/// </summary>
+public interface IConsumer {
 	/// <summary>
 	/// </summary>
-	public interface IConsumer {
-
-		/// <summary>
-		/// </summary>
-		/// <param name="item"></param>
-		void OnConsume(object item);
-	}
-
+	/// <param name="item"></param>
+	void OnConsume(object item);
 }

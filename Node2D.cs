@@ -32,7 +32,7 @@ using static Renoir.Logger;
 /// </summary>
 public static class Game {
 	public const int TILE_SIZE = 8;
-	public const int SCALE_FACTOR = 1;
+	public const int SCALE_FACTOR = 3;
 	public static readonly Vector2 VIEWPORT_TILES = new(60, 40);
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;

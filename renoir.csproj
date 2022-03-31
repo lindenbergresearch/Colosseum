@@ -2,13 +2,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
     <ProjectGuid>{C1174F1F-FE44-4555-B4ED-6995BB1935E3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
     <RootNamespace>Renoir</RootNamespace>
     <AssemblyName>Renoir</AssemblyName>
     <GodotProjectGeneratorVersion>1.0.7374.18850</GodotProjectGeneratorVersion>
-    <LangVersion>default</LangVersion>
+    <LangVersion>10</LangVersion>
     <Nullable>disable</Nullable>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <!--The following properties were overridden during migration to prevent errors.
     Enabling them may require other manual changes to the project and its files.-->
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -40,9 +39,9 @@
     <Compile Include="opening\Opening.cs"/>
     <Compile Include="player\DebugMessageBox.cs"/>
     <Compile Include="player\Mario2D.cs"/>
-    <Compile Include="player\Player2D.cs"/>
     <Compile Include="player\PlayerInfoText.cs"/>
     <Compile Include="elements\questionbox\QuestionBox.cs"/>
+    <Compile Include="scripts\ActionKey.cs"/>
     <Compile Include="scripts\AgileItem2D.cs"/>
     <Compile Include="scripts\CommonExtensions.cs"/>
     <Compile Include="scripts\DynamicBindings.cs"/>

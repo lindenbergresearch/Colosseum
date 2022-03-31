@@ -29,7 +29,6 @@ using Renoir;
 ///     An abstract item which can be consumed by a consumer
 /// </summary>
 public class AgileItem2D : KinematicEntity2D, ICollider {
-
 	/// <summary>
 	/// </summary>
 	public Node Item { get; set; }
@@ -130,7 +129,7 @@ public class VerticalMovingItem : Node {
 	public override void _PhysicsProcess(float delta) {
 		_label.Text = ((Motion2D) AgileItem.Position).ToString();
 
-		if (AgileItem.Position.y > -16) AgileItem.UpdateMotion();
+		if (AgileItem.Position.y > -16) AgileItem.ApplyMotion();
 		else _audioStreamPlayer.Stop();
 	}
 }
@@ -177,6 +176,6 @@ public class HorizontalMovingItem : Node {
 		_label.Text = $"Motion={AgileItem.Motion}";
 
 		AgileItem.Motion += delta * GRAVITY;
-		AgileItem.UpdateMotion();
+		AgileItem.ApplyMotion();
 	}
 }
