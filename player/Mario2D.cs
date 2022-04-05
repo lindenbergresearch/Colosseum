@@ -22,6 +22,7 @@
 using Godot;
 using Renoir;
 using static Renoir.Logger;
+using static Renoir.Util;
 
 #endregion
 
@@ -29,50 +30,26 @@ using static Renoir.Logger;
 /// <summary>
 ///     Main Player character
 /// </summary>
-public class Mario2D : KinematicEntity2D {
-	// /// <summary>
-	// ///     Power states
-	// /// </summary>
-	// public enum PowerStateEnum {
-	// 	SMALL,
-	// 	BIG,
-	// 	FIRE
-	// }
-	//
-	//
-	// /// <summary>
-	// ///     Handle coins
-	// /// </summary>
-	// /// <param name="coin"></param>
-	// /// <returns></returns>
-	// public bool onCoinCollect(Coin coin) {
-	// 	debug($"Collecting coin: {coin}");
-	//
-	// 	CollectedCoins += 1;
-	// 	TotalScore += 250;
-	//
-	// 	if (CollectedCoins.Value == 100) {
-	// 		SetLives();
-	// 		CollectedCoins.Value = 0;
-	// 	}
-	//
-	// 	return true;
-	// }
+public class Mario2D : KinematicEntity2D, ICoinConsumer {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="payload"></param>
+	/// <param name="item"></param>
+	/// <returns></returns>
+	public bool DoCoinConsume(int payload, Object item) {
+		debug($"consuming a coin with value: {payload}");
 
+		CollectedCoins += payload;
+		TotalScore += 250 * payload;
 
-	// /// <summary>
-	// /// </summary>
-	// /// <param name="item"></param>
-	// public void OnConsume(object item) {
-	// 	debug($"consuming {item}");
-	// }
-	//
-	//
-	// public void OnPropertyChange<T>(Property<T> sender, PropertyEventArgs<T> args) {
-	// 	debug($"D: {Node2D.MouseButton} from: {sender} args: {args}");
-	//
-	// 	if (Node2D.MouseButton.Value != null && Node2D.MouseButton.Value.Pressed) camera.Offset = Node2D.MouseButton.Value.Position;
-	// }
+		if (CollectedCoins.Value >= 100) {
+			SetLives();
+			CollectedCoins.Value -= 100;
+		}
+
+		return true;
+	}
 
 
 	/// <summary>
@@ -90,13 +67,11 @@ public class Mario2D : KinematicEntity2D {
 	/// <param name="collision2D"></param>
 	public override void HandleCollision(KinematicCollision2D collision2D) {
 		switch (collision2D.Collider) {
-			case TileMap _ when collision2D.Bottom():
+			case TileMap when collision2D.Bottom():
 				_bumpSound.Play();
 				break;
 			case ICollider collider:
-				debug(
-					$"position={collision2D.Position} velocity={collision2D.ColliderVelocity} collider={collision2D.Collider} vector={collision2D.Normal} {collision2D.Normal.ToDirectionArrow()}");
-
+				trace(DebugCollision(collision2D));
 				collider.OnCollide(this, collision2D);
 				break;
 		}
