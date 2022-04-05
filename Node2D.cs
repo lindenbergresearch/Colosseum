@@ -32,7 +32,7 @@ using static Renoir.Logger;
 /// </summary>
 public static class Game {
 	public const int TILE_SIZE = 8;
-	public const int SCALE_FACTOR = 3;
+	public const float SCALE_FACTOR = 3.5f;
 	public static readonly Vector2 VIEWPORT_TILES = new(60, 40);
 	public static readonly Vector2 VIEWPORT_RESOLUTION = VIEWPORT_TILES * TILE_SIZE;
 	public static readonly Vector2 WINDOW_RESOLUTION = VIEWPORT_TILES * TILE_SIZE * SCALE_FACTOR;
@@ -102,10 +102,13 @@ public class Node2D : Godot.Node2D {
 
 		var rounded = (int) Math.Round(time);
 
-		if (Level.Time.Value != rounded) Level.Time.Value = rounded;
+		if (Level.Time.Value != rounded)
+			Level.Time.Value = rounded;
 
-		if (fps > 0) fps = Mathf.Lerp(fps, 1 / delta, 0.1f);
-		else fps = 1 / delta;
+		if (fps > 0)
+			fps = Mathf.Lerp(fps, 1 / delta, 0.1f);
+		else
+			fps = 1 / delta;
 
 		FPS.Value = fps;
 	}
