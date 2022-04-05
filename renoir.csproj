@@ -2,12 +2,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Tools</Configuration>
     <ProjectGuid>{C1174F1F-FE44-4555-B4ED-6995BB1935E3}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Renoir</RootNamespace>
     <AssemblyName>Renoir</AssemblyName>
     <GodotProjectGeneratorVersion>1.0.7374.18850</GodotProjectGeneratorVersion>
-    <LangVersion>10</LangVersion>
+    <LangVersion>9</LangVersion>
     <Nullable>disable</Nullable>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <!--The following properties were overridden during migration to prevent errors.
     Enabling them may require other manual changes to the project and its files.-->
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -52,6 +53,8 @@
     <Compile Include="scripts\Logger.cs"/>
     <Compile Include="scripts\Motion2D.cs"/>
     <Compile Include="scripts\Parameter.cs"/>
+    <Compile Include="scripts\StaticConsumableItem.cs"/>
+    <Compile Include="scripts\StaticEntity2D.cs"/>
     <Compile Include="scripts\Util.cs"/>
   </ItemGroup>
   <ItemGroup>
