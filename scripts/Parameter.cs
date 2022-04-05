@@ -25,207 +25,234 @@ using Godot;
 
 #endregion
 
-namespace Renoir;
+namespace Renoir {
 
-/// <summary>
-/// </summary>
-/// <typeparam name="T"></typeparam>
-public class Parameter<T> {
-	private T _value;
+	/// <summary>
+	/// Parameter Actions interface.
+	/// </summary>
+	public interface IParameterAction {
+		List<Action> Actions { get; set; }
 
-	protected List<Action> actions = new();
-	protected List<Func<T, T>> hooks = new();
-
-	/*---------------------------------------------------------------------*/
-
-	public Parameter(T value) {
-		Format = "";
-		_value = value;
-	}
-
-	public Parameter(T value, string format) {
-		_value = value;
-		Format = format;
+		/// <summary>
+		/// Add an action to the action list.
+		/// </summary>
+		/// <param name="action"></param>
+		void AddAction(Action action);
 	}
 
 
-	public T Value {
-		get => _value;
-		set => Update(value);
-	}
+	/// <summary>
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public partial class Parameter<T> : IParameterAction {
+		private T _value;
+		protected List<Func<T, T>> hooks = new();
+
+		/*---------------------------------------------------------------------*/
+
+		public Parameter(T value) {
+			Format = "";
+			_value = value;
+		}
+
+		public Parameter(T value, string format) {
+			_value = value;
+			Format = format;
+		}
 
 
-	public string Format { get; set; }
-
-	/*---------------------------------------------------------------------*/
-
-	public void AddAction(Action action) {
-		actions.Add(action);
-	}
+		public T Value {
+			get => _value;
+			set => Update(value);
+		}
 
 
-	public void AddHook(Func<T, T> hook) {
-		hooks.Add(hook);
-	}
+		public string Format { get; set; }
+
+		public List<Action> Actions { get; set; } = new();
+
+		/*---------------------------------------------------------------------*/
+
+		public void AddAction(Action action) {
+			Actions.Add(action);
+		}
 
 
-	public void Update(T val) {
-		foreach (var hook in hooks) val = hook(val);
-
-		foreach (var action in actions) action();
-
-		_value = val;
-	}
+		public void AddHook(Func<T, T> hook) {
+			hooks.Add(hook);
+		}
 
 
-	public string Formatted() {
-		return string.Format(Format, _value);
-	}
+		public void Update(T val) {
+			foreach (var hook in hooks) val = hook(val);
 
-	public override string ToString() {
-		return Format.Length > 1
-			? Formatted()
-			: _value.ToString();
-	}
+			foreach (var action in Actions) action();
+
+			_value = val;
+		}
 
 
-	#region Implicits
+		public string Formatted() {
+			return string.Format(Format, _value);
+		}
 
-	/*===== IMPLICIT CONVERSATIONS =================================================================================*/
-	public static implicit operator Vector2(Parameter<T> p) {
-		return p._value switch {
-			Vector2 v => v,
-			float f => new Vector2(f, f),
-			int i => new Vector2(i, i),
-			_ => new Vector2()
-		};
-	}
+		public override string ToString() {
+			return Format.Length > 1
+				? Formatted()
+				: _value.ToString();
+		}
 
 
-	public static explicit operator T(Parameter<T> p) {
-		return p._value;
-	}
+		#region Implicits
+
+		/*===== IMPLICIT CONVERSATIONS =================================================================================*/
+		public static implicit operator Vector2(Parameter<T> p) {
+			return p._value switch {
+				Vector2 v => v,
+				float f => new Vector2(f, f),
+				int i => new Vector2(i, i),
+				_ => new Vector2()
+			};
+		}
 
 
-	public static implicit operator string(Parameter<T> p) {
-		if ((object) p == null) return "<NIL>";
-		if (p._value == null) return "<null>";
-		return p.Format.Length > 1
-			? p.Formatted()
-			: p.Value.ToString();
-	}
-
-	/*===== IMPLICIT CONVERSATIONS =================================================================================*/
-
-	#endregion
-
-	#region Operators
-
-	/*===== OPERATOR CONVERSATIONS =================================================================================*/
-	public static Parameter<T> operator +(Parameter<T> p, dynamic n) {
-		p.Value = p._value + n;
-		return p;
-	}
+		public static explicit operator T(Parameter<T> p) {
+			return p._value;
+		}
 
 
-	public static Parameter<T> operator -(Parameter<T> p, dynamic n) {
-		p.Value = p._value - n;
-		return p;
-	}
+		public static implicit operator string(Parameter<T> p) {
+			if ((object) p == null) return "<NIL>";
+			if (p._value == null) return "<null>";
+			return p.Format.Length > 1
+				? p.Formatted()
+				: p.Value.ToString();
+		}
 
+		/*===== IMPLICIT CONVERSATIONS =================================================================================*/
 
-	public static Parameter<T> operator *(Parameter<T> p, dynamic n) {
-		p.Value = p._value * n;
-		return p;
-	}
+		#endregion
 
+		#region Operators
 
-	public static Parameter<T> operator /(Parameter<T> p, dynamic n) {
-		p.Value = p._value / n;
-		return p;
-	}
-
-
-	public static bool operator ==(Parameter<T> p, dynamic n) {
-		return p._value == n;
-	}
-
-
-	public static bool operator !=(Parameter<T> p, dynamic n) {
-		return p._value != n;
-	}
-
-
-	public static Parameter<T> operator >(Parameter<T> p, dynamic n) {
-		p.Value = p._value > n;
-		return p;
-	}
-
-
-	public static Parameter<T> operator <(Parameter<T> p, dynamic n) {
-		p.Value = p._value < n;
-		return p;
-	}
-
-
-	public static Parameter<T> operator >=(Parameter<T> p, dynamic n) {
-		p.Value = p._value >= n;
-		return p;
-	}
-
-
-	public static Parameter<T> operator <=(Parameter<T> p, dynamic n) {
-		p.Value = p._value <= n;
-		return p;
-	}
-
-
-	public static Parameter<T> operator ++(Parameter<T> p) {
-		return p + 1;
-	}
-
-
-	public static Parameter<T> operator --(Parameter<T> p) {
-		return p - 1;
-	}
-
-
-	public static Parameter<T> operator -(Parameter<T> p) {
-		if (p is Parameter<int> i) {
-			i._value = -i._value;
+		/*===== OPERATOR CONVERSATIONS =================================================================================*/
+		public static Parameter<T> operator +(Parameter<T> p, dynamic n) {
+			p.Value = p._value + n;
 			return p;
 		}
 
-		if (p is Parameter<long> l) {
-			l._value = -l._value;
+
+		public static Parameter<T> operator -(Parameter<T> p, dynamic n) {
+			p.Value = p._value - n;
 			return p;
 		}
 
-		if (p is Parameter<float> f) {
-			f._value = -f._value;
+
+		public static Parameter<T> operator *(Parameter<T> p, dynamic n) {
+			p.Value = p._value * n;
 			return p;
 		}
 
-		if (p is Parameter<double> d) {
-			d._value = -d._value;
+
+		public static Parameter<T> operator /(Parameter<T> p, dynamic n) {
+			p.Value = p._value / n;
 			return p;
 		}
 
-		throw new InvalidCastException(
-			$"Type: {p.GetType()} can't be casted to int|long|float|double to apply unary (-) operator.");
+
+		public static bool operator ==(Parameter<T> p, dynamic n) {
+			return p._value == n;
+		}
+
+
+		public static bool operator !=(Parameter<T> p, dynamic n) {
+			return p._value != n;
+		}
+
+
+		public static Parameter<T> operator >(Parameter<T> p, dynamic n) {
+			p.Value = p._value > n;
+			return p;
+		}
+
+
+		public static Parameter<T> operator <(Parameter<T> p, dynamic n) {
+			p.Value = p._value < n;
+			return p;
+		}
+
+
+		public static Parameter<T> operator >=(Parameter<T> p, dynamic n) {
+			p.Value = p._value >= n;
+			return p;
+		}
+
+
+		public static Parameter<T> operator <=(Parameter<T> p, dynamic n) {
+			p.Value = p._value <= n;
+			return p;
+		}
+
+
+		public static Parameter<T> operator ++(Parameter<T> p) {
+			return p + 1;
+		}
+
+
+		public static Parameter<T> operator --(Parameter<T> p) {
+			return p - 1;
+		}
+
+
+		public static Parameter<T> operator -(Parameter<T> p) {
+			if (p is Parameter<int> i) {
+				i._value = -i._value;
+				return p;
+			}
+
+			if (p is Parameter<long> l) {
+				l._value = -l._value;
+				return p;
+			}
+
+			if (p is Parameter<float> f) {
+				f._value = -f._value;
+				return p;
+			}
+
+			if (p is Parameter<double> d) {
+				d._value = -d._value;
+				return p;
+			}
+
+			throw new InvalidCastException(
+				$"Type: {p.GetType()} can't be casted to int|long|float|double to apply unary (-) operator.");
+		}
+
+
+		public static Parameter<T> operator !(Parameter<T> p) {
+			if (p is Parameter<bool> pbool)
+				pbool.Value = !pbool.Value;
+			else
+				throw new InvalidCastException($"Type: {p.GetType()} can't be casted to bool to apply unary (!) operator.");
+
+			return p;
+		}
+
+		/*===== OPERATOR CONVERSATIONS =================================================================================*/
+
+		#endregion
 	}
 
-
-	public static Parameter<T> operator !(Parameter<T> p) {
-		if (p is Parameter<bool> pbool)
-			pbool.Value = !pbool.Value;
-		else
-			throw new InvalidCastException($"Type: {p.GetType()} can't be casted to bool to apply unary (!) operator.");
-
-		return p;
+	/// <summary>
+	/// Static helper class for Parameters.
+	/// </summary>
+	public static class Parameter {
+		public static void AddActionSources(Action action, params IParameterAction[] parameters) {
+			foreach (var parameter in parameters) {
+				parameter.AddAction(action);
+			}
+		}
 	}
 
-	/*===== OPERATOR CONVERSATIONS =================================================================================*/
-
-	#endregion
 }
