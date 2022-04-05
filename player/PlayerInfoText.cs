@@ -19,6 +19,7 @@
 
 #region
 
+using System;
 using Godot;
 using Renoir;
 
@@ -26,11 +27,14 @@ using Renoir;
 
 
 public class PlayerInfoText : ParallaxBackground {
+	[GNode("BitmapFont2D")]
+	private BitmapFont2D _BitmapFont2D;
+
+	[GNode("BitmapFont2D2")]
+	private BitmapFont2D _BitmapFont2D2;
+
 	[GNode("CoinsLabel")]
 	private Label CoinsLabel;
-
-	[GNode("FPSLabel")]
-	private Label FPSLabel;
 
 	[GNode("LevelNameLabel")]
 	private Label LevelNameLabel;
@@ -44,20 +48,29 @@ public class PlayerInfoText : ParallaxBackground {
 	[GNode("TimeLabel")]
 	private Label TimeLabel;
 
-
 	public void Update() {
-		FPSLabel.Text = Node2D.FPS;
 		ScoreLabel.Text = Mario2D.TotalScore;
 		TimeLabel.Text = Level.Time;
 		CoinsLabel.Text = Mario2D.CollectedCoins;
 		LivesLabel.Text = Mario2D.LivesLeft;
 		LevelNameLabel.Text = Level.Name;
+
+		_BitmapFont2D.Text = $"> FPS: {Node2D.FPS}";
+		_BitmapFont2D2.Text = $"> MEM: {GC.GetTotalMemory(false) / 1000}K";
 	}
 
 
 	public override void _Ready() {
 		this.Init();
 
-		Level.Time.AddAction(Update);
+		//Level.Time.AddAction(Update);
+		Parameter.AddActionSources(
+			Update,
+			Mario2D.TotalScore,
+			Level.Time,
+			Level.Name,
+			Mario2D.CollectedCoins,
+			Mario2D.LivesLeft
+		);
 	}
 }
