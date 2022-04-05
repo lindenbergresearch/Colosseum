@@ -47,8 +47,10 @@ namespace Renoir {
 			trace($"A body: {body} entered this static consumable item: {this}");
 
 			if (!Consumed && body is T consumer) {
+				debug($"The consumer: {body} requests consuming: {this}");
 				OnConsumerRequest(consumer);
-			}
+			} else
+				debug($"The consumer: {body} cant consume: {this}");
 		}
 
 		/// <summary>
