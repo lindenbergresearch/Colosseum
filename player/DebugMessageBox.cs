@@ -74,7 +74,7 @@ public class DebugMessageBox : RichTextLabel {
 	private void UpdateMessageBox(float delta) {
 		current += delta * 1000.0f;
 
-		if (current == -1 || (current >= RedrawInterval && messages.Count != i)) {
+		if ((int) current == -1 || (current >= RedrawInterval && messages.Count != i)) {
 			if (!_messageSound.Playing) _messageSound.Play();
 
 			//_timer.Stop();
@@ -93,7 +93,8 @@ public class DebugMessageBox : RichTextLabel {
 
 			subset.Reverse();
 
-			foreach (var message in subset) text += message + "\n";
+			foreach (var message in subset)
+				text += message + "\n";
 
 			Text = text;
 
@@ -104,15 +105,15 @@ public class DebugMessageBox : RichTextLabel {
 
 	public override void _Process(float delta) {
 		if (Input.IsActionJustReleased("ui_tab")) {
-			show = !show;
-
-			if (show) _messageSound2.Play();
+			if (show = !show)
+				_messageSound.Play();
 
 			Visible = show;
 			_colorRect.Visible = show;
 		}
 
 
-		if (PrintDebug && show) UpdateMessageBox(delta);
+		if (PrintDebug && show)
+			UpdateMessageBox(delta);
 	}
 }
