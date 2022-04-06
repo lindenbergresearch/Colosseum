@@ -155,8 +155,10 @@ namespace Renoir {
 			var dt = DateTime.Now.ToString("HH:mm:ss.fff");
 			var m = $"[{dt}] {LoggerLevel2String(level)} ";
 
-			if (lineno > 0) m += $"<{filename.ReplaceN(".cs", "")}.{method} {lineno}:{colno}> {msg}";
-			else m += $"({method}) {msg}";
+			if (lineno > 0 && level is TRACE or DEBUG or ERROR or FATAL)
+				m += $"<{filename.ReplaceN(".cs", "")}.{method} {lineno}:{colno}> {msg}";
+			else
+				m += $"{msg}";
 
 			LogWriters.Each(writer => writer.Write(level, m));
 
@@ -260,7 +262,7 @@ namespace Renoir {
 			var currentForeground = ForegroundColor;
 
 			ForegroundColor = level switch {
-				TRACE => ConsoleColor.Gray,
+				TRACE => ConsoleColor.DarkCyan,
 				DEBUG => ConsoleColor.Blue,
 				INFO => ConsoleColor.White,
 				WARN => ConsoleColor.Yellow,
