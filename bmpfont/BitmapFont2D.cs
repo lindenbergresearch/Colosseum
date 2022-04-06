@@ -21,6 +21,7 @@
 
 using System;
 using Godot;
+using Renoir;
 using static Renoir.Util;
 using static Renoir.Logger;
 using File = System.IO.File;
@@ -283,8 +284,6 @@ public class BitmapFont2D : Godot.Node2D {
 	///     Take properties and try to reload the bitmap-font.
 	/// </summary>
 	private void Refresh() {
-		trace($"Refresh(): {this}");
-
 		if (lockRefresh) return;
 
 		try {
@@ -310,8 +309,6 @@ public class BitmapFont2D : Godot.Node2D {
 			GD.PrintErr(e);
 			trace("Exception: " + e);
 		}
-
-		trace($"After Refresh(): {this}");
 	}
 
 
@@ -372,10 +369,14 @@ public class BitmapFont2D : Godot.Node2D {
 	}
 
 
-	public override string ToString() {
-		return
-			$"GlyphDimension={GlyphDimension} Scale={Scale} Offset={Offset} LineHeight={LineHeight} HasShadow={HasShadow} ShadowOffset={ShadowOffset} CharDimensions={CharsDimension}";
-	}
+	public override string ToString()
+		=> $"GlyphDimension={GlyphDimension.ToFormatted("D0")} " +
+		   $"Scale={Scale} " +
+		   $"Offset={Offset} " +
+		   $"LineHeight={LineHeight} " +
+		   $"HasShadow={HasShadow} " +
+		   $"ShadowOffset={ShadowOffset} " +
+		   $"CharDimensions={CharsDimension.ToFormatted("D0")}";
 
 
 	/// <summary>

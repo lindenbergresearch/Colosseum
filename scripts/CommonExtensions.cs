@@ -145,6 +145,9 @@ namespace Renoir {
 			(x, y) = (vector2.x, vector2.y);
 		}
 
+		public static string ToFormatted(this Vector2 vector2, string format = "F2") =>
+			String.Format("({0:" + format + "}, {1:" + format + "})", vector2.x, vector2.y); //$"({vector2.x:F2}, {vector2.y:{format}})";
+
 
 		/// <summary>
 		///     Returns the vectors direction as unicode arrow
