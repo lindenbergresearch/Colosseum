@@ -27,13 +27,14 @@ using static Renoir.Logger;
 
 #endregion
 
+/*---------------------------------------------------------------------*/
+
+#region font config
 
 /// <summary>
 /// </summary>
 internal class BitmapFontConfig : SerializableDataClass {
-	public override int VERSION_MAJOR { get; } = 1;
-	public override int VERSION_MINOR { get; } = 0;
-	public override int VERSION_PATCH { get; } = 0;
+	public override int VERSION { get; } = 1;
 
 	public Vector<int> GlyphDimension { get; set; } = new(0, 0);
 	public float LineHeight { get; set; } = 2.0f;
@@ -62,6 +63,12 @@ internal class BitmapFontConfig : SerializableDataClass {
 	}
 }
 
+#endregion
+
+/*---------------------------------------------------------------------*/
+
+
+#region bitmap glyph
 
 /// <summary>
 /// </summary>
@@ -96,13 +103,17 @@ public class BitmapGlyph {
 	public void Parse(Image image, Vector2 offset, Color transparent) {
 		image.Lock();
 
-		for (var j = 0; j < height; j++)
-			for (var i = 0; i < width; i++) {
-				var pixel = image.GetPixel((int) offset.x + i, (int) offset.y + j);
+		try {
+			for (var j = 0; j < height; j++)
+				for (var i = 0; i < width; i++) {
+					var pixel = image.GetPixel((int) offset.x + i, (int) offset.y + j);
 
-				if (pixel == transparent) data[i, j] = 0;
-				else data[i, j] = 1;
-			}
+					if (pixel == transparent) data[i, j] = 0;
+					else data[i, j] = 1;
+				}
+		} catch (Exception e) {
+			trace($"Exception while drawing: {e}");
+		}
 
 		image.Unlock();
 	}
@@ -119,13 +130,18 @@ public class BitmapGlyph {
 	}
 }
 
+#endregion
+
+/*---------------------------------------------------------------------*/
+
+
+#region bitmap font
 
 /// <summary>
 ///     Simple class to load and use plain bitmap files as bitmap font in Godot.
 /// </summary>
 public class BitmapFont {
-	public static readonly int MIN_CHAR_DIMENSION = 4;
-
+	public const int MIN_CHAR_DIMENSION = 4;
 
 	private BitmapGlyph[] _glyphs;
 
@@ -137,8 +153,8 @@ public class BitmapFont {
 		Offset = 32;
 		Count = 256;
 
-		CharsDimension = Vec(1, 1);
-		GlyphDimension = Vec(8, 16);
+		CharsDimension = Vector2(1, 1);
+		GlyphDimension = Vector2(8, 16);
 		TransparentColor = Color(0, 0, 0, 0);
 	}
 
@@ -208,22 +224,36 @@ public class BitmapFont {
 
 		if (imageTexture == null) return;
 
-		if ((int) GlyphDimension.x < MIN_CHAR_DIMENSION || (int) GlyphDimension.y < MIN_CHAR_DIMENSION) return;
+		if ((int) GlyphDimension.x < MIN_CHAR_DIMENSION || (int) GlyphDimension.y < MIN_CHAR_DIMENSION) {
+			trace($"Bad glyph dimension: {GlyphDimension}");
+			return;
+		}
 
 		var idim = new Vector2(imageTexture.GetData().GetWidth(), imageTexture.GetData().GetHeight());
 
-		if (idim.x < MIN_CHAR_DIMENSION || idim.y < MIN_CHAR_DIMENSION) return;
+		if (idim.x < MIN_CHAR_DIMENSION || idim.y < MIN_CHAR_DIMENSION) {
+			trace($"Bad texture dimensions: {idim}");
+			return;
+		}
 
 		if ((int) idim.x % (int) GlyphDimension.x != 0) {
 			GD.PrintErr(
-				$"No possible character x-alignment found: texture-with={idim.x}px char-width:{GlyphDimension.x}px ratio:{idim.x / GlyphDimension.x} !?");
+				"No possible character x-alignment found: " +
+				$"texture-with={idim.x}px " +
+				$"char-width:{GlyphDimension.x}px " +
+				$"ratio:{idim.x / GlyphDimension.x} !?"
+			);
 
 			return;
 		}
 
 		if ((int) idim.y % (int) GlyphDimension.y != 0) {
 			GD.PrintErr(
-				$"No possible character y-alignment found: texture-height={idim.y}px char-height:{GlyphDimension.y}px ratio:{idim.y / GlyphDimension.y} !?");
+				$"No possible character y-alignment found: " +
+				$"texture-height={idim.y}px " +
+				$"char-height:{GlyphDimension.y}px " +
+				$"ratio:{idim.y / GlyphDimension.y} !?"
+			);
 
 			return;
 		}
@@ -280,7 +310,7 @@ public class BitmapFont {
 		for (var y = 0; y < CharsDimension.y; y++)
 			for (var x = 0; x < CharsDimension.x; x++) {
 				var glyph = new BitmapGlyph((int) GlyphDimension.x, (int) GlyphDimension.y);
-				glyph.Parse(image, Vec(x * GlyphDimension.x, y * GlyphDimension.y), transparentColor);
+				glyph.Parse(image, Vector2(x * GlyphDimension.x, y * GlyphDimension.y), transparentColor);
 
 				if (cindex < _glyphs.Length)
 					_glyphs[cindex] = glyph;
@@ -298,12 +328,18 @@ public class BitmapFont {
 	public void process() {
 		trace($"{this}");
 		IsLoaded = false;
-		CharsDimension = Vec(0, 0);
+		CharsDimension = Vector2(0, 0);
 
-		if (imageTexture?.GetData() == null) return;
+		if (imageTexture == null || imageTexture?.GetData() == null) {
+			trace("No image texture has been setup.");
+			return;
+		}
 
 		GD.Print(
-			$"{GetType().Name}: Loading bitmap-font with: {this} from image: {imageTexture.ResourceName} having {imageTexture.GetData().GetSize()} px.");
+			$"{GetType().Name}: Loading bitmap-font with: {this} " +
+			$"from image: {imageTexture.ResourceName} " +
+			$"having {imageTexture.GetData().GetSize()}px."
+		);
 
 		DetectCharsDimension();
 
@@ -313,7 +349,7 @@ public class BitmapFont {
 		}
 
 
-		GD.Print($"{GetType().Name}: Create bitmap-font: {this}");
+		GD.Print($"{GetType().Name}: Created bitmap-font: {this}");
 		IsLoaded = true;
 	}
 
@@ -332,6 +368,12 @@ public class BitmapFont {
 	}
 }
 
+#endregion
+
+/*---------------------------------------------------------------------*/
+
+
+#region bitmap exception
 
 /// <summary>
 ///     Bitpmap Font Exception
@@ -345,3 +387,5 @@ public class BitmapFontException : Exception {
 
 	public BitmapFontException(string message, Exception innerException) : base(message, innerException) { }
 }
+
+#endregion
