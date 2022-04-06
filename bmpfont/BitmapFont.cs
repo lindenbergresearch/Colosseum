@@ -150,14 +150,10 @@ public class BitmapFont {
 	///     Set default values on creation
 	/// </summary>
 	public BitmapFont() {
-		Offset = 32;
-		Count = 256;
-
-		CharsDimension = Vector2(1, 1);
-		GlyphDimension = Vector2(8, 16);
-		TransparentColor = Color(0, 0, 0, 0);
+		Reset();
 	}
 
+	/*---------------------------------------------------------------------*/
 
 	/// <summary>
 	///     The color which indicates the transparent background.
@@ -192,12 +188,25 @@ public class BitmapFont {
 	public Texture imageTexture { get; set; }
 
 	/// <summary>
-	///     Holds all parsed BitmapGlyph instances.
+	/// Indicates a loaded font.
 	/// </summary>
-
-
 	public bool IsLoaded { get; set; }
 
+	/// <summary>
+	/// Reset font parameter.
+	/// </summary>
+	public void Reset() {
+		Offset = 32;
+		Count = 256;
+
+		CharsDimension = Vector2(1, 1);
+		GlyphDimension = Vector2(8, 16);
+		TransparentColor = Color(0, 0, 0, 0);
+		IsLoaded = false;
+	}
+
+
+	/*---------------------------------------------------------------------*/
 
 	/// <summary>
 	/// </summary>
@@ -237,7 +246,7 @@ public class BitmapFont {
 		}
 
 		if ((int) idim.x % (int) GlyphDimension.x != 0) {
-			GD.PrintErr(
+			error(
 				"No possible character x-alignment found: " +
 				$"texture-with={idim.x}px " +
 				$"char-width:{GlyphDimension.x}px " +
@@ -248,7 +257,7 @@ public class BitmapFont {
 		}
 
 		if ((int) idim.y % (int) GlyphDimension.y != 0) {
-			GD.PrintErr(
+			error(
 				$"No possible character y-alignment found: " +
 				$"texture-height={idim.y}px " +
 				$"char-height:{GlyphDimension.y}px " +
@@ -262,7 +271,7 @@ public class BitmapFont {
 		// throw new BitmapFontException($"The width of the image: {idim.x}px doesn't fit to the glyphs width: {GlyphDimension.x}px!");
 
 		CharsDimension = new Vector2(idim.x / GlyphDimension.x, idim.y / GlyphDimension.y);
-		GD.Print($"Character alignment is: {CharsDimension}");
+		info($"Character alignment is: {CharsDimension}");
 	}
 
 
@@ -299,7 +308,8 @@ public class BitmapFont {
 		if ((int) CharsDimension.x < MIN_CHAR_DIMENSION || (int) CharsDimension.y < MIN_CHAR_DIMENSION) return false;
 
 		if (CharsDimension.x * CharsDimension.y > 512) {
-			GD.PrintErr($"Suspicious character alignment: {CharsDimension.x} x {CharsDimension.y} !?");
+			error($"Suspicious character alignment: {CharsDimension.x} x {CharsDimension.y} !?");
+			Reset();
 			return false;
 		}
 
@@ -314,7 +324,7 @@ public class BitmapFont {
 
 				if (cindex < _glyphs.Length)
 					_glyphs[cindex] = glyph;
-				else GD.PrintErr($"Impossible: {CharsDimension} index: {cindex}");
+				else error($"Impossible: {CharsDimension} index: {cindex}");
 
 				cindex++;
 			}
@@ -335,7 +345,7 @@ public class BitmapFont {
 			return;
 		}
 
-		GD.Print(
+		info(
 			$"{GetType().Name}: Loading bitmap-font with: {this} " +
 			$"from image: {imageTexture.ResourceName} " +
 			$"having {imageTexture.GetData().GetSize()}px."
@@ -344,12 +354,12 @@ public class BitmapFont {
 		DetectCharsDimension();
 
 		if (!ProcessImage()) {
-			GD.PrintErr($"{GetType().Name}: Error loading bitmap-font with current config: {Dump(this)}!");
+			error($"{GetType().Name}: Error loading bitmap-font with current config: {Dump(this)}!");
 			return;
 		}
 
 
-		GD.Print($"{GetType().Name}: Created bitmap-font: {this}");
+		info($"{GetType().Name}: Created bitmap-font: {this}");
 		IsLoaded = true;
 	}
 

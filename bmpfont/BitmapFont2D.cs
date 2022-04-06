@@ -24,14 +24,9 @@ using Godot;
 using Renoir;
 using static Renoir.Util;
 using static Renoir.Logger;
-using File = System.IO.File;
 
 #endregion
 
-
-/// <summary>
-///     Tool node to edit and preview a bitmap font in realtime.
-/// </summary>
 [Tool]
 public class BitmapFont2D : Godot.Node2D {
 	private Color _foreground;
@@ -44,22 +39,20 @@ public class BitmapFont2D : Godot.Node2D {
 	private Color _shadow;
 	private Vector2 _shadowOffset;
 	private string _text;
-
+	private string jsonFile;
 	private bool lockRefresh;
 
+	/*---------------------------------------------------------------------*/
 
-	/// <summary>
-	///     Setup standard values
-	/// </summary>
 	public BitmapFont2D() {
-		_glyphDimension = Vec(8, 16);
+		_glyphDimension = Vector2(8, 16);
 		_foreground = Color(1, 1, 1);
 		_text = "The quick brown fox is dead. !\"§$\"%&/()=?><|#+*'´`/\\";
-		_scale = Vec(1, 1);
+		_scale = Vector2(1, 1);
 		_lineHeight = 2;
 		_hasShadow = false;
 		_shadow = Color(0, 0, 0);
-		_shadowOffset = Vec(1, 1);
+		_shadowOffset = Vector2(1, 1);
 
 		_offset = 32;
 
@@ -68,6 +61,219 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	private BitmapFont BitmapFont { get; }
+
+
+	public string JsonFileName {
+		get {
+			jsonFile = _imageTexture?.ResourcePath.Substring(6) + ".json";
+			return jsonFile;
+		}
+	}
+
+
+	/// <summary>
+	///     Transfer local properties to BitmapFont
+	/// </summary>
+	private void ConfigureBitmapFont() {
+		BitmapFont.imageTexture = _imageTexture;
+		BitmapFont.Offset = _offset;
+		BitmapFont.CharsDimension = CharsDimension;
+		BitmapFont.GlyphDimension = _glyphDimension;
+	}
+
+
+	/// <summary>
+	///     Simulates a put pixel taking scale into account.
+	/// </summary>
+	/// <param name="pos">The position (in normal coordinates)</param>
+	/// <param name="color">The color</param>
+	private void PutPixel(Vector2 pos, Color color) {
+		DrawRect(new Rect2(pos * _scale, _scale), color);
+	}
+
+
+	private void DrawText(Vector2 pos, string text, Color color) {
+		for (var c = 0; c < text.Length; c++) {
+			var index = Mathf.Clamp(text[c] - _offset, 0, BitmapFont.GetGlyphCount() - 1);
+			var glyph = BitmapFont.GetGlyph(index);
+
+
+			for (var y = 0; y < GlyphDimension.y; y++)
+				for (var x = 0; x < GlyphDimension.x; x++)
+					if (glyph.PixelAt(x, y))
+						PutPixel(Vector2(x + c * GlyphDimension.x, y) + pos, color);
+		}
+	}
+
+
+	/// <summary>
+	///     Draw bitmap-font to canvas.
+	/// </summary>
+	public override void _Draw() {
+		if (
+			_imageTexture?.GetData() == null ||
+			BitmapFont == null ||
+			BitmapFont.GetGlyphCount() == 0 ||
+			!BitmapFont.IsLoaded
+		) return;
+
+
+		var lines = Text.Split('\n');
+		var yOffset = 0;
+
+		foreach (var line in lines) {
+			if (HasShadow)
+				DrawText(
+					Vector2(0, yOffset * (GlyphDimension.y + _lineHeight)) +
+					ShadowOffset,
+					line,
+					Shadow
+				);
+
+			DrawText(
+				Vector2(0, yOffset * (GlyphDimension.y + _lineHeight)),
+				line,
+				Foreground
+			);
+
+			yOffset++;
+		}
+	}
+
+
+	/// <summary>
+	///     Take properties and try to reload the bitmap-font.
+	/// </summary>
+	private void Refresh() {
+		if (lockRefresh) return;
+
+		try {
+			if (_imageTexture?.GetData() == null) {
+				trace("Refresh(): no texture data.");
+				return;
+			}
+
+			if (!BitmapFont.IsLoaded) {
+				trace("Refresh(): not loaded!");
+				BitmapFont.process();
+			}
+
+			if (ValidJsonExists())
+				SaveConfigToJSON();
+
+			if (BitmapFont.IsLoaded) {
+				CharsDimension = BitmapFont.CharsDimension;
+				Update();
+			} else {
+				error($"{GetType().Name}: Unable to use bitmap-font with that configuration: {Dump(BitmapFont)}");
+			}
+		} catch (Exception e) {
+			trace("Exception: " + e);
+		}
+	}
+
+
+	/// <summary>
+	/// </summary>
+	public void SaveConfigToJSON() {
+		if (_imageTexture == null || _imageTexture.GetData() == null || _imageTexture.ResourcePath.Length < 3) return;
+
+
+		try {
+			var _config = new BitmapFontConfig {
+				GlyphDimension = {
+					X = (int) GlyphDimension.x,
+					Y = (int) GlyphDimension.y
+				},
+				Scale = Scale.x,
+				Offset = Offset,
+				HasShadow = HasShadow,
+				ShadowOffset = {
+					X = (int) ShadowOffset.x,
+					Y = (int) ShadowOffset.y
+				}
+			};
+
+			SerializeObject(_config, JsonFileName);
+		} catch (Exception e) {
+			error($"Unable to save bitmap-file config data to json file: '{JsonFileName}'");
+			error($"Exception is: {e.Message}");
+		}
+	}
+
+
+	public bool ValidJsonExists() {
+		try {
+			var _config = DeserializeObject<BitmapFontConfig>(JsonFileName);
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
+	}
+
+
+	/// <summary>
+	///     Setup bitmap properties from json data.
+	/// </summary>
+	/// <param name="filename"></param>
+	public void ConfigureFromJSON(string filename) {
+		if (!ValidJsonExists())
+			return;
+
+		lockRefresh = true;
+
+		try {
+			var _config = DeserializeObject<BitmapFontConfig>(filename);
+
+			trace($"Bitmap Json config: {_config}");
+
+			GlyphDimension = Vector2(_config.GlyphDimension.X, _config.GlyphDimension.Y);
+			Scale = Vector2(_config.Scale, _config.Scale);
+			Offset = _config.Offset;
+			LineHeight = _config.LineHeight;
+			HasShadow = _config.HasShadow;
+			ShadowOffset = Vector2(_config.ShadowOffset.X, _config.ShadowOffset.Y);
+
+			info("Bitmap-font successfully configured by json file.");
+		} catch (Exception e) {
+			error($"Unable to load bitmap-font config data from json file: {filename}");
+			error(e.Message);
+		} finally {
+			lockRefresh = false;
+		}
+	}
+
+
+	public override string ToString() {
+		return $"GlyphDimension={GlyphDimension.ToFormatted("D0")} " +
+		       $"Scale={Scale} " +
+		       $"Offset={Offset} " +
+		       $"LineHeight={LineHeight} " +
+		       $"HasShadow={HasShadow} " +
+		       $"ShadowOffset={ShadowOffset} " +
+		       $"CharDimensions={CharsDimension.ToFormatted("D0")}";
+	}
+
+
+	/// <summary>
+	/// </summary>
+	public override void _Ready() { }
+
+
+	/*---------------------------------------------------------------------*/
+
+	#region exports
+
+	[Export]
+	public bool ForceReload {
+		get => false;
+		set {
+			ConfigureFromJSON(jsonFile);
+			ConfigureBitmapFont();
+			Refresh();
+		}
+	}
 
 
 	[Export]
@@ -85,13 +291,16 @@ public class BitmapFont2D : Godot.Node2D {
 		set {
 			_imageTexture = value;
 
-			if (_imageTexture != null && _imageTexture.ResourcePath.Length > 3) {
-				// test of there is a file equal to the image file ending with json
-				var jsonFile = _imageTexture.ResourcePath.Substring(6) + ".json";
-				if (File.Exists(jsonFile)) {
-					GD.Print($"Found a corresponding json config file for this bitmap-font: {jsonFile}. Try to load it...");
-					ConfigureFromJSON(jsonFile);
-				}
+			BitmapFont.Reset();
+
+			if (_imageTexture == null) {
+				error("No bitmap-font texture.");
+				return;
+			}
+
+			if (_imageTexture.ResourcePath.Length > 3 && ValidJsonExists()) {
+				info($"Found a corresponding json config file for this bitmap-font: {JsonFileName}. Try to load it...");
+				ConfigureFromJSON(JsonFileName);
 			}
 
 			ConfigureBitmapFont();
@@ -219,167 +428,5 @@ public class BitmapFont2D : Godot.Node2D {
 		}
 	}
 
-
-	/// <summary>
-	///     Transfer local properties to BitmapFont
-	/// </summary>
-	private void ConfigureBitmapFont() {
-		BitmapFont.imageTexture = _imageTexture;
-		BitmapFont.Offset = _offset;
-		BitmapFont.CharsDimension = CharsDimension;
-		BitmapFont.GlyphDimension = _glyphDimension;
-	}
-
-
-	/// <summary>
-	///     Simulates a put pixel taking scale into account.
-	/// </summary>
-	/// <param name="pos">The position (in normal coordinates)</param>
-	/// <param name="color">The color</param>
-	private void PutPixel(Vector2 pos, Color color) {
-		DrawRect(new Rect2(pos * _scale, _scale), color);
-	}
-
-
-	/// <summary>
-	/// </summary>
-	/// <param name="pos"></param>
-	/// <param name="text"></param>
-	private void DrawText(Vector2 pos, string text, Color color) {
-		for (var c = 0; c < text.Length; c++) {
-			var index = Mathf.Clamp(text[c] - _offset, 0, BitmapFont.GetGlyphCount() - 1);
-			var glyph = BitmapFont.GetGlyph(index);
-
-
-			for (var y = 0; y < GlyphDimension.y; y++)
-				for (var x = 0; x < GlyphDimension.x; x++)
-					if (glyph.PixelAt(x, y))
-						PutPixel(Vec(x + c * GlyphDimension.x, y) + pos, color);
-		}
-	}
-
-
-	/// <summary>
-	///     Draw bitmap-font to canvas.
-	/// </summary>
-	public override void _Draw() {
-		if (_imageTexture == null || _imageTexture.GetData() == null || BitmapFont == null || BitmapFont.GetGlyphCount() == 0 ||
-		    !BitmapFont.IsLoaded)
-			return;
-
-
-		var lines = Text.Split('\n');
-		var yoffset = 0;
-
-		foreach (var line in lines) {
-			if (HasShadow) DrawText(Vec(0, yoffset * (GlyphDimension.y + _lineHeight)) + ShadowOffset, line, Shadow);
-
-			DrawText(Vec(0, yoffset * (GlyphDimension.y + _lineHeight)), line, Foreground);
-			yoffset++;
-		}
-	}
-
-
-	/// <summary>
-	///     Take properties and try to reload the bitmap-font.
-	/// </summary>
-	private void Refresh() {
-		if (lockRefresh) return;
-
-		try {
-			if (_imageTexture?.GetData() == null) {
-				trace($"Refresh(): no texture data.");
-				return;
-			}
-
-			if (!BitmapFont.IsLoaded) {
-				trace($"Refresh(): not loaded!");
-				BitmapFont.process();
-			}
-			//SaveConfigToJSON();
-
-
-			if (BitmapFont.IsLoaded) {
-				CharsDimension = BitmapFont.CharsDimension;
-				Update();
-			} else {
-				GD.PrintErr($"{GetType().Name}: Unable to use bitmap-font with that configuration: {Dump(BitmapFont)}");
-			}
-		} catch (Exception e) {
-			GD.PrintErr(e);
-			trace("Exception: " + e);
-		}
-	}
-
-
-	/// <summary>
-	/// </summary>
-	public void SaveConfigToJSON() {
-		if (_imageTexture == null || _imageTexture.GetData() == null || _imageTexture.ResourcePath.Length < 3) return;
-		var jsonFile = _imageTexture.ResourcePath.Substring(6) + ".json";
-
-
-		try {
-			var _config = new BitmapFontConfig {
-				GlyphDimension = {
-					X = (int) GlyphDimension.x,
-					Y = (int) GlyphDimension.y
-				},
-				Scale = Scale.x,
-				Offset = Offset,
-				HasShadow = HasShadow,
-				ShadowOffset = {
-					X = (int) ShadowOffset.x,
-					Y = (int) ShadowOffset.y
-				}
-			};
-
-			SerializeObject(_config, jsonFile);
-		} catch (Exception e) {
-			GD.PrintErr($"Unable to save bitmap-file config data to json file: '{jsonFile}'");
-			GD.PrintErr($"Exception is: {e.Message}");
-		}
-	}
-
-
-	/// <summary>
-	///     Setup bitmap properties from json data.
-	/// </summary>
-	/// <param name="filename"></param>
-	public void ConfigureFromJSON(string filename) {
-		lockRefresh = true;
-
-		try {
-			var _config = DeserializeObject<BitmapFontConfig>(filename);
-
-			GlyphDimension = new Vector2(_config.GlyphDimension.X, _config.GlyphDimension.Y);
-			Scale = new Vector2(_config.Scale, _config.Scale);
-			Offset = _config.Offset;
-			LineHeight = _config.LineHeight;
-			HasShadow = _config.HasShadow;
-			ShadowOffset = new Vector2(_config.ShadowOffset.X, _config.ShadowOffset.Y);
-
-			GD.Print("Bitmap-font successfully configured by json file.");
-		} catch (Exception e) {
-			GD.PrintErr($"Unable to load bitmap-font config data from json file: {filename}");
-			GD.PrintErr(e.Message);
-		} finally {
-			lockRefresh = false;
-		}
-	}
-
-
-	public override string ToString()
-		=> $"GlyphDimension={GlyphDimension.ToFormatted("D0")} " +
-		   $"Scale={Scale} " +
-		   $"Offset={Offset} " +
-		   $"LineHeight={LineHeight} " +
-		   $"HasShadow={HasShadow} " +
-		   $"ShadowOffset={ShadowOffset} " +
-		   $"CharDimensions={CharsDimension.ToFormatted("D0")}";
-
-
-	/// <summary>
-	/// </summary>
-	public override void _Ready() { }
+	#endregion
 }
