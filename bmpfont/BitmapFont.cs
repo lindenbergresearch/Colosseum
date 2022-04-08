@@ -32,6 +32,7 @@ using static Renoir.Logger;
 #region font config
 
 /// <summary>
+/// Bitmap font config object.
 /// </summary>
 internal class BitmapFontConfig : SerializableDataClass {
 	public override int VERSION { get; } = 1;
@@ -40,14 +41,31 @@ internal class BitmapFontConfig : SerializableDataClass {
 	public Vector<int> CharsDimension { get; set; } = new(0, 0);
 	public float LineHeight { get; set; } = 2.0f;
 	public float Scale { get; set; } = 1.0f;
-	public bool HasShadow { get; set; } = false;
-	public int Offset { get; set; } = 0;
+	public bool HasShadow { get; set; }
+	public int Offset { get; set; }
+	public int Spacing { get; set; }
 	public Vector<float> ShadowOffset { get; set; } = new(2, 2);
 
 
 	public override string ToString() {
 		return
-			$"{nameof(VERSION)}: {VERSION}, {nameof(GlyphDimension)}: {GlyphDimension}, {nameof(CharsDimension)}: {CharsDimension}, {nameof(LineHeight)}: {LineHeight}, {nameof(Scale)}: {Scale}, {nameof(HasShadow)}: {HasShadow}, {nameof(Offset)}: {Offset}, {nameof(ShadowOffset)}: {ShadowOffset}";
+			$"{nameof(VERSION)}: {VERSION}, " +
+			$"{nameof(GlyphDimension)}: " +
+			$"{GlyphDimension}, " +
+			$"{nameof(CharsDimension)}: " +
+			$"{CharsDimension}, " +
+			$"{nameof(LineHeight)}: " +
+			$"{LineHeight}px, " +
+			$"{nameof(Scale)}: " +
+			$"{Scale}px, " +
+			$"{nameof(HasShadow)}: " +
+			$"{HasShadow}, " +
+			$"{nameof(Offset)}: " +
+			$"{Offset}, " +
+			$"{nameof(Scale)}: " +
+			$"{Scale}px, " +
+			$"{nameof(ShadowOffset)}: " +
+			$"{ShadowOffset}";
 	}
 
 	/// <summary>
