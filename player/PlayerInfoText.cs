@@ -27,43 +27,43 @@ using Renoir;
 
 
 public class PlayerInfoText : ParallaxBackground {
-	[GNode("BitmapFont2D")]
-	private BitmapFont2D _BitmapFont2D;
+	[GNode("Coins")]
+	private BitmapFont2D Coins;
 
-	[GNode("BitmapFont2D2")]
-	private BitmapFont2D _BitmapFont2D2;
+	[GNode("ColorRectDebug/FPS")]
+	private BitmapFont2D FPS;
 
-	[GNode("CoinsLabel")]
-	private Label CoinsLabel;
+	[GNode("LevelName")]
+	private BitmapFont2D LevelName;
 
-	[GNode("LevelNameLabel")]
-	private Label LevelNameLabel;
+	[GNode("LivesLeft")]
+	private BitmapFont2D LivesLeft;
 
-	[GNode("LivesLabel")]
-	private Label LivesLabel;
+	[GNode("ColorRectDebug/Mem")]
+	private BitmapFont2D MemInfo;
 
-	[GNode("ScoreLabel")]
-	private Label ScoreLabel;
+	[GNode("Score")]
+	private BitmapFont2D Score;
 
-	[GNode("TimeLabel")]
-	private Label TimeLabel;
+	[GNode("Time")]
+	private BitmapFont2D Time;
+
 
 	public void Update() {
-		ScoreLabel.Text = Mario2D.TotalScore;
-		TimeLabel.Text = Level.Time;
-		CoinsLabel.Text = Mario2D.CollectedCoins;
-		LivesLabel.Text = Mario2D.LivesLeft;
-		LevelNameLabel.Text = Level.Name;
+		Score.Text = Mario2D.TotalScore;
+		Time.Text = Level.Time.ToString() + "s";
+		Coins.Text = Mario2D.CollectedCoins;
+		LivesLeft.Text = "x " + Mario2D.LivesLeft;
+		LevelName.Text = Level.Name;
 
-		_BitmapFont2D.Text = $"> FPS: {Node2D.FPS}";
-		_BitmapFont2D2.Text = $"> MEM: {GC.GetTotalMemory(false) / 1000}K";
+		FPS.Text = $"FPS: {Node2D.FPS}";
+		MemInfo.Text = $"MEM: {GC.GetTotalMemory(false) / 1000}K";
 	}
 
 
 	public override void _Ready() {
 		this.Init();
 
-		//Level.Time.AddAction(Update);
 		Parameter.AddActionSources(
 			Update,
 			Mario2D.TotalScore,
