@@ -26,7 +26,7 @@ namespace Renoir {
 		/// <summary>
 		///     Determines of the item is active
 		/// </summary>
-		public bool Active { get; set; } = true;
+		public virtual bool Active { get; set; } = true;
 
 
 		/// <summary>
