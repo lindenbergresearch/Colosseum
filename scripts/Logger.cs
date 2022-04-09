@@ -26,6 +26,7 @@ using System.Linq;
 using Godot;
 using static System.Console;
 using static Renoir.Logger.LoggerLevel;
+using Environment = System.Environment;
 using File = System.IO.File;
 
 #endregion
@@ -59,21 +60,23 @@ namespace Renoir {
 			FATAL
 		}
 
-		public const int MAX_BUFFER_LINES = 200;
+		private const int MAX_BUFFER_LINES = 350;
 
 		/// <summary>
 		///     Holds all pushed messages.
 		/// </summary>
 		public static List<string> messages = new(MAX_BUFFER_LINES);
 
+		private static readonly int TICKS_START = Environment.TickCount;
+
 
 		/// <summary>
 		///     Init logger
 		/// </summary>
 		static Logger() {
-			LogLevel = TRACE;
+			LogLevel = DEBUG;
 
-			//LogWriters.Add(new GodotConsoleLogWriter());
+			LogWriters.Add(new GodotConsoleLogWriter());
 			LogWriters.Add(new SystemConsoleLogWriter());
 			//LogWriters.Add(new FileLogWriter());
 
@@ -106,6 +109,10 @@ namespace Renoir {
 		///     Holds all output writers
 		/// </summary>
 		public static List<ILogWriter> LogWriters { get; set; } = new();
+
+		private static int Ticks() => Environment.TickCount - TICKS_START;
+
+		private static string TicksFormatted() => String.Format("{0,8:F4}", Ticks() / 1000.0f);
 
 		/// <summary>
 		/// Transform LoggerLevel to string.
@@ -147,16 +154,15 @@ namespace Renoir {
 			var st = new StackTrace(true);
 			var sf = st.GetFrame(2);
 
-			var filename = sf.GetFileName()?.Split('/').Last();
+			var filename = sf.GetFileName()?.Split('/').Last().ReplaceN(".cs", "");
 			var lineno = sf.GetFileLineNumber();
 			var method = sf.GetMethod().Name;
 			var colno = sf.GetFileColumnNumber();
-
 			var dt = DateTime.Now.ToString("HH:mm:ss.fff");
-			var m = $"[{dt}] {LoggerLevel2String(level)} ";
+			var m = $"[{TicksFormatted()}] {LoggerLevel2String(level)} ";
 
-			if (lineno > 0 && level is TRACE or DEBUG or ERROR or FATAL)
-				m += $"<{filename.ReplaceN(".cs", "")}.{method} {lineno}:{colno}> {msg}";
+			if (lineno > 0)
+				m += $"<{filename}.{method} {lineno}:{colno}> {msg}";
 			else
 				m += $"{msg}";
 
@@ -236,7 +242,7 @@ namespace Renoir {
 		/// <param name="level"></param>
 		/// <param name="message"></param>
 		public void Write(Logger.LoggerLevel level, string message) {
-			if (level is ERROR or FATAL)
+			if (level > WARN)
 				GD.PrintErr(message);
 			else
 				GD.Print(message);
