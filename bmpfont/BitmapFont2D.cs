@@ -21,6 +21,7 @@
 
 using System;
 using Godot;
+using Renoir;
 using static Renoir.Util;
 using static Renoir.Logger;
 
@@ -38,6 +39,7 @@ public class BitmapFont2D : Godot.Node2D {
 	private Vector2 _scale;
 	private Color _shadow;
 	private Vector2 _shadowOffset;
+	private int _spaceing;
 	private string _text;
 	private bool initialized = false;
 	private string jsonFile;
@@ -64,7 +66,9 @@ public class BitmapFont2D : Godot.Node2D {
 
 
 	/*---------------------------------------------------------------------*/
-
+	/// <summary>
+	/// Clear font parameter.
+	/// </summary>
 	public void Clear() {
 		_glyphDimension = Vector2(8, 16);
 		_charsDimension = Vector2(32, 8);
@@ -80,8 +84,8 @@ public class BitmapFont2D : Godot.Node2D {
 		_hasShadow = true;
 		_shadow = Color(0, 0, 0);
 		_shadowOffset = Vector2(1, 1);
-
 		_offset = 0;
+		_spaceing = 0;
 	}
 
 
@@ -108,17 +112,22 @@ public class BitmapFont2D : Godot.Node2D {
 		DrawRect(new Rect2(pos * _scale, _scale), color);
 	}
 
-
+	/// <summary>
+	/// Draws a text string based on a configured bitmap-font.
+	/// </summary>
+	/// <param name="pos">Position to start drawing.</param>
+	/// <param name="text">Text to render.</param>
+	/// <param name="color">Color to render with.</param>
 	private void DrawText(Vector2 pos, string text, Color color) {
 		for (var c = 0; c < text.Length; c++) {
 			var index = Mathf.Clamp(text[c] - _offset, 0, BitmapFont.GetGlyphCount() - 1);
 			var glyph = BitmapFont.GetGlyph(index);
-
+			var space = c * Spacing * 0.1f;
 
 			for (var y = 0; y < GlyphDimension.y; y++)
 				for (var x = 0; x < GlyphDimension.x; x++)
 					if (glyph.PixelAt(x, y))
-						PutPixel(Vector2(x + c * GlyphDimension.x, y) + pos, color);
+						PutPixel(pos + Vector2(x + c * GlyphDimension.x + space, y), color);
 		}
 	}
 
@@ -178,7 +187,6 @@ public class BitmapFont2D : Godot.Node2D {
 			if (!BitmapFont.IsLoaded) {
 				trace("Font has not loaded flag!");
 				BitmapFont.process();
-				trace($"Process => {BitmapFont}");
 
 				if (BitmapFont.IsLoaded && !ValidJsonExists())
 					SaveConfigToJSON();
@@ -218,11 +226,13 @@ public class BitmapFont2D : Godot.Node2D {
 				},
 				Scale = Scale.x,
 				Offset = Offset,
+				Spacing = Spacing,
 				HasShadow = HasShadow,
 				ShadowOffset = {
 					X = (int) ShadowOffset.x,
 					Y = (int) ShadowOffset.y
-				}
+				},
+				Timestamp = DateTime.Now
 			};
 
 			SerializeObject(_config, JsonFileName);
@@ -230,14 +240,19 @@ public class BitmapFont2D : Godot.Node2D {
 			error($"Unable to save bitmap-file config data to json file: '{JsonFileName}'");
 			error($"Exception is: {e.Message}");
 		}
+
+		trace("Successfully saved font settings to Json config.");
 	}
 
-
+	/// <summary>
+	/// Test for Json config integrity.
+	/// </summary>
+	/// <returns></returns>
 	public bool ValidJsonExists() {
 		try {
-			var _config = DeserializeObject<BitmapFontConfig>(JsonFileName);
+			DeserializeObject<BitmapFontConfig>(JsonFileName);
 		} catch (Exception e) {
-			warn($"No valid Json file found: '{JsonFileName}'.");
+			warn($"No valid Json file found: '{JsonFileName}'.\nException: {e}");
 			return false;
 		}
 
@@ -264,11 +279,12 @@ public class BitmapFont2D : Godot.Node2D {
 			CharsDimension = Vector2(_config.CharsDimension.X, _config.CharsDimension.Y);
 			Scale = Vector2(_config.Scale, _config.Scale);
 			Offset = _config.Offset;
+			Spacing = _config.Spacing;
 			LineHeight = _config.LineHeight;
 			HasShadow = _config.HasShadow;
 			ShadowOffset = Vector2(_config.ShadowOffset.X, _config.ShadowOffset.Y);
 
-			info("Bitmap-font successfully configured by json file.");
+			trace("Bitmap-font successfully configured by json file.");
 		} catch (Exception e) {
 			error($"Unable to load bitmap-font config data from json file: {filename}");
 			error(e.Message);
@@ -370,7 +386,7 @@ public class BitmapFont2D : Godot.Node2D {
 			}
 
 			if (_imageTexture.ResourcePath.Length > 3 && ValidJsonExists()) {
-				info($"Found a corresponding json config file for this bitmap-font: {JsonFileName}. Try to load it...");
+				debug($"Found a corresponding Json config for this bitmap-font: {JsonFileName}.");
 				ConfigureFromJSON(JsonFileName);
 			}
 
@@ -379,6 +395,39 @@ public class BitmapFont2D : Godot.Node2D {
 			Update();
 			PropertyListChangedNotify();
 
+			if (initialized) {
+				ConfigureBitmapFont();
+				Refresh();
+				Update();
+			}
+		}
+	}
+
+
+	/// <summary>
+	/// </summary>
+	[Export(PropertyHint.MultilineText)]
+	public string Text {
+		get => _text;
+		set {
+			trace($"SET Text: {value.Substr(0, 12)}...");
+			_text = value;
+
+			if (initialized && BitmapFont.IsLoaded) {
+				Update();
+			}
+		}
+	}
+
+
+	/// <summary>
+	/// </summary>
+	[Export]
+	public Color Foreground {
+		get => _foreground;
+		set {
+			trace($"SET Foreground: {value}");
+			_foreground = value;
 			if (initialized) {
 				ConfigureBitmapFont();
 				Refresh();
@@ -412,7 +461,6 @@ public class BitmapFont2D : Godot.Node2D {
 		get => _charsDimension;
 		set {
 			trace($"SET CharsDimension: {value}");
-
 			_charsDimension = value;
 		}
 	}
@@ -438,30 +486,20 @@ public class BitmapFont2D : Godot.Node2D {
 	/// <summary>
 	/// </summary>
 	[Export]
-	public Color Foreground {
-		get => _foreground;
+	public int Size {
+		get => (_scale.x * 50).Round();
 		set {
-			trace($"SET Foreground: {value}");
-			_foreground = value;
+			trace($"SET Size: {value}");
+			_scale = Vector2(
+				value * 0.02f,
+				value * 0.02f
+			);
+
+			PropertyListChangedNotify();
+
 			if (initialized) {
 				ConfigureBitmapFont();
 				Refresh();
-				Update();
-			}
-		}
-	}
-
-
-	/// <summary>
-	/// </summary>
-	[Export(PropertyHint.MultilineText)]
-	public string Text {
-		get => _text;
-		set {
-			trace($"SET Text: {value.Substr(0, 12)}...");
-			_text = value;
-
-			if (initialized && BitmapFont.IsLoaded) {
 				Update();
 			}
 		}
@@ -478,6 +516,23 @@ public class BitmapFont2D : Godot.Node2D {
 			_scale = value;
 			if (initialized) {
 				ConfigureBitmapFont();
+				Update();
+			}
+		}
+	}
+
+
+	/// <summary>
+	/// </summary>
+	[Export]
+	public int Spacing {
+		get => _spaceing;
+		set {
+			trace($"SET Spacing: {value}");
+			_spaceing = value;
+			if (initialized) {
+				ConfigureBitmapFont();
+				Refresh();
 				Update();
 			}
 		}

@@ -251,57 +251,6 @@ public class BitmapFont {
 		return -1;
 	}
 
-
-	/// <summary>
-	///     Detects the correct char dimension based on the glyph dimension
-	/// </summary>
-	public void DetectCharsDimension() {
-		//trace($"{this}");
-
-		if (imageTexture == null) return;
-
-		if ((int) GlyphDimension.x < MIN_CHAR_DIMENSION || (int) GlyphDimension.y < MIN_CHAR_DIMENSION) {
-			trace($"Bad glyph dimension: {GlyphDimension}");
-			return;
-		}
-
-		var textureDimension = new Vector2(imageTexture.GetData().GetWidth(), imageTexture.GetData().GetHeight());
-
-		if (textureDimension.x < GlyphDimension.x || textureDimension.y < GlyphDimension.y) {
-			trace($"Bad texture dimensions: {textureDimension}");
-			return;
-		}
-
-		if ((int) textureDimension.x % (int) GlyphDimension.x != 0) {
-			error(
-				"No possible character x-alignment found: " +
-				$"texture-with={textureDimension.x}px " +
-				$"char-width:{GlyphDimension.x}px " +
-				$"ratio:{textureDimension.x / GlyphDimension.x} !?"
-			);
-
-			return;
-		}
-
-		if ((int) textureDimension.y % (int) GlyphDimension.y != 0) {
-			error(
-				$"No possible character y-alignment found: " +
-				$"texture-height={textureDimension.y}px " +
-				$"char-height:{GlyphDimension.y}px " +
-				$"ratio:{textureDimension.y / GlyphDimension.y} !?"
-			);
-
-			return;
-		}
-
-		// throw new BitmapFontException($"The height of the image: {idim.y}px doesn't fit to the glyphs height: {GlyphDimension.y}px!");
-		// throw new BitmapFontException($"The width of the image: {idim.x}px doesn't fit to the glyphs width: {GlyphDimension.x}px!");
-
-		CharsDimension = new Vector2(textureDimension.x / GlyphDimension.x, textureDimension.y / GlyphDimension.y);
-		info($"Character alignment is: {CharsDimension}");
-	}
-
-
 	/// <summary>
 	///     Detect transparent color while retrieving the color of a specific point.
 	///     The default is (0, 0)
@@ -416,7 +365,7 @@ public class BitmapFont {
 	/// <summary>
 	/// </summary>
 	public void process() {
-		info(
+		debug(
 			$"Loading bitmap-font with: {this} " +
 			$"from image: {imageTexture?.ResourcePath.Substring(6)} " +
 			$"with {imageTexture?.GetData().GetSize()}px."
@@ -429,7 +378,7 @@ public class BitmapFont {
 			return;
 		}
 
-		info($"Successfully created bitmap-font: {this}");
+		debug($"Successfully created bitmap-font: {this}");
 		IsLoaded = true;
 	}
 
