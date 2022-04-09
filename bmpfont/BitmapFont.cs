@@ -39,12 +39,12 @@ internal class BitmapFontConfig : SerializableDataClass {
 
 	public Vector<int> GlyphDimension { get; set; } = new(0, 0);
 	public Vector<int> CharsDimension { get; set; } = new(0, 0);
-	public float LineHeight { get; set; } = 2.0f;
-	public float Scale { get; set; } = 1.0f;
-	public bool HasShadow { get; set; }
+	// public float LineHeight { get; set; } = 2.0f;
+	// public float Scale { get; set; } = 1.0f;
+	// public bool HasShadow { get; set; }
 	public int Offset { get; set; }
-	public int Spacing { get; set; }
-	public Vector<float> ShadowOffset { get; set; } = new(2, 2);
+	// public int Spacing { get; set; }
+	// public Vector<float> ShadowOffset { get; set; } = new(2, 2);
 
 
 	public override string ToString() {
@@ -54,18 +54,18 @@ internal class BitmapFontConfig : SerializableDataClass {
 			$"{GlyphDimension}, " +
 			$"{nameof(CharsDimension)}: " +
 			$"{CharsDimension}, " +
-			$"{nameof(LineHeight)}: " +
-			$"{LineHeight}px, " +
-			$"{nameof(Scale)}: " +
-			$"{Scale}px, " +
-			$"{nameof(HasShadow)}: " +
-			$"{HasShadow}, " +
+			// $"{nameof(LineHeight)}: " +
+			// $"{LineHeight}px, " +
+			// $"{nameof(Scale)}: " +
+			// $"{Scale}px, " +
+			// $"{nameof(HasShadow)}: " +
+			// $"{HasShadow}, " +
 			$"{nameof(Offset)}: " +
-			$"{Offset}, " +
-			$"{nameof(Scale)}: " +
-			$"{Scale}px, " +
-			$"{nameof(ShadowOffset)}: " +
-			$"{ShadowOffset}";
+			$"{Offset}, ";
+		// $"{nameof(Scale)}: " +
+		// $"{Scale}px, " +
+		// $"{nameof(ShadowOffset)}: " +
+		// $"{ShadowOffset}";
 	}
 
 	/// <summary>

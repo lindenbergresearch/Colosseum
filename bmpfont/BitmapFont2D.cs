@@ -224,14 +224,14 @@ public class BitmapFont2D : Godot.Node2D {
 					X = (int) CharsDimension.x,
 					Y = (int) CharsDimension.y
 				},
-				Scale = Scale.x,
+				// Scale = Scale.x,
 				Offset = Offset,
-				Spacing = Spacing,
-				HasShadow = HasShadow,
-				ShadowOffset = {
-					X = (int) ShadowOffset.x,
-					Y = (int) ShadowOffset.y
-				},
+				// Spacing = Spacing,
+				// HasShadow = HasShadow,
+				// ShadowOffset = {
+				// 	X = (int) ShadowOffset.x,
+				// 	Y = (int) ShadowOffset.y
+				// },
 				Timestamp = DateTime.Now
 			};
 
@@ -277,12 +277,12 @@ public class BitmapFont2D : Godot.Node2D {
 
 			GlyphDimension = Vector2(_config.GlyphDimension.X, _config.GlyphDimension.Y);
 			CharsDimension = Vector2(_config.CharsDimension.X, _config.CharsDimension.Y);
-			Scale = Vector2(_config.Scale, _config.Scale);
+			// Scale = Vector2(_config.Scale, _config.Scale);
 			Offset = _config.Offset;
-			Spacing = _config.Spacing;
-			LineHeight = _config.LineHeight;
-			HasShadow = _config.HasShadow;
-			ShadowOffset = Vector2(_config.ShadowOffset.X, _config.ShadowOffset.Y);
+			// Spacing = _config.Spacing;
+			// LineHeight = _config.LineHeight;
+			// HasShadow = _config.HasShadow;
+			// ShadowOffset = Vector2(_config.ShadowOffset.X, _config.ShadowOffset.Y);
 
 			trace("Bitmap-font successfully configured by json file.");
 		} catch (Exception e) {
