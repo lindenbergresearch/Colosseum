@@ -18,26 +18,34 @@
 #endregion
 
 using Godot;
+using Renoir.item;
 using static Renoir.Logger;
 
 namespace Renoir {
 
 	/// <summary>
-	/// Basic interface for item consumer. 
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	public interface IItemConsumer {
-	}
-
-	/// <summary>
 	/// Abstract static consumable item.
 	/// An item which does not collide or move.
 	/// </summary>
-	public abstract class StaticConsumableItem<T> : Area2D where T : IItemConsumer {
-		/// <summary>
-		/// Indicates if the item has been consumed.
-		/// </summary>
-		public bool Consumed { get; set; }
+	public abstract class StaticConsumableItem<T> : Area2D, IGameItem<T> where T : IItemConsumer {
+		/// <inheritdoc />
+		public ItemState State { get; set; }
+
+		/// <inheritdoc />
+		public abstract void OnConsumerRequest(T consumer);
+
+
+		/// <inheritdoc />
+		public void SetConsumed() {
+			State = ItemState.Consumed;
+
+			Visible = false;
+			SetProcess(false);
+			SetPhysicsProcess(false);
+			SetProcessInput(false);
+			Disconnect("body_entered", this, nameof(OnBodyEntered));
+		}
+
 
 		/// <summary>
 		/// Catch signal and check if a valid consume tries to consume the item.
@@ -46,7 +54,7 @@ namespace Renoir {
 		private void OnBodyEntered(Object body) {
 			trace($"A body: {body} entered this static consumable item: {this}");
 
-			if (!Consumed && body is T consumer) {
+			if (State == ItemState.Consumable && body is T consumer) {
 				debug($"The consumer: {body} requests consuming: {this}");
 				OnConsumerRequest(consumer);
 			} else
@@ -54,36 +62,11 @@ namespace Renoir {
 		}
 
 		/// <summary>
-		/// Called on subclass if a valid consume request happened.
+		/// Called after class init.
 		/// </summary>
-		/// <param name="consumer"></param>
-		public abstract void OnConsumerRequest(T consumer);
+		public virtual void Ready() { }
 
-		/// <summary>
-		/// Called in subclass on ready.
-		/// </summary>
-		public abstract void Ready();
-
-
-		/// <summary>
-		/// Set item state to consumed and may deactivate in scene-tree.
-		/// </summary>
-		/// <param name="deactivate"></param>
-		protected void SetConsumed(bool deactivate = true) {
-			Consumed = true;
-
-			if (deactivate) {
-				Visible = false;
-				SetProcess(false);
-				SetPhysicsProcess(false);
-				SetProcessInput(false);
-				Disconnect("body_entered", this, nameof(OnBodyEntered));
-			}
-		}
-
-		/// <summary>
-		/// Init object and connect signal.
-		/// </summary>
+		/// <inheritdoc />
 		public sealed override void _Ready() {
 			this.Init();
 			Ready();
