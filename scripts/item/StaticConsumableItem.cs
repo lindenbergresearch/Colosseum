@@ -39,6 +39,9 @@ namespace Renoir {
 		public void SetConsumed() {
 			State = ItemState.Consumed;
 
+			// call on consumed for further actions
+			OnConsumed();
+
 			Visible = false;
 			SetProcess(false);
 			SetPhysicsProcess(false);
@@ -64,8 +67,12 @@ namespace Renoir {
 		/// <summary>
 		/// Called after class init.
 		/// </summary>
-		public virtual void Ready() {
-		}
+		public virtual void Ready() { }
+
+		/// <summary>
+		/// Called if the item has been successfully consumed.
+		/// </summary>
+		public virtual void OnConsumed() { }
 
 		/// <inheritdoc />
 		public sealed override void _Ready() {
