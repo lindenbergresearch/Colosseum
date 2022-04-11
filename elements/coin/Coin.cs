@@ -20,15 +20,14 @@
 #region
 
 using Godot;
+using Renoir.item;
 using static Renoir.Logger;
 
 #endregion
 
 namespace Renoir {
 
-	/// <summary>
-	/// Irem consumer for coins.
-	/// </summary>
+	/// <inheritdoc />
 	public interface ICoinConsumer : IItemConsumer {
 		/// <summary>
 		/// Called on the consumer side.
@@ -54,24 +53,18 @@ namespace Renoir {
 		private AudioStreamPlayer _audioStreamPlayer;
 
 
-		private CoinType coinType = CoinType.NORMAL;
-
+		private CoinType Type { get; set; } = CoinType.Single;
 
 		/*---------------------------------------------------------------------*/
 
-		/// <summary>
-		///     Init...
-		/// </summary>
+		/// <inheritdoc />
 		public override void Ready() {
 			_animatedSprite.Play();
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="consumer"></param>
+		/// <inheritdoc />
 		public override void OnConsumerRequest(ICoinConsumer consumer) {
-			var valid = consumer.DoCoinConsume((int) coinType, this);
+			var valid = consumer.DoCoinConsume((int) Type, this);
 
 			if (valid) {
 				_audioStreamPlayer.Play();
@@ -80,10 +73,13 @@ namespace Renoir {
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private enum CoinType {
-			NORMAL = 1,
-			SPECIAL = 5,
-			SUPER = 10
+			Single = 1,
+			Special = 5,
+			Super = 10
 		}
 	}
 
