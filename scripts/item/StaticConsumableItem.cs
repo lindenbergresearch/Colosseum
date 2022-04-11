@@ -29,7 +29,7 @@ namespace Renoir {
 	/// </summary>
 	public abstract class StaticConsumableItem<T> : Area2D, IGameItem<T> where T : IItemConsumer {
 		/// <inheritdoc />
-		public ItemState State { get; set; }
+		public ItemState State { get; set; } = ItemState.Consumable;
 
 		/// <inheritdoc />
 		public abstract void OnConsumerRequest(T consumer);
@@ -64,7 +64,8 @@ namespace Renoir {
 		/// <summary>
 		/// Called after class init.
 		/// </summary>
-		public virtual void Ready() { }
+		public virtual void Ready() {
+		}
 
 		/// <inheritdoc />
 		public sealed override void _Ready() {
@@ -72,7 +73,6 @@ namespace Renoir {
 			Ready();
 
 			Connect("body_entered", this, nameof(OnBodyEntered));
-
 			debug($"Created static consumable item: {this}");
 		}
 	}
