@@ -29,6 +29,7 @@ namespace Renoir {
 	///     Represents a motion as vector containing additional functions
 	/// </summary>
 	public class Motion2D {
+
 		/// <summary>
 		///     Normal vector for standard bottom ground
 		/// </summary>
@@ -75,6 +76,7 @@ namespace Renoir {
 
 
 		// Shorthand direction states
+		public bool Stopped => velocity.Abs().Length() == 0;
 		public bool MovingUp => velocity.y < 0;
 		public bool MovingDown => velocity.y > 0;
 		public bool MovingLeft => velocity.x < 0;
@@ -104,11 +106,29 @@ namespace Renoir {
 
 
 		/// <summary>
+		/// Apply a motion impulse.
+		/// </summary>
+		/// <param name="motion2D"></param>
+		public void Impulse(Motion2D motion2D) {
+			velocity += motion2D;
+		}
+
+
+		/// <summary>
+		/// Apply a motion impulse.
+		/// </summary>
+		/// <param name="motion"></param>
+		public void Impulse(Vector2 motion) {
+			velocity += motion;
+		}
+
+
+		/// <summary>
 		///     Return vector information as string
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString() {
-			return $"Vector2({velocity.x}, {velocity.y})";
+			return $"Velocity({velocity.x}, {velocity.y})";
 		}
 
 
@@ -128,7 +148,8 @@ namespace Renoir {
 		/// <param name="tuple"></param>
 		/// <returns></returns>
 		public static implicit operator Motion2D((int x, int y) tuple) {
-			return new Motion2D(new Vector2(tuple.x, tuple.y));
+			var (x, y) = tuple;
+			return new Motion2D(new Vector2(x, y));
 		}
 
 
@@ -140,6 +161,7 @@ namespace Renoir {
 		public static implicit operator Vector2(Motion2D motion2D) {
 			return new Vector2(motion2D.Velocity);
 		}
+
 	}
 
 }
