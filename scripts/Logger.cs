@@ -37,27 +37,32 @@ namespace Renoir {
 	///     I/O Interface for log messages.
 	/// </summary>
 	public interface ILogWriter {
+
 		/// <summary>
 		///     Simple interface method for string output.
 		/// </summary>
 		/// <param name="level"></param>
 		/// <param name="message"></param>
 		void Write(Logger.LoggerLevel level, string message);
+
 	}
 	/// <summary>
 	///     Helper class for qualified log output
 	/// </summary>
 	public static class Logger {
+
 		/// <summary>
 		///     Available log levels.
 		/// </summary>
 		public enum LoggerLevel {
+
 			TRACE,
 			DEBUG,
 			INFO,
 			WARN,
 			ERROR,
 			FATAL
+
 		}
 
 		private const int MAX_BUFFER_LINES = 350;
@@ -76,8 +81,11 @@ namespace Renoir {
 		static Logger() {
 			LogLevel = DEBUG;
 
-			LogWriters.Add(new GodotConsoleLogWriter());
-			LogWriters.Add(new SystemConsoleLogWriter());
+			if (OS.HasEnvironment("GODOT_EXTERNAL"))
+				LogWriters.Add(new GodotConsoleLogWriter());
+			else
+				LogWriters.Add(new SystemConsoleLogWriter());
+
 			//LogWriters.Add(new FileLogWriter());
 
 			log(INFO, $"Renoir Core Engine - Logging Module started on: {DateTime.Now}");
@@ -226,6 +234,7 @@ namespace Renoir {
 			if (LogLevel > FATAL) return;
 			log(FATAL, message);
 		}
+
 	}
 
 	/*---------------------------------------------------------------------*/
@@ -236,6 +245,7 @@ namespace Renoir {
 	///     Standard Godot console log-writer
 	/// </summary>
 	public class GodotConsoleLogWriter : ILogWriter {
+
 		/// <summary>
 		///     Write to Godot console.
 		/// </summary>
@@ -247,6 +257,7 @@ namespace Renoir {
 			else
 				GD.Print(message);
 		}
+
 	}
 
 	#endregion
@@ -259,6 +270,7 @@ namespace Renoir {
 	///     System console log-writer
 	/// </summary>
 	public class SystemConsoleLogWriter : ILogWriter {
+
 		/// <summary>
 		///     Write to system console.
 		/// </summary>
@@ -284,6 +296,7 @@ namespace Renoir {
 
 			ForegroundColor = currentForeground;
 		}
+
 	}
 
 	#endregion
@@ -297,6 +310,7 @@ namespace Renoir {
 	///     Quick and dirty.
 	/// </summary>
 	public class FileLogWriter : ILogWriter {
+
 		private bool active = true;
 
 		private static string GetFileName
@@ -318,6 +332,7 @@ namespace Renoir {
 				active = false;
 			}
 		}
+
 	}
 
 	#endregion
