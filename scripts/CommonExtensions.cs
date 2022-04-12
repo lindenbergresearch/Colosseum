@@ -35,6 +35,7 @@ namespace Renoir {
 	///     Extension methods for numeric stuff
 	/// </summary>
 	public static class RMath {
+
 		/// <summary>
 		///     Test for number exceeding a special value
 		/// </summary>
@@ -163,11 +164,13 @@ namespace Renoir {
 
 			return direction;
 		}
+
 	}
 	/// <summary>
 	///     String extensions
 	/// </summary>
 	public static class RString {
+
 		/// <summary>
 		///     Directly write a string to a file
 		/// </summary>
@@ -176,11 +179,13 @@ namespace Renoir {
 		public static void ToTextFile(this string text, string filePath) {
 			File.WriteAllText(filePath, text);
 		}
+
 	}
 	/// <summary>
 	///     Object extentions
 	/// </summary>
 	public static class RObject {
+
 		/// <summary>
 		///     Converts the current data of an object to a JSON string
 		/// </summary>
@@ -215,11 +220,13 @@ namespace Renoir {
 		public static void ToTextFile(this object obj, string fileName) {
 			File.AppendAllText(fileName, obj.ToString());
 		}
+
 	}
 	/// <summary>
 	///     Godot classes extensions
 	/// </summary>
 	public static class RGodot {
+
 		/// <summary>
 		///     Return all collider since last movement.
 		/// </summary>
@@ -233,6 +240,24 @@ namespace Renoir {
 			}
 
 			return collider;
+		}
+
+
+		/// <summary>
+		/// Disable collisions on collision-shape.
+		/// </summary>
+		/// <param name="collisionShape2D"></param>
+		public static void Disable(this CollisionShape2D collisionShape2D) {
+			collisionShape2D.Disabled = true;
+		}
+
+
+		/// <summary>
+		/// Enable collisions on collision-shape.
+		/// </summary>
+		/// <param name="collisionShape2D"></param>
+		public static void Enable(this CollisionShape2D collisionShape2D) {
+			collisionShape2D.Disabled = false;
 		}
 
 
@@ -266,22 +291,22 @@ namespace Renoir {
 		/// </summary>
 		/// <param name="kinematicCollision2D"></param>
 		/// <returns></returns>
-		public static bool Bottom(this KinematicCollision2D kinematicCollision2D) {
+		public static bool IsBottom(this KinematicCollision2D kinematicCollision2D) {
 			return kinematicCollision2D.Normal.y.Round() == 1;
 		}
 
 
-		public static bool Top(this KinematicCollision2D kinematicCollision2D) {
+		public static bool IsTop(this KinematicCollision2D kinematicCollision2D) {
 			return kinematicCollision2D.Normal.y.Round() == -1;
 		}
 
 
-		public static bool Left(this KinematicCollision2D kinematicCollision2D) {
+		public static bool IsLeft(this KinematicCollision2D kinematicCollision2D) {
 			return kinematicCollision2D.Normal.x.Round() == -1;
 		}
 
 
-		public static bool Right(this KinematicCollision2D kinematicCollision2D) {
+		public static bool IsRight(this KinematicCollision2D kinematicCollision2D) {
 			return kinematicCollision2D.Normal.x.Round() == 1;
 		}
 
@@ -294,11 +319,13 @@ namespace Renoir {
 		public static Vector2 ToVector2(this float f) {
 			return new Vector2(f, f);
 		}
+
 	}
 	/// <summary>
 	///     C# collection extensions
 	/// </summary>
 	public static class RCollections {
+
 		/// <summary>
 		///     Convert all elements of an Enumerable to a string separated by a separator
 		/// </summary>
@@ -352,6 +379,7 @@ namespace Renoir {
 		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value) {
 			(key, value) = (tuple.Key, tuple.Value);
 		}
+
 	}
 
 }
